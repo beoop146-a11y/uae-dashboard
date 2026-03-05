@@ -15,34 +15,44 @@
         .nav a { color: #fa0; text-decoration: none; padding: 4px 16px; font-size: 11px; border-right: 1px solid #333; }
         .nav a:hover { background: #111; }
         .nav a.active { background: #ff6600; color: #000; font-weight: 700; }
-        .ticker { background: #111; border-bottom: 1px solid #333; padding: 4px 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
-        .ticker .label { color: #ff6600; }
-        .ticker select { background: #000; color: #ff6600; border: 1px solid #333; padding: 2px 8px; font-family: inherit; font-size: 11px; cursor: pointer; }
-        .ticker select:hover { border-color: #ff6600; }
-        .ticker .count { color: #0cc; }
+        
+        .toolbar { background: #111; border-bottom: 1px solid #333; padding: 6px 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .toolbar .filters { display: flex; gap: 12px; align-items: center; }
+        .toolbar label { color: #666; font-size: 10px; }
+        .toolbar select { background: #000; color: #ff6600; border: 1px solid #333; padding: 3px 8px; font-family: inherit; font-size: 11px; }
+        .toolbar .stats { display: flex; gap: 12px; align-items: center; }
+        .toolbar .stats .count { color: #0cc; }
+        .status-light { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+        .status-light.live { background: #0c0; animation: pulse 2s infinite; }
+        .status-light.cached { background: #ff0; }
+        .status-light.offline { background: #f33; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         
         .main { display: flex; flex: 1; min-height: 0; }
         .map-container { flex: 1; position: relative; }
         #map { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
         
-        .sidebar { width: 320px; background: #000; border-left: 1px solid #333; display: flex; flex-direction: column; flex-shrink: 0; }
-        .sidebar-header { background: #ff6600; color: #000; padding: 4px 8px; font-weight: 700; font-size: 11px; }
+        .sidebar { width: 380px; background: #000; border-left: 1px solid #333; display: flex; flex-direction: column; flex-shrink: 0; }
+        .sidebar-header { background: #ff6600; color: #000; padding: 4px 8px; font-weight: 700; font-size: 11px; display: flex; justify-content: space-between; }
         .feed { flex: 1; overflow-y: auto; }
-        .feed-item { padding: 6px 8px; border-bottom: 1px solid #1a1a1a; cursor: pointer; }
+        .feed-item { padding: 8px; border-bottom: 1px solid #1a1a1a; cursor: pointer; }
         .feed-item:hover { background: #111; }
-        .feed-item .type { color: #f33; font-size: 10px; font-weight: 700; text-transform: uppercase; }
-        .feed-item .type.naval { color: #0cc; }
-        .feed-item .type.military { color: #ff0; }
-        .feed-item .title { color: #ccc; font-size: 11px; margin: 2px 0; line-height: 1.3; }
-        .feed-item .meta { color: #666; font-size: 9px; }
-        .feed-item .meta .country { color: #ff6600; }
+        .feed-item .source-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .feed-item .source { color: #0cc; font-size: 10px; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .feed-item .time { color: #666; font-size: 9px; }
+        .feed-item .title { color: #ccc; font-size: 11px; line-height: 1.4; }
+        .feed-item .title a { color: #ccc; text-decoration: none; }
+        .feed-item .title a:hover { color: #ff6600; text-decoration: underline; }
+        .feed-item .keywords { margin-top: 4px; }
+        .feed-item .keyword { display: inline-block; background: #1a1a1a; color: #888; padding: 1px 4px; font-size: 9px; margin-right: 4px; }
+        .feed-item .keyword.conflict { background: #300; color: #f66; }
+        .feed-item .keyword.location { background: #030; color: #6f6; }
         
-        .stats { border-top: 1px solid #333; padding: 8px; flex-shrink: 0; }
-        .stats-title { color: #ff6600; font-size: 10px; margin-bottom: 6px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
-        .stats-item { text-align: center; padding: 4px; background: #111; }
-        .stats-item .num { color: #f33; font-size: 14px; font-weight: 700; }
-        .stats-item .lbl { color: #666; font-size: 8px; }
+        .loading { text-align: center; padding: 40px; color: #666; }
+        .loading .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid #333; border-top-color: #ff6600; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 10px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .error-banner { background: #300; color: #f66; padding: 6px 8px; font-size: 10px; }
         
         .footer { background: #111; border-top: 1px solid #333; padding: 4px 8px; font-size: 10px; color: #666; display: flex; justify-content: space-between; flex-shrink: 0; }
         .footer .key { background: #ff6600; color: #000; padding: 0 3px; font-weight: 700; margin-right: 2px; }
@@ -50,11 +60,11 @@
         /* Leaflet */
         .leaflet-popup-content-wrapper { background: #111; color: #ccc; border-radius: 0; border: 1px solid #333; font-family: 'Consolas', monospace; font-size: 11px; }
         .leaflet-popup-tip { background: #111; }
-        .leaflet-popup-content { margin: 10px; min-width: 220px; }
+        .leaflet-popup-content { margin: 10px; min-width: 250px; max-width: 350px; }
         .leaflet-popup-close-button { color: #666 !important; }
         .leaflet-popup-close-button:hover { color: #ff6600 !important; }
-        .popup-type { color: #f33; font-weight: 700; font-size: 11px; text-transform: uppercase; margin-bottom: 8px; }
-        .popup-row { margin: 4px 0; }
+        .popup-title { color: #ff6600; font-weight: 700; font-size: 11px; margin-bottom: 8px; line-height: 1.3; }
+        .popup-row { margin: 4px 0; font-size: 10px; }
         .popup-row .k { color: #666; }
         .popup-row .v { color: #ccc; }
         .popup-row a { color: #0cc; text-decoration: underline; }
@@ -70,7 +80,7 @@
 <body>
 <div class="terminal">
     <div class="header">
-        <span>MIDEAST INCIDENT TRACKER</span>
+        <span>MIDEAST INCIDENT & NEWS TRACKER — GDELT + RSS</span>
         <span id="clock"></span>
     </div>
     <div class="nav">
@@ -78,19 +88,32 @@
         <a href="flights.html">FLIGHTS</a>
         <a href="strikes.html" class="active">INCIDENTS</a>
     </div>
-    <div class="ticker">
-        <div>
-            <span class="label">TIME FILTER:</span>
-            <select id="timeFilter">
-                <option value="6">Last 6 hours</option>
-                <option value="12">Last 12 hours</option>
-                <option value="24" selected>Last 24 hours</option>
-                <option value="48">Last 48 hours</option>
-                <option value="72">Last 72 hours</option>
-                <option value="168">Last 7 days</option>
-            </select>
+    
+    <div id="errorBanner" class="error-banner" style="display:none;"></div>
+    
+    <div class="toolbar">
+        <div class="filters">
+            <div>
+                <label>TOPIC</label>
+                <select id="topicFilter">
+                    <option value="conflict">Conflict/Military</option>
+                    <option value="aviation">Aviation</option>
+                    <option value="shipping">Shipping/Maritime</option>
+                </select>
+            </div>
+            <div>
+                <label>TIMESPAN</label>
+                <select id="timeFilter">
+                    <option value="24h">24 Hours</option>
+                    <option value="3d" selected>3 Days</option>
+                    <option value="7d">7 Days</option>
+                </select>
+            </div>
         </div>
-        <div class="count">SHOWING: <span id="eventCount">0</span> EVENTS</div>
+        <div class="stats">
+            <span><span class="status-light" id="statusLight"></span><span id="dataStatus">Loading...</span></span>
+            <span class="count">ARTICLES: <span id="articleCount">0</span></span>
+        </div>
     </div>
     
     <div class="main">
@@ -98,152 +121,310 @@
             <div id="map"></div>
         </div>
         <div class="sidebar">
-            <div class="sidebar-header">INCIDENT FEED</div>
-            <div class="feed" id="feed"></div>
-            <div class="stats">
-                <div class="stats-title">CASUALTIES (FEB 28 - MAR 5)</div>
-                <div class="stats-grid">
-                    <div class="stats-item"><div class="num">~1,045</div><div class="lbl">IRAN</div></div>
-                    <div class="stats-item"><div class="num">11</div><div class="lbl">ISRAEL</div></div>
-                    <div class="stats-item"><div class="num">6</div><div class="lbl">USA</div></div>
-                    <div class="stats-item"><div class="num">7</div><div class="lbl">UAE</div></div>
-                    <div class="stats-item"><div class="num">2</div><div class="lbl">SAUDI</div></div>
-                    <div class="stats-item"><div class="num" style="color:#fff">~1,071</div><div class="lbl">TOTAL</div></div>
-                </div>
+            <div class="sidebar-header">
+                <span>NEWS FEED</span>
+                <span id="feedSource">GDELT</span>
+            </div>
+            <div class="feed" id="feed">
+                <div class="loading"><span class="spinner"></span>Fetching news from GDELT...</div>
             </div>
         </div>
     </div>
     
     <div class="footer">
-        <div><span class="key">F1</span>HELP <span class="key">F2</span>OVERVIEW <span class="key">F3</span>FLIGHTS</div>
-        <span>DATA: GDELT, ACLED, OSINT | AUTO-REFRESH 5M</span>
+        <div><span class="key">CLICK</span>VIEW ON MAP <span class="key">LINK</span>OPEN ARTICLE</div>
+        <span>DATA: GDELT PROJECT | REFRESH 5M</span>
     </div>
 </div>
 
 <script>
+const GDELT_BASE = 'https://api.gdeltproject.org/api/v2/doc/doc';
+const CORS_PROXY = 'https://corsproxy.io/?';
+
+const TOPICS = {
+    conflict: {
+        query: '(missile OR strike OR attack OR military OR airstrike OR drone) (Iran OR Israel OR Yemen OR Houthi OR Gaza OR UAE OR Saudi)',
+        keywords: ['missile', 'strike', 'attack', 'military', 'drone', 'airstrike', 'intercept', 'bomb', 'war', 'conflict']
+    },
+    aviation: {
+        query: '(flight OR airline OR airport OR airspace OR aviation) (Dubai OR Abu Dhabi OR Doha OR Riyadh OR Middle East OR Gulf)',
+        keywords: ['flight', 'airline', 'airport', 'cancel', 'divert', 'airspace', 'closure']
+    },
+    shipping: {
+        query: '(shipping OR tanker OR vessel OR maritime OR Hormuz OR Red Sea OR Houthi) (attack OR threat OR warning)',
+        keywords: ['ship', 'tanker', 'vessel', 'maritime', 'port', 'strait', 'Hormuz', 'Red Sea']
+    }
+};
+
+// Location coordinates for geo-tagging articles
+const LOCATIONS = {
+    'dubai': { lat: 25.20, lon: 55.27 },
+    'abu dhabi': { lat: 24.45, lon: 54.37 },
+    'iran': { lat: 32.43, lon: 53.69 },
+    'tehran': { lat: 35.70, lon: 51.42 },
+    'israel': { lat: 31.05, lon: 34.85 },
+    'tel aviv': { lat: 32.08, lon: 34.78 },
+    'gaza': { lat: 31.50, lon: 34.47 },
+    'yemen': { lat: 15.55, lon: 48.52 },
+    'sanaa': { lat: 15.35, lon: 44.21 },
+    'saudi': { lat: 24.71, lon: 46.68 },
+    'riyadh': { lat: 24.69, lon: 46.72 },
+    'jeddah': { lat: 21.54, lon: 39.17 },
+    'qatar': { lat: 25.29, lon: 51.53 },
+    'doha': { lat: 25.29, lon: 51.53 },
+    'bahrain': { lat: 26.07, lon: 50.56 },
+    'kuwait': { lat: 29.38, lon: 47.99 },
+    'oman': { lat: 21.47, lon: 55.98 },
+    'hormuz': { lat: 26.50, lon: 56.50 },
+    'red sea': { lat: 20.00, lon: 38.00 },
+    'syria': { lat: 34.80, lon: 38.99 },
+    'damascus': { lat: 33.51, lon: 36.29 },
+    'iraq': { lat: 33.22, lon: 43.68 },
+    'baghdad': { lat: 33.31, lon: 44.37 },
+    'lebanon': { lat: 33.85, lon: 35.86 },
+    'beirut': { lat: 33.89, lon: 35.50 },
+    'houthi': { lat: 15.35, lon: 44.21 },
+    'isfahan': { lat: 32.65, lon: 51.68 },
+    'bandar abbas': { lat: 27.18, lon: 56.27 }
+};
+
+let articles = [];
+let markers = [];
+let map;
+
 function updateClock() {
     document.getElementById('clock').textContent = new Date().toLocaleString('en-US', {
         timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric',
         hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
     }) + ' UTC';
 }
-updateClock(); setInterval(updateClock, 1000);
+updateClock();
+setInterval(updateClock, 1000);
 
-const map = L.map('map', { zoomControl: true }).setView([26, 52], 5);
+// Map setup
+map = L.map('map', { zoomControl: true }).setView([28, 48], 4);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     attribution: '© OSM © CARTO', maxZoom: 19
 }).addTo(map);
 
-// Simulated GDELT/ACLED-style incident data
-const incidents = [
-    // UAE
-    { type: 'AIRSTRIKE', lat: 25.12, lon: 55.20, date: '2026-03-05T04:30:00Z', title: 'Drone strike near US Consulate in Dubai; visa, consular appointments cancelled', url: 'theshillongtimes.com', source: 'GDELT', country: 'UAE', hoursAgo: 2 },
-    { type: 'MISSILE', lat: 25.20, lon: 55.27, date: '2026-03-04T22:40:00Z', title: 'Ballistic missile intercepted over Dubai; debris falls in Al Barsha residential area', url: 'khaleejtimes.com', source: 'GDELT', country: 'UAE', hoursAgo: 8 },
-    { type: 'EXPLOSION', lat: 25.07, lon: 55.14, date: '2026-03-04T23:15:00Z', title: 'Explosion reported near Jebel Ali Port; authorities investigating', url: 'gulfnews.com', source: 'GDELT', country: 'UAE', hoursAgo: 7 },
-    { type: 'AIRSTRIKE', lat: 24.45, lon: 54.37, date: '2026-03-04T14:32:00Z', title: 'Drone strike hits Al Salam Naval Base in Abu Dhabi; 4 military personnel killed', url: 'reuters.com', source: 'ACLED', country: 'UAE', hoursAgo: 16 },
-    { type: 'MILITARY', lat: 24.42, lon: 54.43, date: '2026-03-04T16:00:00Z', title: 'Etihad Airways HQ evacuated following naval base attack', url: 'aviationweek.com', source: 'GDELT', country: 'UAE', hoursAgo: 14 },
-    
-    // Saudi Arabia
-    { type: 'MISSILE', lat: 26.43, lon: 50.10, date: '2026-03-04T19:15:00Z', title: 'Patriot intercepts missile near Aramco headquarters in Dhahran', url: 'arabnews.com', source: 'GDELT', country: 'Saudi Arabia', hoursAgo: 11 },
-    { type: 'MILITARY', lat: 26.30, lon: 50.20, date: '2026-03-04T20:00:00Z', title: 'Aramco evacuates non-essential staff from Eastern Province facilities', url: 'bloomberg.com', source: 'GDELT', country: 'Saudi Arabia', hoursAgo: 10 },
-    { type: 'AIRSTRIKE', lat: 26.47, lon: 49.80, date: '2026-03-04T08:00:00Z', title: 'King Fahd Airport Dammam suspends operations after drone threat', url: 'flightradar24.com', source: 'GDELT', country: 'Saudi Arabia', hoursAgo: 22 },
-    
-    // Bahrain
-    { type: 'MILITARY', lat: 26.23, lon: 50.58, date: '2026-03-04T11:20:00Z', title: 'US 5th Fleet raises threat level; non-essential personnel ordered to shelter', url: 'navy.mil', source: 'ACLED', country: 'Bahrain', hoursAgo: 19 },
-    { type: 'MISSILE', lat: 26.27, lon: 50.62, date: '2026-03-04T21:00:00Z', title: 'Bahrain Defense Force intercepts drone approaching from northeast', url: 'bna.bh', source: 'GDELT', country: 'Bahrain', hoursAgo: 9 },
-    
-    // Strait of Hormuz / Naval
-    { type: 'NAVAL', lat: 26.25, lon: 56.50, date: '2026-03-04T23:45:00Z', title: 'IRGC fast boats make aggressive approach toward USS carrier group; warning shots fired', url: 'centcom.mil', source: 'ACLED', country: 'Hormuz Strait', hoursAgo: 6 },
-    { type: 'NAVAL', lat: 26.58, lon: 56.27, date: '2026-03-04T14:20:00Z', title: 'Iranian vessels harass commercial tanker; US Navy escort responds', url: 'maritime-executive.com', source: 'GDELT', country: 'Hormuz Strait', hoursAgo: 16 },
-    { type: 'NAVAL', lat: 25.95, lon: 56.85, date: '2026-03-04T08:00:00Z', title: 'Iranian Kilo-class submarine detected in Gulf of Oman; P-8 Poseidon tracking', url: 'janes.com', source: 'OSINT', country: 'Gulf of Oman', hoursAgo: 22 },
-    { type: 'NAVAL', lat: 26.80, lon: 56.10, date: '2026-03-05T06:00:00Z', title: 'UKMTO warns of possible mine-laying activity in Hormuz shipping lanes', url: 'ukmto.org', source: 'GDELT', country: 'Hormuz Strait', hoursAgo: 0.5 },
-    
-    // Iran (strikes on)
-    { type: 'AIRSTRIKE', lat: 35.70, lon: 51.42, date: '2026-03-03T18:00:00Z', title: 'US-Israeli joint strike destroys IRGC command center in Tehran', url: 'timesofisrael.com', source: 'ACLED', country: 'Iran', hoursAgo: 36 },
-    { type: 'AIRSTRIKE', lat: 32.65, lon: 51.68, date: '2026-03-03T18:15:00Z', title: 'Isfahan nuclear facility struck; significant damage to centrifuge halls', url: 'bbc.com', source: 'ACLED', country: 'Iran', hoursAgo: 36 },
-    { type: 'AIRSTRIKE', lat: 29.62, lon: 52.53, date: '2026-03-03T18:30:00Z', title: 'Shiraz Air Base attacked; multiple fighter jets destroyed on ground', url: 'flightglobal.com', source: 'GDELT', country: 'Iran', hoursAgo: 36 },
-    { type: 'EXPLOSION', lat: 36.26, lon: 59.62, date: '2026-03-03T19:00:00Z', title: 'Mashhad missile base struck; large secondary explosions reported', url: 'cnn.com', source: 'ACLED', country: 'Iran', hoursAgo: 35 },
-    { type: 'AIRSTRIKE', lat: 27.18, lon: 56.27, date: '2026-03-03T19:30:00Z', title: 'Bandar Abbas naval base hit; fast attack boats destroyed in port', url: 'usni.org', source: 'ACLED', country: 'Iran', hoursAgo: 35 },
-    
-    // Israel (retaliation)
-    { type: 'MISSILE', lat: 32.08, lon: 34.78, date: '2026-03-04T02:00:00Z', title: 'Multiple Iranian missiles intercepted over Tel Aviv; Iron Dome engaged', url: 'haaretz.com', source: 'ACLED', country: 'Israel', hoursAgo: 28 },
-    { type: 'MISSILE', lat: 31.77, lon: 35.21, date: '2026-03-04T02:15:00Z', title: 'Arrow system intercepts ballistic missiles over Jerusalem', url: 'jpost.com', source: 'GDELT', country: 'Israel', hoursAgo: 28 },
-    
-    // Iraq
-    { type: 'AIRSTRIKE', lat: 33.31, lon: 44.37, date: '2026-03-03T20:00:00Z', title: 'US strike destroys Iran-backed PMF command post in Baghdad suburbs', url: 'centcom.mil', source: 'ACLED', country: 'Iraq', hoursAgo: 34 },
-    
-    // Syria
-    { type: 'AIRSTRIKE', lat: 33.51, lon: 36.29, date: '2026-03-03T22:00:00Z', title: 'Israeli strike hits IRGC positions near Damascus airport', url: 'syriahr.com', source: 'ACLED', country: 'Syria', hoursAgo: 32 },
-    { type: 'EXPLOSION', lat: 34.80, lon: 36.72, date: '2026-03-04T04:00:00Z', title: 'Iranian weapons depot in Homs destroyed; massive secondary explosions', url: 'aljazeera.com', source: 'GDELT', country: 'Syria', hoursAgo: 26 },
-    
-    // Yemen
-    { type: 'AIRSTRIKE', lat: 15.35, lon: 44.21, date: '2026-03-04T16:00:00Z', title: 'US strikes Houthi missile storage and launch sites near Sanaa', url: 'centcom.mil', source: 'ACLED', country: 'Yemen', hoursAgo: 14 },
-    { type: 'NAVAL', lat: 14.80, lon: 42.95, date: '2026-03-04T10:00:00Z', title: 'Houthi drone targets commercial vessel in Red Sea; shot down by escort', url: 'ukmto.org', source: 'GDELT', country: 'Red Sea', hoursAgo: 20 },
-    
-    // Qatar (no strikes, but activity)
-    { type: 'MILITARY', lat: 25.26, lon: 51.57, date: '2026-03-04T12:00:00Z', title: 'Al Udeid Air Base at maximum readiness; increased fighter sorties observed', url: 'airandspaceforces.com', source: 'OSINT', country: 'Qatar', hoursAgo: 18 }
-];
-
-function createIcon(type) {
-    const colors = { AIRSTRIKE: '#f33', MISSILE: '#f33', EXPLOSION: '#ff6600', NAVAL: '#0cc', MILITARY: '#ff0' };
-    const color = colors[type] || '#f33';
-    return L.divIcon({
-        className: 'custom-marker',
-        html: `<div style="width:10px;height:10px;background:${color};border:2px solid #fff;border-radius:50%;box-shadow:0 0 6px ${color};"></div>`,
-        iconSize: [10, 10],
-        iconAnchor: [5, 5]
-    });
+function extractLocation(title) {
+    const lowerTitle = title.toLowerCase();
+    for (const [name, coords] of Object.entries(LOCATIONS)) {
+        if (lowerTitle.includes(name)) {
+            // Add some randomness to prevent overlapping markers
+            return {
+                lat: coords.lat + (Math.random() - 0.5) * 0.5,
+                lon: coords.lon + (Math.random() - 0.5) * 0.5,
+                location: name
+            };
+        }
+    }
+    return null;
 }
 
-let markers = [];
-let currentFilter = 24;
+function extractKeywords(title, topicKeywords) {
+    const lowerTitle = title.toLowerCase();
+    const found = [];
+    topicKeywords.forEach(kw => {
+        if (lowerTitle.includes(kw.toLowerCase())) {
+            found.push(kw);
+        }
+    });
+    // Also extract locations
+    Object.keys(LOCATIONS).forEach(loc => {
+        if (lowerTitle.includes(loc)) {
+            found.push(loc);
+        }
+    });
+    return [...new Set(found)].slice(0, 5);
+}
 
-function filterAndRender() {
-    // Clear existing
+function timeAgo(dateStr) {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    return `${diffDays}d ago`;
+}
+
+function domainFromUrl(url) {
+    try {
+        return new URL(url).hostname.replace('www.', '');
+    } catch {
+        return url.slice(0, 30);
+    }
+}
+
+function updateStatus(text, status) {
+    document.getElementById('dataStatus').textContent = text;
+    document.getElementById('statusLight').className = 'status-light ' + status;
+}
+
+function showError(msg) {
+    const banner = document.getElementById('errorBanner');
+    banner.textContent = msg;
+    banner.style.display = msg ? 'block' : 'none';
+}
+
+async function fetchGDELT(topic, timespan) {
+    const config = TOPICS[topic];
+    const url = `${GDELT_BASE}?query=${encodeURIComponent(config.query)}&mode=artlist&format=json&maxrecords=75&timespan=${timespan}&sort=datedesc`;
+    
+    try {
+        // Try direct first
+        let response = await fetch(url);
+        if (!response.ok) throw new Error('Direct failed');
+        const text = await response.text();
+        if (text.includes('Please limit requests')) throw new Error('Rate limited');
+        return JSON.parse(text);
+    } catch (e) {
+        // Try CORS proxy
+        try {
+            const response = await fetch(CORS_PROXY + encodeURIComponent(url));
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const text = await response.text();
+            if (text.includes('Please limit requests')) throw new Error('GDELT rate limited - try again in a few seconds');
+            return JSON.parse(text);
+        } catch (e2) {
+            throw new Error(e2.message);
+        }
+    }
+}
+
+function renderArticles(topic) {
+    const config = TOPICS[topic];
+    
+    // Clear map markers
     markers.forEach(m => map.removeLayer(m));
     markers = [];
-    document.getElementById('feed').innerHTML = '';
     
-    const filtered = incidents.filter(i => i.hoursAgo <= currentFilter);
-    document.getElementById('eventCount').textContent = filtered.length;
+    const feed = document.getElementById('feed');
     
-    filtered.forEach((inc, idx) => {
-        // Add marker
-        const marker = L.marker([inc.lat, inc.lon], { icon: createIcon(inc.type) }).addTo(map);
-        marker.bindPopup(`
-            <div class="popup-type">${inc.type}</div>
-            <div class="popup-row"><span class="k">url:</span> <a href="https://${inc.url}" target="_blank">${inc.url}</a></div>
-            <div class="popup-row"><span class="k">date:</span> <span class="v">${inc.date}</span></div>
-            <div class="popup-row"><span class="k">title:</span> <span class="v">${inc.title}</span></div>
-            <div class="popup-row"><span class="k">source:</span> <span class="v">${inc.source}</span></div>
-            <div class="popup-row"><span class="k">country:</span> <span class="v">${inc.country}</span></div>
-        `);
-        markers.push(marker);
+    if (articles.length === 0) {
+        feed.innerHTML = '<div class="loading">No articles found for this topic</div>';
+        document.getElementById('articleCount').textContent = '0';
+        return;
+    }
+    
+    document.getElementById('articleCount').textContent = articles.length;
+    
+    feed.innerHTML = articles.map((art, i) => {
+        const keywords = extractKeywords(art.title, config.keywords);
+        const location = extractLocation(art.title);
         
-        // Add to feed
-        const typeClass = inc.type === 'NAVAL' ? 'naval' : inc.type === 'MILITARY' ? 'military' : '';
-        const feedItem = document.createElement('div');
-        feedItem.className = 'feed-item';
-        feedItem.innerHTML = `
-            <div class="type ${typeClass}">${inc.type}</div>
-            <div class="title">${inc.title}</div>
-            <div class="meta"><span class="country">${inc.country}</span> · ${inc.hoursAgo < 1 ? 'Just now' : inc.hoursAgo + 'h ago'} · ${inc.source}</div>
+        // Add marker if we found a location
+        if (location) {
+            const marker = L.circleMarker([location.lat, location.lon], {
+                radius: 6,
+                color: '#f33',
+                fillColor: '#f33',
+                fillOpacity: 0.6,
+                weight: 1
+            }).addTo(map);
+            
+            marker.bindPopup(`
+                <div class="popup-title">${art.title}</div>
+                <div class="popup-row"><span class="k">source:</span> <span class="v">${domainFromUrl(art.url)}</span></div>
+                <div class="popup-row"><span class="k">date:</span> <span class="v">${art.seendate || 'Unknown'}</span></div>
+                <div class="popup-row"><span class="k">location:</span> <span class="v">${location.location}</span></div>
+                <div class="popup-row"><a href="${art.url}" target="_blank">Read Article →</a></div>
+            `);
+            
+            markers.push(marker);
+            art._marker = marker;
+            art._location = location;
+        }
+        
+        return `
+            <div class="feed-item" data-index="${i}">
+                <div class="source-row">
+                    <span class="source">${domainFromUrl(art.url)}</span>
+                    <span class="time">${art.seendate ? timeAgo(art.seendate) : ''}</span>
+                </div>
+                <div class="title"><a href="${art.url}" target="_blank">${art.title}</a></div>
+                <div class="keywords">
+                    ${keywords.map(kw => {
+                        const isConflict = config.keywords.includes(kw);
+                        const isLocation = LOCATIONS[kw];
+                        return `<span class="keyword ${isConflict ? 'conflict' : ''} ${isLocation ? 'location' : ''}">${kw}</span>`;
+                    }).join('')}
+                </div>
+            </div>
         `;
-        feedItem.onclick = () => {
-            map.flyTo([inc.lat, inc.lon], 8, { duration: 0.5 });
-            marker.openPopup();
-        };
-        document.getElementById('feed').appendChild(feedItem);
+    }).join('');
+    
+    // Click handlers for feed items
+    feed.querySelectorAll('.feed-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') return; // Let links work
+            const idx = parseInt(item.dataset.index);
+            const art = articles[idx];
+            if (art._location && art._marker) {
+                map.flyTo([art._location.lat, art._location.lon], 6, { duration: 0.5 });
+                art._marker.openPopup();
+            }
+        });
     });
 }
 
-document.getElementById('timeFilter').onchange = function() {
-    currentFilter = parseInt(this.value);
-    filterAndRender();
-};
+async function refresh() {
+    const topic = document.getElementById('topicFilter').value;
+    const timespan = document.getElementById('timeFilter').value;
+    const cacheKey = `gdelt_${topic}_${timespan}`;
+    
+    document.getElementById('feed').innerHTML = '<div class="loading"><span class="spinner"></span>Fetching news from GDELT...</div>';
+    updateStatus('Loading...', 'cached');
+    showError('');
+    
+    try {
+        const data = await fetchGDELT(topic, timespan);
+        articles = data.articles || [];
+        
+        updateStatus(`LIVE — ${articles.length} articles`, 'live');
+        document.getElementById('feedSource').textContent = 'GDELT LIVE';
+        showError('');
+        
+        // Cache
+        localStorage.setItem(cacheKey, JSON.stringify({ time: Date.now(), articles }));
+        
+        renderArticles(topic);
+    } catch (err) {
+        console.error('GDELT error:', err);
+        showError('GDELT: ' + err.message);
+        
+        // Try cache
+        const cached = localStorage.getItem(cacheKey);
+        if (cached) {
+            const { time, articles: cachedArticles } = JSON.parse(cached);
+            const ageMin = Math.round((Date.now() - time) / 60000);
+            articles = cachedArticles;
+            updateStatus(`CACHED (${ageMin}m old)`, 'cached');
+            document.getElementById('feedSource').textContent = 'CACHED';
+            renderArticles(topic);
+        } else {
+            updateStatus('OFFLINE', 'offline');
+            document.getElementById('feed').innerHTML = '<div class="loading">Failed to load data. Try refreshing in a few seconds.</div>';
+        }
+    }
+}
 
-filterAndRender();
-setTimeout(() => location.reload(), 300000);
+// Event listeners
+document.getElementById('topicFilter').addEventListener('change', refresh);
+document.getElementById('timeFilter').addEventListener('change', refresh);
+
+// Initial load
+refresh();
+
+// Auto-refresh every 5 minutes
+setInterval(refresh, 300000);
+
+// Full page refresh every 30 min
+setTimeout(() => location.reload(), 1800000);
 </script>
 </body>
 </html>

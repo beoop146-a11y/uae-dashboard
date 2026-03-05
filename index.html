@@ -16,49 +16,46 @@
         .nav a:hover { background: #111; }
         .nav a.active { background: #ff6600; color: #000; font-weight: 700; }
         .ticker { background: #111; border-bottom: 1px solid #333; padding: 4px 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
-        .ticker .alert { color: #f33; font-weight: 700; }
-        .ticker .alert .blink { animation: blink 1s infinite; margin-right: 6px; }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-        .ticker select { background: #000; color: #ff6600; border: 1px solid #333; padding: 2px 8px; font-family: inherit; font-size: 11px; cursor: pointer; }
+        .ticker .status { display: flex; align-items: center; gap: 8px; }
+        .status-light { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+        .status-light.live { background: #0c0; animation: pulse 2s infinite; }
+        .status-light.cached { background: #ff0; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         
         .main { display: flex; flex: 1; min-height: 0; }
         .map-container { flex: 1; position: relative; }
         #map { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
         
-        .sidebar { width: 300px; background: #000; border-left: 1px solid #333; display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; }
+        .sidebar { width: 320px; background: #000; border-left: 1px solid #333; display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; }
         .panel { border-bottom: 1px solid #333; }
-        .panel-title { background: #ff6600; color: #000; padding: 3px 6px; font-weight: 700; font-size: 10px; }
-        .panel-title.red { background: #f33; color: #fff; }
+        .panel-title { background: #ff6600; color: #000; padding: 3px 6px; font-weight: 700; font-size: 10px; display: flex; justify-content: space-between; }
+        .panel-title .tag { background: #000; color: #ff6600; padding: 0 4px; font-size: 9px; }
         
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
-        .stat { padding: 6px 4px; text-align: center; border-right: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; }
-        .stat .num { font-size: 16px; font-weight: 700; }
+        .stat { padding: 8px 4px; text-align: center; border-right: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; }
+        .stat .num { font-size: 18px; font-weight: 700; }
         .stat .lbl { font-size: 8px; color: #666; }
         
-        .feed { max-height: 200px; overflow-y: auto; }
-        .feed-item { padding: 4px 6px; border-bottom: 1px solid #1a1a1a; cursor: pointer; font-size: 10px; }
+        .feed { max-height: 220px; overflow-y: auto; }
+        .feed-item { padding: 6px; border-bottom: 1px solid #1a1a1a; cursor: pointer; font-size: 10px; }
         .feed-item:hover { background: #111; }
-        .feed-item .type { font-weight: 700; }
-        .feed-item .type.critical { color: #f33; }
-        .feed-item .type.high { color: #ff6600; }
-        .feed-item .title { color: #ccc; margin: 2px 0; }
+        .feed-item .source { color: #0cc; font-size: 9px; }
+        .feed-item .title { color: #ccc; margin: 3px 0; line-height: 1.3; }
+        .feed-item .title a { color: #ccc; text-decoration: none; }
+        .feed-item .title a:hover { color: #ff6600; }
         .feed-item .meta { color: #666; font-size: 9px; }
-        .feed-item .meta .loc { color: #0cc; }
         
-        .sidebar-item { padding: 3px 6px; font-size: 10px; border-bottom: 1px solid #1a1a1a; }
-        .sidebar-item .key { color: #fa0; }
+        .loading { padding: 20px; text-align: center; color: #666; font-size: 10px; }
         
-        .country-row { display: grid; grid-template-columns: 60px 70px 1fr; gap: 4px; padding: 3px 6px; border-bottom: 1px solid #1a1a1a; font-size: 10px; align-items: center; }
-        .country-row .name { color: #ff6600; font-weight: 700; }
-        .tag-status { display: inline-block; padding: 1px 4px; font-size: 8px; font-weight: 700; }
-        .tag-status.open { background: #0c0; color: #000; }
-        .tag-status.limited { background: #ff0; color: #000; }
-        .tag-status.restricted { background: #ff6600; color: #000; }
+        .airport-row { display: grid; grid-template-columns: 45px 1fr 50px; gap: 4px; padding: 4px 6px; border-bottom: 1px solid #1a1a1a; font-size: 10px; }
+        .airport-row:hover { background: #111; cursor: pointer; }
+        .airport-row .code { color: #ff6600; font-weight: 700; }
+        .airport-row .name { color: #888; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .airport-row .flights { color: #0c0; text-align: right; }
         
         .c-red { color: #f33; } .c-orange { color: #ff6600; } .c-yellow { color: #ff0; } .c-green { color: #0c0; } .c-cyan { color: #0cc; } .c-dim { color: #666; }
         
         .footer { background: #111; border-top: 1px solid #333; padding: 4px 8px; font-size: 10px; color: #666; display: flex; justify-content: space-between; flex-shrink: 0; }
-        .footer .key { background: #ff6600; color: #000; padding: 0 3px; font-weight: 700; margin-right: 2px; }
         
         /* Leaflet */
         .leaflet-popup-content-wrapper { background: #111; color: #ccc; border-radius: 0; border: 1px solid #333; font-family: 'Consolas', monospace; font-size: 11px; }
@@ -66,11 +63,11 @@
         .leaflet-popup-content { margin: 10px; min-width: 200px; }
         .leaflet-popup-close-button { color: #666 !important; }
         .leaflet-popup-close-button:hover { color: #ff6600 !important; }
-        .popup-type { color: #f33; font-weight: 700; font-size: 11px; text-transform: uppercase; margin-bottom: 8px; }
-        .popup-row { margin: 4px 0; }
+        .popup-title { color: #ff6600; font-weight: 700; font-size: 11px; margin-bottom: 6px; }
+        .popup-row { margin: 3px 0; font-size: 10px; }
         .popup-row .k { color: #666; }
         .popup-row .v { color: #ccc; }
-        .popup-row a { color: #0cc; text-decoration: underline; }
+        .popup-row a { color: #0cc; }
         .leaflet-control-zoom { border: none !important; }
         .leaflet-control-zoom a { background: #111 !important; color: #ff6600 !important; border: 1px solid #333 !important; }
         .leaflet-control-zoom a:hover { background: #222 !important; }
@@ -83,7 +80,7 @@
 <body>
 <div class="terminal">
     <div class="header">
-        <span>MIDEAST CRISIS MONITOR</span>
+        <span>MIDEAST SITUATION MONITOR</span>
         <span id="clock"></span>
     </div>
     <div class="nav">
@@ -92,12 +89,11 @@
         <a href="strikes.html">INCIDENTS</a>
     </div>
     <div class="ticker">
-        <div class="alert"><span class="blink">●</span> US-ISRAELI OPS VS IRAN — IRANIAN RETALIATION — GULF AIRSPACE RESTRICTED</div>
-        <select id="viewFilter">
-            <option value="all">ALL EVENTS</option>
-            <option value="strikes">STRIKES ONLY</option>
-            <option value="airports">AIRPORTS ONLY</option>
-        </select>
+        <div class="status">
+            <span class="status-light" id="statusLight"></span>
+            <span id="statusText">Loading...</span>
+        </div>
+        <span class="c-dim">OPENSKY + GDELT LIVE DATA</span>
     </div>
     
     <div class="main">
@@ -106,176 +102,277 @@
         </div>
         <div class="sidebar">
             <div class="panel">
-                <div class="panel-title red">48H IMPACT</div>
+                <div class="panel-title">LIVE TRAFFIC <span class="tag" id="flightTag">LOADING</span></div>
                 <div class="stats-grid">
-                    <div class="stat"><div class="num c-red">847</div><div class="lbl">CANCELED</div></div>
-                    <div class="stat"><div class="num c-yellow">312</div><div class="lbl">REROUTED</div></div>
-                    <div class="stat"><div class="num">230K</div><div class="lbl">PAX</div></div>
-                    <div class="stat"><div class="num c-red">~1,071</div><div class="lbl">CASUALTIES</div></div>
-                    <div class="stat"><div class="num c-orange">5</div><div class="lbl">ROUTES</div></div>
-                    <div class="stat"><div class="num c-yellow">3</div><div class="lbl">MARKETS</div></div>
+                    <div class="stat"><div class="num c-green" id="airborneNum">-</div><div class="lbl">AIRBORNE</div></div>
+                    <div class="stat"><div class="num" id="groundNum">-</div><div class="lbl">ON GROUND</div></div>
+                    <div class="stat"><div class="num c-cyan" id="totalNum">-</div><div class="lbl">TOTAL</div></div>
                 </div>
             </div>
             
             <div class="panel">
-                <div class="panel-title">REGIONAL STATUS</div>
-                <div class="country-row"><span class="name">UAE</span><span class="tag-status limited">LIMITED</span><span class="c-red">2 strikes</span></div>
-                <div class="country-row"><span class="name">QATAR</span><span class="tag-status limited">LIMITED</span><span class="c-green">No strikes</span></div>
-                <div class="country-row"><span class="name">SAUDI</span><span class="tag-status restricted">RESTRICTED</span><span class="c-yellow">1 intercept</span></div>
-                <div class="country-row"><span class="name">BAHRAIN</span><span class="tag-status limited">LIMITED</span><span class="c-yellow">Mil activity</span></div>
-                <div class="country-row"><span class="name">OMAN</span><span class="tag-status open">OPEN</span><span class="c-green">None</span></div>
+                <div class="panel-title">AIRPORTS <span class="tag">COVERAGE</span></div>
+                <div id="airportList" class="loading">Loading...</div>
             </div>
             
             <div class="panel">
-                <div class="panel-title">LATEST INCIDENTS</div>
-                <div class="feed" id="feed"></div>
-            </div>
-            
-            <div class="panel">
-                <div class="panel-title">MARKET IMPACT</div>
-                <div class="sidebar-item"><span class="key">BRENT</span> <span class="c-green">+8.2% $94.50</span></div>
-                <div class="sidebar-item"><span class="key">DFM</span> <span class="c-red">SUSPENDED</span></div>
-                <div class="sidebar-item"><span class="key">TASI</span> <span class="c-red">-4.3% HALTED</span></div>
-                <div class="sidebar-item"><span class="key">GOLD</span> <span class="c-green">+2.1% $2,847</span></div>
-            </div>
-            
-            <div class="panel">
-                <div class="panel-title">TRAVEL ADVISORY</div>
-                <div class="sidebar-item"><span class="c-red">LVL 4:</span> Iran, Iraq, Yemen, Syria</div>
-                <div class="sidebar-item"><span class="c-orange">LVL 3:</span> UAE, Saudi, Bahrain</div>
-                <div class="sidebar-item"><span class="c-yellow">LVL 2:</span> Qatar, Oman, Kuwait</div>
-            </div>
-            
-            <div class="panel">
-                <div class="panel-title">SUSPENDED ROUTES</div>
-                <div class="sidebar-item"><span class="c-red">ALL → IKA</span> TEHRAN</div>
-                <div class="sidebar-item"><span class="c-red">ALL → BGW</span> BAGHDAD</div>
-                <div class="sidebar-item"><span class="c-red">ALL → TLV</span> TEL AVIV</div>
-                <div class="sidebar-item"><span class="c-red">ALL → BEY</span> BEIRUT</div>
-                <div class="sidebar-item"><span class="c-red">ALL → DAM</span> DAMASCUS</div>
+                <div class="panel-title">NEWS FEED <span class="tag" id="newsTag">GDELT</span></div>
+                <div class="feed" id="newsFeed">
+                    <div class="loading">Loading news...</div>
+                </div>
             </div>
         </div>
     </div>
     
     <div class="footer">
-        <div><span class="key">F1</span>HELP <span class="key">F2</span>FLIGHTS <span class="key">F3</span>INCIDENTS</div>
-        <span>DATA: GDELT, ACLED, OSINT | AUTO-REFRESH 5M</span>
+        <span>DATA: OpenSky Network (flights) • GDELT Project (news)</span>
+        <span>REFRESH: 30s flights / 5m news</span>
     </div>
 </div>
 
 <script>
+const OPENSKY_BBOX = { lamin: 12, lamax: 42, lomin: 30, lomax: 65 };
+const CORS_PROXY = 'https://corsproxy.io/?';
+
+const AIRPORTS = [
+    { code: 'DXB', name: 'Dubai Intl', lat: 25.253, lon: 55.366, country: 'UAE' },
+    { code: 'AUH', name: 'Abu Dhabi', lat: 24.433, lon: 54.651, country: 'UAE' },
+    { code: 'DOH', name: 'Hamad Intl', lat: 25.261, lon: 51.565, country: 'Qatar' },
+    { code: 'RUH', name: 'King Khalid', lat: 24.958, lon: 46.699, country: 'Saudi' },
+    { code: 'JED', name: 'Jeddah', lat: 21.679, lon: 39.157, country: 'Saudi' },
+    { code: 'TLV', name: 'Ben Gurion', lat: 32.011, lon: 34.887, country: 'Israel' },
+    { code: 'CAI', name: 'Cairo Intl', lat: 30.122, lon: 31.406, country: 'Egypt' },
+    { code: 'IST', name: 'Istanbul', lat: 41.262, lon: 28.729, country: 'Turkey' },
+    { code: 'BAH', name: 'Bahrain', lat: 26.270, lon: 50.634, country: 'Bahrain' },
+    { code: 'MCT', name: 'Muscat', lat: 23.593, lon: 58.284, country: 'Oman' }
+];
+
+let flights = [];
+let articles = [];
+let flightMarkers = [];
+let map;
+
 function updateClock() {
     document.getElementById('clock').textContent = new Date().toLocaleString('en-US', {
         timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric',
         hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
     }) + ' UTC';
 }
-updateClock(); setInterval(updateClock, 1000);
+updateClock();
+setInterval(updateClock, 1000);
 
-const map = L.map('map', { zoomControl: true }).setView([26, 52], 5);
+// Map setup
+map = L.map('map', { zoomControl: true }).setView([26, 48], 4);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     attribution: '© OSM © CARTO', maxZoom: 19
 }).addTo(map);
 
-// Incidents
-const incidents = [
-    { type: 'AIRSTRIKE', lat: 25.12, lon: 55.20, date: '2026-03-05T04:30:00Z', title: 'Drone strike near US Consulate Dubai', url: 'reuters.com', source: 'GDELT', country: 'UAE', level: 'critical', hoursAgo: 2 },
-    { type: 'MISSILE', lat: 25.20, lon: 55.27, date: '2026-03-04T22:40:00Z', title: 'Ballistic missile intercepted over Dubai; debris Al Barsha', url: 'khaleejtimes.com', source: 'GDELT', country: 'UAE', level: 'critical', hoursAgo: 8 },
-    { type: 'AIRSTRIKE', lat: 24.45, lon: 54.37, date: '2026-03-04T14:32:00Z', title: 'Drone strike hits Al Salam Naval Base Abu Dhabi; 4 KIA', url: 'reuters.com', source: 'ACLED', country: 'UAE', level: 'critical', hoursAgo: 16 },
-    { type: 'MISSILE', lat: 26.43, lon: 50.10, date: '2026-03-04T19:15:00Z', title: 'Patriot intercepts missile near Aramco HQ Dhahran', url: 'arabnews.com', source: 'GDELT', country: 'Saudi Arabia', level: 'critical', hoursAgo: 11 },
-    { type: 'NAVAL', lat: 26.25, lon: 56.50, date: '2026-03-04T23:45:00Z', title: 'IRGC boats approach USS carrier group; warning shots', url: 'centcom.mil', source: 'ACLED', country: 'Hormuz Strait', level: 'high', hoursAgo: 6 },
-    { type: 'MILITARY', lat: 26.23, lon: 50.58, date: '2026-03-04T11:20:00Z', title: 'US 5th Fleet raises threat level; shelter order', url: 'navy.mil', source: 'ACLED', country: 'Bahrain', level: 'high', hoursAgo: 19 }
-];
+// Coverage box
+L.rectangle([[OPENSKY_BBOX.lamin, OPENSKY_BBOX.lomin], [OPENSKY_BBOX.lamax, OPENSKY_BBOX.lomax]], {
+    color: '#ff6600', weight: 1, fillOpacity: 0.02, dashArray: '5,5'
+}).addTo(map);
 
-// Airports
-const airports = [
-    { code: 'DXB', lat: 25.253, lon: 55.366, status: 'limited', name: 'Dubai Intl', cxl: '76.8%', dly: '142m' },
-    { code: 'AUH', lat: 24.433, lon: 54.651, status: 'limited', name: 'Abu Dhabi Intl', cxl: '79.1%', dly: '186m' },
-    { code: 'DOH', lat: 25.261, lon: 51.565, status: 'limited', name: 'Hamad Intl', cxl: '25.1%', dly: '89m' },
-    { code: 'RUH', lat: 24.958, lon: 46.699, status: 'restricted', name: 'King Khalid', cxl: '55.7%', dly: '98m' },
-    { code: 'JED', lat: 21.679, lon: 39.157, status: 'open', name: 'Jeddah', cxl: '17.9%', dly: '54m' },
-    { code: 'DMM', lat: 26.471, lon: 49.798, status: 'restricted', name: 'Dammam', cxl: '84.8%', dly: '210m' },
-    { code: 'BAH', lat: 26.270, lon: 50.634, status: 'limited', name: 'Bahrain', cxl: '62.2%', dly: '124m' },
-    { code: 'MCT', lat: 23.593, lon: 58.284, status: 'open', name: 'Muscat', cxl: '4.1%', dly: '23m' }
-];
+// Airport markers
+const airportMarkers = {};
+AIRPORTS.forEach(apt => {
+    const m = L.circleMarker([apt.lat, apt.lon], {
+        radius: 6, color: '#ff6600', fillColor: '#000', fillOpacity: 1, weight: 2
+    }).addTo(map);
+    m.bindPopup(`<div class="popup-title">${apt.code} — ${apt.name}</div><div class="popup-row"><span class="k">country:</span> <span class="v">${apt.country}</span></div>`);
+    m.bindTooltip(apt.code, { permanent: true, direction: 'right', offset: [8, 0], className: 'airport-label' });
+    airportMarkers[apt.code] = m;
+});
 
-function incidentIcon(type) {
-    const colors = { AIRSTRIKE: '#f33', MISSILE: '#f33', NAVAL: '#0cc', MILITARY: '#ff0' };
+function updateStatus(text, isLive) {
+    document.getElementById('statusText').textContent = text;
+    document.getElementById('statusLight').className = 'status-light ' + (isLive ? 'live' : 'cached');
+}
+
+function createPlaneIcon(heading) {
     return L.divIcon({
-        className: 'custom-marker',
-        html: `<div style="width:10px;height:10px;background:${colors[type]||'#f33'};border:2px solid #fff;border-radius:50%;box-shadow:0 0 6px ${colors[type]||'#f33'};"></div>`,
-        iconSize: [10, 10], iconAnchor: [5, 5]
+        className: 'plane-marker',
+        html: `<div style="font-size:12px;transform:rotate(${(heading || 0) - 45}deg);color:#0c0;text-shadow:0 0 3px #000;">✈</div>`,
+        iconSize: [12, 12],
+        iconAnchor: [6, 6]
     });
 }
 
-function airportIcon(status) {
-    const colors = { open: '#0c0', limited: '#ff0', restricted: '#ff6600' };
-    return L.divIcon({
-        className: 'apt-marker',
-        html: `<div style="width:12px;height:12px;background:${colors[status]};border:2px solid #fff;transform:rotate(45deg);box-shadow:0 0 6px ${colors[status]};"></div>`,
-        iconSize: [12, 12], iconAnchor: [6, 6]
-    });
+async function fetchFlights() {
+    const url = `https://opensky-network.org/api/states/all?lamin=${OPENSKY_BBOX.lamin}&lomin=${OPENSKY_BBOX.lomin}&lamax=${OPENSKY_BBOX.lamax}&lomax=${OPENSKY_BBOX.lomax}`;
+    
+    try {
+        let response = await fetch(url);
+        if (!response.ok) throw new Error('Direct failed');
+        return await response.json();
+    } catch {
+        const response = await fetch(CORS_PROXY + encodeURIComponent(url));
+        if (!response.ok) throw new Error('API error');
+        return await response.json();
+    }
 }
 
-const incidentMarkers = [];
-const airportMarkers = [];
+function countNearAirport(apt, flights) {
+    return flights.filter(f => {
+        const dist = Math.sqrt(Math.pow(f.lat - apt.lat, 2) + Math.pow(f.lon - apt.lon, 2));
+        return dist < 1.5; // ~150km radius
+    }).length;
+}
 
-incidents.forEach((inc, idx) => {
-    const m = L.marker([inc.lat, inc.lon], { icon: incidentIcon(inc.type) }).addTo(map);
-    m.bindPopup(`
-        <div class="popup-type">${inc.type}</div>
-        <div class="popup-row"><span class="k">url:</span> <a href="https://${inc.url}" target="_blank">${inc.url}</a></div>
-        <div class="popup-row"><span class="k">date:</span> <span class="v">${inc.date}</span></div>
-        <div class="popup-row"><span class="k">title:</span> <span class="v">${inc.title}</span></div>
-        <div class="popup-row"><span class="k">source:</span> <span class="v">${inc.source}</span></div>
-        <div class="popup-row"><span class="k">country:</span> <span class="v">${inc.country}</span></div>
-    `);
-    incidentMarkers.push(m);
-});
+async function refreshFlights() {
+    try {
+        const data = await fetchFlights();
+        flights = (data.states || []).map(s => ({
+            callsign: (s[1] || '').trim(),
+            lat: s[6],
+            lon: s[5],
+            alt: s[7] ? Math.round(s[7] * 3.28084) : null,
+            heading: s[10],
+            onGround: s[8],
+            speed: s[9] ? Math.round(s[9] * 1.94384) : null
+        })).filter(f => f.lat && f.lon);
+        
+        const airborne = flights.filter(f => !f.onGround).length;
+        const ground = flights.filter(f => f.onGround).length;
+        
+        document.getElementById('airborneNum').textContent = airborne;
+        document.getElementById('groundNum').textContent = ground;
+        document.getElementById('totalNum').textContent = flights.length;
+        document.getElementById('flightTag').textContent = 'LIVE';
+        
+        // Update airport list
+        const aptList = document.getElementById('airportList');
+        aptList.innerHTML = AIRPORTS.map(apt => {
+            const count = countNearAirport(apt, flights);
+            return `<div class="airport-row" data-code="${apt.code}">
+                <span class="code">${apt.code}</span>
+                <span class="name">${apt.name}</span>
+                <span class="flights">${count} ✈</span>
+            </div>`;
+        }).join('');
+        
+        aptList.querySelectorAll('.airport-row').forEach(row => {
+            row.onclick = () => {
+                const apt = AIRPORTS.find(a => a.code === row.dataset.code);
+                if (apt) {
+                    map.flyTo([apt.lat, apt.lon], 8, { duration: 0.5 });
+                    airportMarkers[apt.code].openPopup();
+                }
+            };
+        });
+        
+        // Update map markers
+        flightMarkers.forEach(m => map.removeLayer(m));
+        flightMarkers = [];
+        
+        flights.filter(f => !f.onGround).forEach(f => {
+            const m = L.marker([f.lat, f.lon], { icon: createPlaneIcon(f.heading) }).addTo(map);
+            m.bindPopup(`<div class="popup-title">${f.callsign || 'Unknown'}</div>
+                <div class="popup-row"><span class="k">alt:</span> <span class="v">${f.alt ? f.alt.toLocaleString() + ' ft' : 'N/A'}</span></div>
+                <div class="popup-row"><span class="k">speed:</span> <span class="v">${f.speed ? f.speed + ' kts' : 'N/A'}</span></div>`);
+            flightMarkers.push(m);
+        });
+        
+        updateStatus(`LIVE — ${flights.length} aircraft tracked`, true);
+        localStorage.setItem('flightCache', JSON.stringify({ time: Date.now(), flights }));
+    } catch (err) {
+        console.error('Flight fetch error:', err);
+        document.getElementById('flightTag').textContent = 'CACHED';
+        
+        const cached = localStorage.getItem('flightCache');
+        if (cached) {
+            const { flights: cachedFlights } = JSON.parse(cached);
+            flights = cachedFlights;
+            document.getElementById('airborneNum').textContent = flights.filter(f => !f.onGround).length;
+            document.getElementById('groundNum').textContent = flights.filter(f => f.onGround).length;
+            document.getElementById('totalNum').textContent = flights.length;
+        }
+        updateStatus('Connection issue — showing cached data', false);
+    }
+}
 
-airports.forEach(apt => {
-    const m = L.marker([apt.lat, apt.lon], { icon: airportIcon(apt.status) }).addTo(map);
-    m.bindPopup(`
-        <div class="popup-type" style="color:#ff6600">AIRPORT</div>
-        <div class="popup-row"><span class="k">code:</span> <span class="v">${apt.code}</span></div>
-        <div class="popup-row"><span class="k">name:</span> <span class="v">${apt.name}</span></div>
-        <div class="popup-row"><span class="k">status:</span> <span class="v" style="color:${apt.status==='open'?'#0c0':apt.status==='limited'?'#ff0':'#ff6600'}">${apt.status.toUpperCase()}</span></div>
-        <div class="popup-row"><span class="k">cancel_rate:</span> <span class="v">${apt.cxl}</span></div>
-        <div class="popup-row"><span class="k">avg_delay:</span> <span class="v">${apt.dly}</span></div>
-    `);
-    airportMarkers.push(m);
-});
+async function fetchNews() {
+    const url = 'https://api.gdeltproject.org/api/v2/doc/doc?query=(military%20OR%20missile%20OR%20strike%20OR%20attack)%20(Iran%20OR%20Israel%20OR%20Yemen%20OR%20UAE%20OR%20Gaza)&mode=artlist&format=json&maxrecords=15&timespan=24h&sort=datedesc';
+    
+    try {
+        let response = await fetch(url);
+        let text = await response.text();
+        if (text.includes('Please limit')) throw new Error('Rate limited');
+        return JSON.parse(text);
+    } catch {
+        const response = await fetch(CORS_PROXY + encodeURIComponent(url));
+        const text = await response.text();
+        if (text.includes('Please limit')) throw new Error('Rate limited');
+        return JSON.parse(text);
+    }
+}
 
-// Closed airspace
-const airspace = L.polygon([[38,44],[38,63],[25,63],[25,56],[29,48],[33,44]], 
-    { color: '#f33', weight: 1, fillColor: '#f33', fillOpacity: 0.1, dashArray: '5,5' })
-    .addTo(map).bindPopup('<div class="popup-type">CLOSED AIRSPACE</div><div class="popup-row"><span class="k">region:</span> <span class="v">Iran, Iraq, W. Afghanistan</span></div><div class="popup-row"><span class="k">status:</span> <span class="v" style="color:#f33">NO CIVILIAN OVERFLIGHTS</span></div>');
+function timeAgo(dateStr) {
+    const date = new Date(dateStr);
+    const diffMs = Date.now() - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    return `${Math.floor(diffHours / 24)}d ago`;
+}
 
-// View filter
-document.getElementById('viewFilter').onchange = function() {
-    const v = this.value;
-    incidentMarkers.forEach(m => v === 'airports' ? map.removeLayer(m) : m.addTo(map));
-    airportMarkers.forEach(m => v === 'strikes' ? map.removeLayer(m) : m.addTo(map));
-};
+function domainFromUrl(url) {
+    try { return new URL(url).hostname.replace('www.', ''); } catch { return url.slice(0, 25); }
+}
 
-// Feed
-const feed = document.getElementById('feed');
-incidents.forEach((inc, idx) => {
-    const item = document.createElement('div');
-    item.className = 'feed-item';
-    item.innerHTML = `
-        <div class="type ${inc.level}">${inc.type}</div>
-        <div class="title">${inc.title}</div>
-        <div class="meta"><span class="loc">${inc.country}</span> · ${inc.hoursAgo}h ago · ${inc.source}</div>
-    `;
-    item.onclick = () => {
-        map.flyTo([inc.lat, inc.lon], 8, { duration: 0.5 });
-        incidentMarkers[idx].openPopup();
-    };
-    feed.appendChild(item);
-});
+async function refreshNews() {
+    try {
+        const data = await fetchNews();
+        articles = data.articles || [];
+        document.getElementById('newsTag').textContent = 'LIVE';
+        
+        const feed = document.getElementById('newsFeed');
+        if (articles.length === 0) {
+            feed.innerHTML = '<div class="loading">No recent news</div>';
+            return;
+        }
+        
+        feed.innerHTML = articles.slice(0, 12).map(art => `
+            <div class="feed-item">
+                <div class="source">${domainFromUrl(art.url)}</div>
+                <div class="title"><a href="${art.url}" target="_blank">${art.title}</a></div>
+                <div class="meta">${art.seendate ? timeAgo(art.seendate) : ''}</div>
+            </div>
+        `).join('');
+        
+        localStorage.setItem('newsCache', JSON.stringify({ time: Date.now(), articles }));
+    } catch (err) {
+        console.error('News fetch error:', err);
+        document.getElementById('newsTag').textContent = 'CACHED';
+        
+        const cached = localStorage.getItem('newsCache');
+        if (cached) {
+            const { articles: cachedArticles } = JSON.parse(cached);
+            articles = cachedArticles;
+            const feed = document.getElementById('newsFeed');
+            feed.innerHTML = articles.slice(0, 12).map(art => `
+                <div class="feed-item">
+                    <div class="source">${domainFromUrl(art.url)}</div>
+                    <div class="title"><a href="${art.url}" target="_blank">${art.title}</a></div>
+                    <div class="meta">${art.seendate ? timeAgo(art.seendate) : ''}</div>
+                </div>
+            `).join('');
+        } else {
+            document.getElementById('newsFeed').innerHTML = '<div class="loading">News temporarily unavailable</div>';
+        }
+    }
+}
 
-setTimeout(() => location.reload(), 300000);
+// Initial load
+refreshFlights();
+refreshNews();
+
+// Auto-refresh
+setInterval(refreshFlights, 30000);
+setInterval(refreshNews, 300000);
+
+// Full page refresh every 15 min
+setTimeout(() => location.reload(), 900000);
 </script>
 </body>
 </html>
