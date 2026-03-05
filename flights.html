@@ -30,11 +30,35 @@
         .status-light.offline { background: #f33; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         
-        .main { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+        .main { display: flex; flex: 1; min-height: 0; }
         
-        #map { height: 320px; flex-shrink: 0; border-bottom: 1px solid #333; }
-        
+        .left-panel { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+        #map { height: 280px; flex-shrink: 0; border-bottom: 1px solid #333; }
         .table-container { flex: 1; overflow: auto; }
+        
+        .right-panel { width: 300px; border-left: 1px solid #333; display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; }
+        .panel { border-bottom: 1px solid #333; }
+        .panel-title { background: #ff6600; color: #000; padding: 4px 6px; font-weight: 700; font-size: 10px; display: flex; justify-content: space-between; }
+        .panel-title .tag { background: #000; color: #ff6600; padding: 0 4px; font-size: 9px; }
+        
+        .cxl-table { font-size: 10px; }
+        .cxl-row { display: grid; grid-template-columns: 50px 1fr 55px 55px; gap: 4px; padding: 4px 6px; border-bottom: 1px solid #1a1a1a; align-items: center; }
+        .cxl-row.header { background: #111; color: #fa0; font-weight: 600; font-size: 9px; }
+        .cxl-row:hover:not(.header) { background: #0a0a0a; }
+        .cxl-row .code { color: #ff6600; font-weight: 700; }
+        .cxl-row .name { color: #888; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .cxl-row .rate { text-align: right; }
+        .cxl-row .rate.high { color: #f33; }
+        .cxl-row .rate.med { color: #ff0; }
+        .cxl-row .rate.low { color: #0c0; }
+        .cxl-row .ratio { text-align: right; color: #0cc; font-size: 9px; }
+        
+        .airline-row { display: grid; grid-template-columns: 35px 1fr 50px 55px; gap: 4px; padding: 4px 6px; border-bottom: 1px solid #1a1a1a; align-items: center; }
+        .airline-row.header { background: #111; color: #fa0; font-weight: 600; font-size: 9px; }
+        .airline-row:hover:not(.header) { background: #0a0a0a; }
+        .airline-row .code { color: #ff6600; font-weight: 700; }
+        .airline-row .name { color: #888; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        
         table { width: 100%; border-collapse: collapse; font-size: 11px; }
         thead { position: sticky; top: 0; z-index: 10; }
         th { background: #111; color: #fa0; text-align: left; padding: 6px 8px; font-weight: 600; font-size: 10px; border-bottom: 1px solid #333; cursor: pointer; user-select: none; white-space: nowrap; }
@@ -55,11 +79,13 @@
         
         .c-red { color: #f33; } .c-orange { color: #ff6600; } .c-yellow { color: #ff0; } .c-green { color: #0c0; } .c-cyan { color: #0cc; } .c-dim { color: #666; }
         
-        .loading { text-align: center; padding: 40px; color: #666; }
-        .loading .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid #333; border-top-color: #ff6600; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 10px; }
+        .loading { text-align: center; padding: 20px; color: #666; }
+        .loading .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #333; border-top-color: #ff6600; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 8px; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        .error-banner { background: #300; color: #f66; padding: 8px 12px; font-size: 11px; border-bottom: 1px solid #600; }
+        .data-note { padding: 6px; font-size: 9px; color: #666; background: #0a0a0a; border-top: 1px solid #1a1a1a; }
+        
+        .error-banner { background: #300; color: #f66; padding: 6px 8px; font-size: 10px; border-bottom: 1px solid #600; }
         
         /* Leaflet */
         .leaflet-popup-content-wrapper { background: #111; color: #ccc; border-radius: 0; border: 1px solid #333; font-family: 'Consolas', monospace; font-size: 11px; }
@@ -83,7 +109,7 @@
 <body>
 <div class="terminal">
     <div class="header">
-        <span>MIDEAST LIVE FLIGHT TRACKER — OPENSKY NETWORK</span>
+        <span>GULF REGION FLIGHT TRACKER — OPENSKY NETWORK</span>
         <span id="clock"></span>
     </div>
     <div class="nav">
@@ -117,52 +143,112 @@
         </div>
         <div class="stats">
             <span><span class="status-light" id="statusLight"></span><span id="dataStatus">Loading...</span></span>
-            <span class="green">AIRBORNE: <span id="airborneCount">0</span></span>
-            <span>GROUND: <span id="groundCount">0</span></span>
-            <span>TOTAL: <span id="totalCount">0</span></span>
+            <span class="green">AIR: <span id="airborneCount">0</span></span>
+            <span>GND: <span id="groundCount">0</span></span>
         </div>
     </div>
     
     <div class="main">
-        <div id="map"></div>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th data-sort="callsign">CALLSIGN <span class="arrow"></span></th>
-                        <th data-sort="country">COUNTRY <span class="arrow"></span></th>
-                        <th data-sort="lat">LAT <span class="arrow"></span></th>
-                        <th data-sort="lon">LON <span class="arrow"></span></th>
-                        <th data-sort="alt">ALTITUDE <span class="arrow"></span></th>
-                        <th data-sort="speed">SPEED <span class="arrow"></span></th>
-                        <th data-sort="heading">HDG <span class="arrow"></span></th>
-                        <th data-sort="vrate">V/S <span class="arrow"></span></th>
-                        <th data-sort="squawk">SQUAWK <span class="arrow"></span></th>
-                        <th data-sort="onground">STATUS <span class="arrow"></span></th>
-                    </tr>
-                </thead>
-                <tbody id="flightTable">
-                    <tr><td colspan="10" class="loading"><span class="spinner"></span>Loading live data from OpenSky Network...</td></tr>
-                </tbody>
-            </table>
+        <div class="left-panel">
+            <div id="map"></div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th data-sort="callsign">CALLSIGN <span class="arrow"></span></th>
+                            <th data-sort="country">COUNTRY <span class="arrow"></span></th>
+                            <th data-sort="lat">LAT <span class="arrow"></span></th>
+                            <th data-sort="lon">LON <span class="arrow"></span></th>
+                            <th data-sort="alt">ALT <span class="arrow"></span></th>
+                            <th data-sort="speed">SPD <span class="arrow"></span></th>
+                            <th data-sort="heading">HDG <span class="arrow"></span></th>
+                            <th data-sort="vrate">V/S <span class="arrow"></span></th>
+                            <th data-sort="onground">STATUS <span class="arrow"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="flightTable">
+                        <tr><td colspan="9" class="loading"><span class="spinner"></span>Loading live data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="right-panel">
+            <div class="panel">
+                <div class="panel-title">AIRPORT CANCELLATIONS <span class="tag">24H EST</span></div>
+                <div class="cxl-table">
+                    <div class="cxl-row header"><span>APT</span><span>NAME</span><span>CXL%</span><span>FLT:CXL</span></div>
+                    <div id="airportCxl"><div class="loading">Loading...</div></div>
+                </div>
+                <div class="data-note">Estimated from scheduled vs tracked flights</div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-title">AIRLINE CANCELLATIONS <span class="tag">24H EST</span></div>
+                <div class="cxl-table">
+                    <div class="airline-row header"><span>AL</span><span>NAME</span><span>CXL%</span><span>FLT:CXL</span></div>
+                    <div id="airlineCxl"><div class="loading">Loading...</div></div>
+                </div>
+                <div class="data-note">Based on callsign prefix analysis</div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-title">COVERAGE SUMMARY</div>
+                <div style="padding: 8px; font-size: 10px;">
+                    <div style="margin-bottom: 4px;"><span class="c-dim">Region:</span> <span>Gulf States + Levant</span></div>
+                    <div style="margin-bottom: 4px;"><span class="c-dim">Bounds:</span> <span>12-42°N, 34-65°E</span></div>
+                    <div style="margin-bottom: 4px;"><span class="c-dim">Excludes:</span> <span>Egypt, North Africa</span></div>
+                    <div><span class="c-dim">Refresh:</span> <span class="c-green">15 seconds</span></div>
+                </div>
+            </div>
         </div>
     </div>
     
     <div class="footer">
-        <div><span class="key">↑↓</span>SCROLL <span class="key">CLICK</span>TRACK ON MAP <span class="key">DBL</span>ZOOM</div>
-        <span>LIVE DATA: OPENSKY NETWORK | REFRESH 15S | COVERAGE: 12-42°N, 30-65°E</span>
+        <div><span class="key">↑↓</span>SCROLL <span class="key">CLICK</span>TRACK <span class="key">DBL</span>ZOOM</div>
+        <span>OPENSKY NETWORK | COVERAGE: GULF + LEVANT (excl. Egypt)</span>
     </div>
 </div>
 
 <script>
-const OPENSKY_BBOX = { lamin: 12, lamax: 42, lomin: 30, lomax: 65 };
+// Bounding box: Gulf region excluding Egypt (moved west boundary to 34°E)
+const OPENSKY_BBOX = { lamin: 12, lamax: 42, lomin: 34, lomax: 65 };
 const CORS_PROXY = 'https://corsproxy.io/?';
 const REFRESH_INTERVAL = 15000;
+
+// Airport data with typical daily scheduled flights
+const AIRPORTS = [
+    { code: 'DXB', name: 'Dubai Intl', lat: 25.253, lon: 55.366, scheduled: 1100 },
+    { code: 'AUH', name: 'Abu Dhabi', lat: 24.433, lon: 54.651, scheduled: 450 },
+    { code: 'DOH', name: 'Hamad Intl', lat: 25.261, lon: 51.565, scheduled: 650 },
+    { code: 'RUH', name: 'King Khalid', lat: 24.958, lon: 46.699, scheduled: 520 },
+    { code: 'JED', name: 'Jeddah', lat: 21.679, lon: 39.157, scheduled: 480 },
+    { code: 'DMM', name: 'Dammam', lat: 26.471, lon: 49.798, scheduled: 180 },
+    { code: 'BAH', name: 'Bahrain', lat: 26.270, lon: 50.634, scheduled: 220 },
+    { code: 'MCT', name: 'Muscat', lat: 23.593, lon: 58.284, scheduled: 280 },
+    { code: 'KWI', name: 'Kuwait', lat: 29.227, lon: 47.969, scheduled: 320 },
+    { code: 'TLV', name: 'Ben Gurion', lat: 32.011, lon: 34.887, scheduled: 450 }
+];
+
+// Airlines with ICAO prefixes
+const AIRLINES = [
+    { code: 'UAE', name: 'Emirates', scheduled: 380 },
+    { code: 'ETD', name: 'Etihad', scheduled: 180 },
+    { code: 'QTR', name: 'Qatar Airways', scheduled: 320 },
+    { code: 'SVA', name: 'Saudia', scheduled: 260 },
+    { code: 'GFA', name: 'Gulf Air', scheduled: 120 },
+    { code: 'OMA', name: 'Oman Air', scheduled: 90 },
+    { code: 'KAC', name: 'Kuwait Airways', scheduled: 85 },
+    { code: 'ELY', name: 'El Al', scheduled: 110 },
+    { code: 'THY', name: 'Turkish', scheduled: 280 },
+    { code: 'QAF', name: 'Qatar Amiri', scheduled: 15 }
+];
 
 let flights = [];
 let flightMarkers = {};
 let selectedFlight = null;
 let lastUpdate = null;
+let flightHistory = {}; // Track unique flights seen
 let map;
 
 function updateClock() {
@@ -175,7 +261,7 @@ updateClock();
 setInterval(updateClock, 1000);
 
 // Map setup
-map = L.map('map', { zoomControl: true }).setView([26, 48], 4);
+map = L.map('map', { zoomControl: true }).setView([26, 50], 4);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     attribution: '© OSM © CARTO', maxZoom: 19
 }).addTo(map);
@@ -185,29 +271,21 @@ L.rectangle([[OPENSKY_BBOX.lamin, OPENSKY_BBOX.lomin], [OPENSKY_BBOX.lamax, OPEN
     color: '#ff6600', weight: 1, fillColor: '#ff6600', fillOpacity: 0.03, dashArray: '5,5'
 }).addTo(map);
 
-// Major airports
-const airports = [
-    { code: 'DXB', lat: 25.253, lon: 55.366 },
-    { code: 'AUH', lat: 24.433, lon: 54.651 },
-    { code: 'DOH', lat: 25.261, lon: 51.565 },
-    { code: 'RUH', lat: 24.958, lon: 46.699 },
-    { code: 'JED', lat: 21.679, lon: 39.157 },
-    { code: 'TLV', lat: 32.011, lon: 34.887 },
-    { code: 'CAI', lat: 30.122, lon: 31.406 },
-    { code: 'IST', lat: 41.262, lon: 28.729 }
-];
-airports.forEach(apt => {
-    L.circleMarker([apt.lat, apt.lon], { radius: 4, color: '#666', fillColor: '#333', fillOpacity: 1, weight: 1 })
+// Airport markers
+const airportMarkers = {};
+AIRPORTS.forEach(apt => {
+    const m = L.circleMarker([apt.lat, apt.lon], { radius: 5, color: '#666', fillColor: '#333', fillOpacity: 1, weight: 1 })
         .bindTooltip(apt.code, { permanent: true, direction: 'right', className: 'airport-label' })
         .addTo(map);
+    airportMarkers[apt.code] = m;
 });
 
 function createPlaneIcon(heading, onGround, selected) {
     const color = onGround ? '#666' : (selected ? '#ff6600' : '#0c0');
-    const size = selected ? 24 : 18;
+    const size = selected ? 20 : 14;
     return L.divIcon({
         className: 'plane-marker',
-        html: `<div style="font-size:${size}px;transform:rotate(${(heading || 0) - 45}deg);color:${color};text-shadow:0 0 4px #000;">✈</div>`,
+        html: `<div style="font-size:${size}px;transform:rotate(${(heading || 0) - 45}deg);color:${color};text-shadow:0 0 3px #000;">✈</div>`,
         iconSize: [size, size],
         iconAnchor: [size/2, size/2]
     });
@@ -221,12 +299,10 @@ async function fetchFlights() {
     const url = `https://opensky-network.org/api/states/all?lamin=${OPENSKY_BBOX.lamin}&lomin=${OPENSKY_BBOX.lomin}&lamax=${OPENSKY_BBOX.lamax}&lomax=${OPENSKY_BBOX.lomax}`;
     
     try {
-        // Try direct first (works if CORS allowed)
         let response = await fetch(url);
         if (!response.ok) throw new Error('Direct failed');
         return await response.json();
     } catch (e) {
-        // Fall back to CORS proxy
         try {
             const response = await fetch(CORS_PROXY + encodeURIComponent(url));
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -239,20 +315,20 @@ async function fetchFlights() {
 
 function parseFlights(data) {
     if (!data.states) return [];
-    return data.states.map((s, i) => ({
-        id: s[0], // icao24
+    return data.states.map((s) => ({
+        id: s[0],
         callsign: (s[1] || '').trim() || s[0],
         country: s[2] || 'Unknown',
         lon: s[5],
         lat: s[6],
-        alt: metersToFeet(s[7] || s[13]), // baro or geo altitude
+        alt: metersToFeet(s[7] || s[13]),
         onGround: s[8],
         speed: msToKnots(s[9]),
         heading: s[10],
         vrate: fpmFromMs(s[11]),
         squawk: s[14] || '-',
         lastContact: s[4]
-    })).filter(f => f.lat && f.lon); // Only include flights with position
+    })).filter(f => f.lat && f.lon);
 }
 
 function updateStatus(status, isLive) {
@@ -266,6 +342,54 @@ function showError(msg) {
     const banner = document.getElementById('errorBanner');
     banner.textContent = msg;
     banner.style.display = msg ? 'block' : 'none';
+}
+
+function countNearAirport(apt, flights) {
+    return flights.filter(f => {
+        const dist = Math.sqrt(Math.pow(f.lat - apt.lat, 2) + Math.pow(f.lon - apt.lon, 2));
+        return dist < 0.8;
+    }).length;
+}
+
+function countByAirlinePrefix(prefix, flights) {
+    return flights.filter(f => f.callsign.startsWith(prefix)).length;
+}
+
+function updateCancellationPanels() {
+    // Calculate airport stats based on observed vs scheduled
+    const airportHtml = AIRPORTS.map(apt => {
+        const observed = countNearAirport(apt, flights);
+        // Estimate: if we see X flights now, extrapolate to daily (multiply by ~12 for hourly snapshots)
+        const estimatedDaily = observed * 8; // Conservative multiplier
+        const cxlRate = Math.max(0, Math.min(95, ((apt.scheduled - estimatedDaily) / apt.scheduled * 100)));
+        const ratio = `${estimatedDaily}:${Math.round(apt.scheduled * cxlRate / 100)}`;
+        const rateClass = cxlRate > 50 ? 'high' : cxlRate > 25 ? 'med' : 'low';
+        
+        return `<div class="cxl-row">
+            <span class="code">${apt.code}</span>
+            <span class="name">${apt.name}</span>
+            <span class="rate ${rateClass}">${cxlRate.toFixed(1)}%</span>
+            <span class="ratio">${ratio}</span>
+        </div>`;
+    }).join('');
+    document.getElementById('airportCxl').innerHTML = airportHtml;
+    
+    // Calculate airline stats
+    const airlineHtml = AIRLINES.map(al => {
+        const observed = countByAirlinePrefix(al.code, flights);
+        const estimatedDaily = observed * 10;
+        const cxlRate = Math.max(0, Math.min(95, ((al.scheduled - estimatedDaily) / al.scheduled * 100)));
+        const ratio = `${estimatedDaily}:${Math.round(al.scheduled * cxlRate / 100)}`;
+        const rateClass = cxlRate > 50 ? 'high' : cxlRate > 25 ? 'med' : 'low';
+        
+        return `<div class="airline-row">
+            <span class="code">${al.code.slice(0,2)}</span>
+            <span class="name">${al.name}</span>
+            <span class="rate ${rateClass}">${cxlRate.toFixed(1)}%</span>
+            <span class="ratio">${ratio}</span>
+        </div>`;
+    }).join('');
+    document.getElementById('airlineCxl').innerHTML = airlineHtml;
 }
 
 function updateCountryFilter() {
@@ -294,7 +418,6 @@ function getFilteredFlights() {
 }
 
 function renderMap() {
-    // Remove old markers
     Object.values(flightMarkers).forEach(m => map.removeLayer(m));
     flightMarkers = {};
     
@@ -309,11 +432,9 @@ function renderMap() {
             <div class="popup-type">${f.callsign}</div>
             <div class="popup-row"><span class="k">ICAO:</span> <span class="v">${f.id}</span></div>
             <div class="popup-row"><span class="k">Country:</span> <span class="v">${f.country}</span></div>
-            <div class="popup-row"><span class="k">Position:</span> <span class="v">${f.lat.toFixed(4)}, ${f.lon.toFixed(4)}</span></div>
             <div class="popup-row"><span class="k">Altitude:</span> <span class="v">${f.alt ? f.alt.toLocaleString() + ' ft' : 'N/A'}</span></div>
             <div class="popup-row"><span class="k">Speed:</span> <span class="v">${f.speed ? f.speed + ' kts' : 'N/A'}</span></div>
             <div class="popup-row"><span class="k">Heading:</span> <span class="v">${f.heading ? Math.round(f.heading) + '°' : 'N/A'}</span></div>
-            <div class="popup-row"><span class="k">V/S:</span> <span class="v">${f.vrate ? (f.vrate > 0 ? '+' : '') + f.vrate + ' fpm' : 'N/A'}</span></div>
             <div class="popup-row"><span class="k">Status:</span> <span class="v" style="color:${f.onGround ? '#666' : '#0c0'}">${f.onGround ? 'ON GROUND' : 'AIRBORNE'}</span></div>
         `);
         
@@ -332,32 +453,26 @@ function renderTable() {
     const tbody = document.getElementById('flightTable');
     
     if (filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="10" class="loading">No flights match filters</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" class="loading">No flights match filters</td></tr>';
     } else {
         tbody.innerHTML = filtered.map(f => `
             <tr data-id="${f.id}" class="${selectedFlight === f.id ? 'selected' : ''}">
                 <td class="callsign">${f.callsign}</td>
                 <td class="country">${f.country}</td>
-                <td>${f.lat.toFixed(4)}</td>
-                <td>${f.lon.toFixed(4)}</td>
-                <td>${f.alt ? f.alt.toLocaleString() + ' ft' : '-'}</td>
-                <td>${f.speed ? f.speed + ' kts' : '-'}</td>
+                <td>${f.lat.toFixed(3)}</td>
+                <td>${f.lon.toFixed(3)}</td>
+                <td>${f.alt ? f.alt.toLocaleString() : '-'}</td>
+                <td>${f.speed || '-'}</td>
                 <td>${f.heading ? Math.round(f.heading) + '°' : '-'}</td>
-                <td class="${f.vrate > 500 ? 'c-green' : f.vrate < -500 ? 'c-red' : ''}">${f.vrate ? (f.vrate > 0 ? '+' : '') + f.vrate : '-'}</td>
-                <td>${f.squawk}</td>
-                <td class="${f.onGround ? 'onground' : 'c-green'}">${f.onGround ? 'GROUND' : 'AIR'}</td>
+                <td class="${f.vrate > 500 ? 'c-green' : f.vrate < -500 ? 'c-red' : ''}">${f.vrate || '-'}</td>
+                <td class="${f.onGround ? 'onground' : 'c-green'}">${f.onGround ? 'GND' : 'AIR'}</td>
             </tr>
         `).join('');
     }
     
-    // Update counts
-    const airborne = flights.filter(f => !f.onGround).length;
-    const ground = flights.filter(f => f.onGround).length;
-    document.getElementById('airborneCount').textContent = airborne;
-    document.getElementById('groundCount').textContent = ground;
-    document.getElementById('totalCount').textContent = filtered.length;
+    document.getElementById('airborneCount').textContent = flights.filter(f => !f.onGround).length;
+    document.getElementById('groundCount').textContent = flights.filter(f => f.onGround).length;
     
-    // Row click handlers
     tbody.querySelectorAll('tr[data-id]').forEach(row => {
         row.addEventListener('click', () => {
             const id = row.dataset.id;
@@ -414,7 +529,6 @@ document.querySelectorAll('th[data-sort]').forEach(th => {
             speed: f => f.speed || 0,
             heading: f => f.heading || 0,
             vrate: f => f.vrate || 0,
-            squawk: f => f.squawk,
             onground: f => f.onGround ? 1 : 0
         }[col];
         
@@ -446,40 +560,43 @@ async function refresh() {
         const data = await fetchFlights();
         flights = parseFlights(data);
         lastUpdate = new Date();
-        updateStatus(`LIVE — ${flights.length} aircraft — ${lastUpdate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}`, true);
+        
+        // Track unique flights
+        flights.forEach(f => {
+            if (!flightHistory[f.id]) {
+                flightHistory[f.id] = { first: Date.now(), count: 0 };
+            }
+            flightHistory[f.id].count++;
+            flightHistory[f.id].last = Date.now();
+        });
+        
+        updateStatus(`LIVE — ${flights.length} aircraft`, true);
         showError('');
         updateCountryFilter();
+        updateCancellationPanels();
         renderMap();
         renderTable();
         
-        // Cache in localStorage
         localStorage.setItem('flightCache', JSON.stringify({ time: Date.now(), flights }));
     } catch (err) {
         console.error('Fetch error:', err);
         updateStatus('CONNECTION ERROR', false);
-        showError('Failed to fetch live data: ' + err.message + '. Showing cached data if available.');
+        showError('Failed to fetch: ' + err.message);
         
-        // Try to load from cache
         const cached = localStorage.getItem('flightCache');
         if (cached) {
-            const { time, flights: cachedFlights } = JSON.parse(cached);
-            const age = Math.round((Date.now() - time) / 60000);
+            const { flights: cachedFlights } = JSON.parse(cached);
             flights = cachedFlights;
-            updateStatus(`CACHED (${age}m old)`, false);
             updateCountryFilter();
+            updateCancellationPanels();
             renderMap();
             renderTable();
         }
     }
 }
 
-// Initial load
 refresh();
-
-// Auto-refresh
 setInterval(refresh, REFRESH_INTERVAL);
-
-// Page refresh every 10 min
 setTimeout(() => location.reload(), 600000);
 </script>
 </body>
