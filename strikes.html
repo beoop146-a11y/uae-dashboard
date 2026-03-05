@@ -8,230 +8,334 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #000; color: #ccc; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 12px; line-height: 1.3; }
-        .terminal { padding: 2px; }
-        .header { background: #ff6600; color: #000; padding: 3px 8px; font-weight: 700; font-size: 13px; display: flex; justify-content: space-between; }
-        .nav { background: #000; border-bottom: 1px solid #333; display: flex; }
-        .nav a { color: #fa0; text-decoration: none; padding: 4px 16px; font-size: 11px; border-right: 1px solid #333; }
-        .nav a:hover { background: #111; }
-        .nav a.active { background: #ff6600; color: #000; font-weight: 700; }
-        .ticker { background: #f33; color: #fff; padding: 3px 8px; font-size: 11px; font-weight: 700; }
-        .ticker .blink { animation: blink 1s infinite; margin-right: 8px; }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-        .panel { border: 1px solid #333; background: #000; margin-bottom: 2px; }
-        .panel-title { background: #ff6600; color: #000; padding: 2px 6px; font-size: 11px; font-weight: 700; display: flex; justify-content: space-between; }
-        .panel-title .tag { background: #000; color: #ff6600; padding: 0 4px; font-size: 10px; }
-        #map { height: 350px; background: #111; }
-        .toll-grid { display: grid; grid-template-columns: repeat(6, 1fr); }
-        @media(max-width:700px) { .toll-grid { grid-template-columns: repeat(3, 1fr); } }
-        .toll { padding: 8px; text-align: center; border-right: 1px solid #333; border-bottom: 1px solid #333; }
-        .toll .region { font-size: 9px; color: #666; }
-        .toll .num { font-size: 22px; font-weight: 700; color: #f33; }
-        .toll .type { font-size: 8px; color: #666; }
-        .timeline-item { display: grid; grid-template-columns: 130px 100px 1fr; gap: 8px; padding: 4px 6px; border-bottom: 1px solid #1a1a1a; font-size: 11px; border-left: 3px solid transparent; }
-        .timeline-item:hover { background: #0a0a0a; cursor: pointer; }
-        .timeline-item.critical { border-left-color: #f33; }
-        .timeline-item.high { border-left-color: #ff6600; }
-        .timeline-item.medium { border-left-color: #ff0; }
-        .timeline-item .time { color: #ff6600; font-size: 10px; }
-        .timeline-item .loc { color: #0cc; font-size: 10px; }
-        .country-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2px; }
-        .incident-block { padding: 6px; border-bottom: 1px solid #1a1a1a; }
-        .incident-block .meta { display: flex; gap: 12px; margin-bottom: 4px; font-size: 10px; }
-        .incident-block .meta .time { color: #ff6600; }
-        .incident-block .meta .type { padding: 0 4px; font-weight: 700; font-size: 9px; }
-        .incident-block .meta .type.strike { background: #f33; color: #fff; }
-        .incident-block .meta .type.intercept { background: #ff0; color: #000; }
-        .incident-block .meta .type.military { background: #0cc; color: #000; }
-        .incident-block h4 { color: #fff; font-size: 11px; margin-bottom: 3px; }
-        .incident-block p { color: #ccc; font-size: 10px; line-height: 1.4; }
-        .incident-block .impact { margin-top: 4px; font-size: 9px; color: #666; border-top: 1px dotted #333; padding-top: 4px; }
-        .incident-block .impact strong { color: #ff0; }
-        .no-incidents { padding: 12px; text-align: center; color: #0c0; font-size: 11px; }
-        .c-dim { color: #666; }
-        .footer { background: #111; border-top: 1px solid #333; padding: 4px 8px; font-size: 10px; color: #666; display: flex; justify-content: space-between; }
-        .footer .key { background: #ff6600; color: #000; padding: 0 3px; font-weight: 700; margin-right: 2px; }
-        .footer .keys span { margin-right: 16px; }
-        .leaflet-popup-content-wrapper { background: #111; color: #ccc; border-radius: 0; font-family: monospace; font-size: 11px; }
-        .leaflet-popup-tip { background: #111; }
-        .leaflet-popup-content { margin: 8px; max-width: 250px; }
-        .popup-title { color: #ff6600; font-weight: 700; margin-bottom: 4px; font-size: 12px; }
-        .popup-time { color: #666; margin-bottom: 6px; }
-        .popup-casualties { color: #f33; font-weight: 700; }
+        body { background: #0a0f0a; color: #ccc; font-family: 'Inter', -apple-system, sans-serif; font-size: 12px; overflow: hidden; height: 100vh; }
+        
+        /* Header */
+        .header { background: #0d120d; border-bottom: 1px solid #1a251a; padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 44px; }
+        .header .logo { color: #4ade80; font-weight: 700; font-size: 14px; }
+        .header .nav { display: flex; gap: 4px; }
+        .header .nav a { color: #888; text-decoration: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; }
+        .header .nav a:hover { background: #1a251a; color: #ccc; }
+        .header .nav a.active { background: #166534; color: #fff; }
+        .header .clock { color: #4ade80; font-family: monospace; font-size: 11px; }
+        
+        /* Map Container */
+        #map { position: fixed; top: 44px; left: 0; right: 0; bottom: 0; z-index: 1; }
+        
+        /* Layer Panel */
+        .layer-panel { position: fixed; top: 54px; left: 10px; width: 220px; background: rgba(13,18,13,0.95); border: 1px solid #1a251a; border-radius: 6px; z-index: 1000; max-height: calc(100vh - 120px); overflow-y: auto; }
+        .layer-header { background: #166534; color: #fff; padding: 8px 12px; font-weight: 600; font-size: 11px; display: flex; justify-content: space-between; align-items: center; border-radius: 5px 5px 0 0; }
+        .layer-section { border-bottom: 1px solid #1a251a; padding: 8px 0; }
+        .layer-section:last-child { border-bottom: none; }
+        .layer-section-title { color: #4ade80; font-size: 9px; font-weight: 600; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .layer-item { display: flex; align-items: center; padding: 4px 12px; cursor: pointer; }
+        .layer-item:hover { background: #1a251a; }
+        .layer-item input { margin-right: 8px; accent-color: #4ade80; }
+        .layer-item .dot { width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
+        .layer-item label { cursor: pointer; font-size: 11px; flex: 1; }
+        .layer-item .count { color: #666; font-size: 10px; }
+        
+        /* Stats Panel */
+        .stats-panel { position: fixed; top: 54px; right: 10px; width: 280px; background: rgba(13,18,13,0.95); border: 1px solid #1a251a; border-radius: 6px; z-index: 1000; }
+        .stats-header { background: #991b1b; color: #fff; padding: 8px 12px; font-weight: 600; font-size: 11px; border-radius: 5px 5px 0 0; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #1a251a; padding: 1px; }
+        .stats-item { background: #0d120d; padding: 10px 8px; text-align: center; }
+        .stats-item .num { font-size: 18px; font-weight: 700; color: #ef4444; }
+        .stats-item .lbl { font-size: 8px; color: #666; margin-top: 2px; text-transform: uppercase; }
+        
+        /* Incident Feed */
+        .feed-panel { position: fixed; bottom: 10px; right: 10px; width: 340px; background: rgba(13,18,13,0.95); border: 1px solid #1a251a; border-radius: 6px; z-index: 1000; max-height: 300px; }
+        .feed-header { background: #0d120d; color: #4ade80; padding: 8px 12px; font-weight: 600; font-size: 11px; border-bottom: 1px solid #1a251a; display: flex; justify-content: space-between; border-radius: 5px 5px 0 0; }
+        .feed-header .live { color: #ef4444; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+        .feed-list { max-height: 250px; overflow-y: auto; }
+        .feed-item { padding: 8px 12px; border-bottom: 1px solid #1a251a; cursor: pointer; display: flex; gap: 10px; }
+        .feed-item:hover { background: #1a251a; }
+        .feed-item .icon { width: 24px; height: 24px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+        .feed-item .icon.strike { background: #991b1b; }
+        .feed-item .icon.missile { background: #dc2626; }
+        .feed-item .icon.naval { background: #1d4ed8; }
+        .feed-item .icon.military { background: #ca8a04; }
+        .feed-item .icon.airspace { background: #7c3aed; }
+        .feed-item .content { flex: 1; min-width: 0; }
+        .feed-item .title { color: #fff; font-size: 11px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .feed-item .meta { color: #666; font-size: 9px; margin-top: 2px; }
+        .feed-item .meta .loc { color: #4ade80; }
+        .feed-item .meta .time { color: #888; }
+        
+        /* Leaflet Overrides */
+        .leaflet-popup-content-wrapper { background: #0d120d; color: #ccc; border-radius: 6px; border: 1px solid #1a251a; font-family: 'Inter', sans-serif; }
+        .leaflet-popup-tip { background: #0d120d; border: 1px solid #1a251a; }
+        .leaflet-popup-content { margin: 12px; font-size: 11px; }
+        .popup-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .popup-type { padding: 2px 6px; border-radius: 3px; font-size: 9px; font-weight: 600; text-transform: uppercase; }
+        .popup-type.strike { background: #991b1b; color: #fff; }
+        .popup-type.missile { background: #dc2626; color: #fff; }
+        .popup-type.naval { background: #1d4ed8; color: #fff; }
+        .popup-type.military { background: #ca8a04; color: #000; }
+        .popup-type.airspace { background: #7c3aed; color: #fff; }
+        .popup-title { color: #fff; font-weight: 600; font-size: 12px; }
+        .popup-time { color: #4ade80; font-size: 10px; margin-bottom: 8px; }
+        .popup-desc { color: #aaa; line-height: 1.4; margin-bottom: 8px; }
+        .popup-casualties { color: #ef4444; font-weight: 600; }
+        .popup-source { color: #666; font-size: 9px; border-top: 1px solid #1a251a; padding-top: 8px; margin-top: 8px; }
+        
+        .leaflet-control-zoom { border: 1px solid #1a251a !important; }
+        .leaflet-control-zoom a { background: #0d120d !important; color: #4ade80 !important; border-bottom: 1px solid #1a251a !important; }
+        .leaflet-control-zoom a:hover { background: #1a251a !important; }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0f0a; }
+        ::-webkit-scrollbar-thumb { background: #1a251a; border-radius: 3px; }
     </style>
 </head>
 <body>
-<div class="terminal">
-    <div class="header"><span>MIDEAST INCIDENT TRACKER</span><span id="clock"></span></div>
+<div class="header">
+    <div class="logo">⚡ MIDEAST OSINT</div>
     <div class="nav">
-        <a href="index.html">OVERVIEW</a>
-        <a href="flights.html">FLIGHTS</a>
-        <a href="strikes.html" class="active">INCIDENTS</a>
+        <a href="index.html">Overview</a>
+        <a href="flights.html">Flights</a>
+        <a href="strikes.html" class="active">Incidents</a>
     </div>
-    <div class="ticker"><span class="blink">●</span> ONGOING: US-ISRAELI OPS VS IRAN — IRANIAN RETALIATION AFFECTING GULF STATES — MULTIPLE INTERCEPTIONS</div>
+    <div class="clock" id="clock"></div>
+</div>
 
-    <div class="panel">
-        <div class="panel-title">CONFIRMED CASUALTIES FEB 28 - MAR 5</div>
-        <div class="toll-grid">
-            <div class="toll"><div class="region">IRAN</div><div class="num">~1,045</div><div class="type">MIL+CIV</div></div>
-            <div class="toll"><div class="region">ISRAEL</div><div class="num">11</div><div class="type">CIVILIAN</div></div>
-            <div class="toll"><div class="region">USA</div><div class="num">6</div><div class="type">MILITARY</div></div>
-            <div class="toll"><div class="region">UAE</div><div class="num">7</div><div class="type">CIVILIAN</div></div>
-            <div class="toll"><div class="region">SAUDI</div><div class="num">2</div><div class="type">MILITARY</div></div>
-            <div class="toll"><div class="region">TOTAL</div><div class="num">~1,071</div><div class="type">CONFIRMED</div></div>
-        </div>
+<div id="map"></div>
+
+<div class="layer-panel">
+    <div class="layer-header">
+        <span>MAP LAYERS</span>
+        <span style="font-size:9px;color:#4ade80;">6 active</span>
     </div>
-
-    <div class="panel">
-        <div class="panel-title">INCIDENT MAP <span class="tag">CLICK FOR DETAILS</span></div>
-        <div id="map"></div>
+    <div class="layer-section">
+        <div class="layer-section-title">Incidents</div>
+        <div class="layer-item"><input type="checkbox" id="layer-strikes" checked><div class="dot" style="background:#dc2626"></div><label for="layer-strikes">Strikes & Explosions</label><span class="count">12</span></div>
+        <div class="layer-item"><input type="checkbox" id="layer-missiles" checked><div class="dot" style="background:#ef4444"></div><label for="layer-missiles">Missile Activity</label><span class="count">8</span></div>
+        <div class="layer-item"><input type="checkbox" id="layer-naval" checked><div class="dot" style="background:#3b82f6"></div><label for="layer-naval">Naval Incidents</label><span class="count">4</span></div>
+        <div class="layer-item"><input type="checkbox" id="layer-military" checked><div class="dot" style="background:#eab308"></div><label for="layer-military">Military Activity</label><span class="count">6</span></div>
     </div>
-
-    <div class="panel">
-        <div class="panel-title">INCIDENT TIMELINE</div>
-        <div class="timeline-item critical" data-lat="25.20" data-lon="55.27"><span class="time">MAR 2 22:40Z</span><span class="loc">DUBAI UAE</span><span><strong>Missile intercept</strong> — Debris Al Barsha/Business Bay. 3 casualties.</span></div>
-        <div class="timeline-item critical" data-lat="26.43" data-lon="50.10"><span class="time">MAR 2 19:15Z</span><span class="loc">DHAHRAN KSA</span><span><strong>Patriot intercept</strong> — Incoming projectile near Aramco HQ neutralized.</span></div>
-        <div class="timeline-item critical" data-lat="24.45" data-lon="54.37"><span class="time">MAR 1 14:32Z</span><span class="loc">ABU DHABI UAE</span><span><strong>Drone strike</strong> — Shahed-136 hit Al Salam Naval Base. 4 KIA.</span></div>
-        <div class="timeline-item high" data-lat="26.25" data-lon="56.50"><span class="time">MAR 1 23:45Z</span><span class="loc">HORMUZ</span><span><strong>Naval incident</strong> — IRGC boats approached USS group. Warning shots.</span></div>
-        <div class="timeline-item high" data-lat="26.23" data-lon="50.58"><span class="time">MAR 1 11:20Z</span><span class="loc">BAHRAIN</span><span><strong>Base alert</strong> — US 5th Fleet elevated readiness. Personnel evac.</span></div>
-        <div class="timeline-item medium" data-lat="35.70" data-lon="51.42"><span class="time">FEB 28 18:00Z</span><span class="loc">TEHRAN IRAN</span><span><strong>Conflict begins</strong> — US-Israeli strikes on military targets.</span></div>
+    <div class="layer-section">
+        <div class="layer-section-title">Infrastructure</div>
+        <div class="layer-item"><input type="checkbox" id="layer-airspace" checked><div class="dot" style="background:#8b5cf6"></div><label for="layer-airspace">Closed Airspace</label></div>
+        <div class="layer-item"><input type="checkbox" id="layer-airports" checked><div class="dot" style="background:#22c55e"></div><label for="layer-airports">Airports</label><span class="count">8</span></div>
     </div>
-
-    <div class="country-grid">
-        <div class="panel">
-            <div class="panel-title">UAE <span class="tag">2 STRIKES</span></div>
-            <div class="incident-block">
-                <div class="meta"><span class="time">MAR 2 22:40Z</span><span class="type intercept">INTERCEPT</span></div>
-                <h4>Dubai Missile Interception</h4>
-                <p>Emirati air defense intercepted ballistic missile over Dubai. Debris fell Al Barsha and Business Bay. 3 civilian casualties, multiple injuries.</p>
-                <div class="impact"><strong>Impact:</strong> DXB suspended 4h. Sheikh Zayed Rd closed.</div>
-            </div>
-            <div class="incident-block">
-                <div class="meta"><span class="time">MAR 1 14:32Z</span><span class="type strike">STRIKE</span></div>
-                <h4>Abu Dhabi Naval Base Attack</h4>
-                <p>Two Iranian Shahed-136 drones struck Al Salam Naval Base. 4 military KIA. Secondary fires. Etihad HQ evacuated.</p>
-                <div class="impact"><strong>Impact:</strong> AUH closed 8h. Threat level maximum.</div>
-            </div>
-        </div>
-
-        <div class="panel">
-            <div class="panel-title">SAUDI ARABIA <span class="tag">1 INTERCEPT</span></div>
-            <div class="incident-block">
-                <div class="meta"><span class="time">MAR 2 19:15Z</span><span class="type intercept">INTERCEPT</span></div>
-                <h4>Dhahran Interception</h4>
-                <p>Saudi Patriot batteries engaged incoming projectile near Dhahran. Target believed Aramco HQ. No casualties. E Province airspace closed.</p>
-                <div class="impact"><strong>Impact:</strong> DMM halted. Eastern route closures expanded.</div>
-            </div>
-        </div>
-
-        <div class="panel">
-            <div class="panel-title">QATAR <span class="tag">NO STRIKES</span></div>
-            <div class="no-incidents">NO DIRECT INCIDENTS<br><span class="c-dim">Rerouting active. Al Udeid high readiness.</span></div>
-        </div>
-
-        <div class="panel">
-            <div class="panel-title">BAHRAIN <span class="tag">MIL ACTIVITY</span></div>
-            <div class="incident-block">
-                <div class="meta"><span class="time">MAR 1 11:20Z</span><span class="type military">MILITARY</span></div>
-                <h4>US 5th Fleet Alert</h4>
-                <p>NAVCENT raised alert NSA Bahrain. Non-essential shelter order. Increased Gulf patrol. Commercial shipping alternate routes.</p>
-                <div class="impact"><strong>Impact:</strong> BAH reduced capacity. Military priority.</div>
-            </div>
-        </div>
-
-        <div class="panel">
-            <div class="panel-title">OMAN <span class="tag">NEUTRAL</span></div>
-            <div class="no-incidents">NO INCIDENTS<br><span class="c-dim">Neutral. MCT diversion hub.</span></div>
-        </div>
-    </div>
-
-    <div class="footer">
-        <div class="keys"><span><span class="key">F1</span>HELP</span><span><span class="key">F2</span>OVERVIEW</span><span><span class="key">F3</span>FLIGHTS</span></div>
-        <span>CASUALTY FIGURES PRELIMINARY | REFRESH 5M</span>
+    <div class="layer-section">
+        <div class="layer-section-title">Base Map</div>
+        <div class="layer-item"><input type="radio" name="basemap" id="map-dark" checked><label for="map-dark">Dark</label></div>
+        <div class="layer-item"><input type="radio" name="basemap" id="map-satellite"><label for="map-satellite">Satellite</label></div>
     </div>
 </div>
 
+<div class="stats-panel">
+    <div class="stats-header">⚠️ CASUALTY SUMMARY — FEB 28 - MAR 5</div>
+    <div class="stats-grid">
+        <div class="stats-item"><div class="num">~1,045</div><div class="lbl">Iran</div></div>
+        <div class="stats-item"><div class="num">11</div><div class="lbl">Israel</div></div>
+        <div class="stats-item"><div class="num">6</div><div class="lbl">USA</div></div>
+        <div class="stats-item"><div class="num">7</div><div class="lbl">UAE</div></div>
+        <div class="stats-item"><div class="num">2</div><div class="lbl">Saudi</div></div>
+        <div class="stats-item"><div class="num" style="color:#fff;">~1,071</div><div class="lbl">Total</div></div>
+    </div>
+</div>
+
+<div class="feed-panel">
+    <div class="feed-header">
+        <span>INCIDENT FEED</span>
+        <span class="live">● LIVE</span>
+    </div>
+    <div class="feed-list" id="feed-list"></div>
+</div>
+
 <script>
+// Clock
 function updateClock() {
     document.getElementById('clock').textContent = new Date().toLocaleString('en-US', {
-        timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric',
+        timeZone: 'UTC', month: 'short', day: 'numeric', year: 'numeric',
         hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
     }) + ' UTC';
 }
 updateClock(); setInterval(updateClock, 1000);
 
 // Map
-const map = L.map('map', { zoomControl: false }).setView([27, 52], 5);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+const map = L.map('map', { zoomControl: false }).setView([28, 50], 5);
+
+const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     attribution: '© OSM © CARTO', maxZoom: 19
 }).addTo(map);
-L.control.zoom({ position: 'topright' }).addTo(map);
 
-function icon(level) {
-    const colors = { critical: '#f33', high: '#ff6600', medium: '#ff0' };
-    const c = colors[level] || '#666';
-    const size = level === 'critical' ? 16 : 12;
+const satTiles = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '© Esri', maxZoom: 19
+});
+
+L.control.zoom({ position: 'bottomleft' }).addTo(map);
+
+// Incident Data
+const incidents = [
+    // Iran Strikes
+    { lat: 35.70, lon: 51.42, type: 'strike', title: 'Tehran Military Complex', time: 'FEB 28 18:00Z', desc: 'US-Israeli joint strike on IRGC command center. Multiple buildings destroyed.', casualties: '~120 military', source: 'OSINT/Satellite' },
+    { lat: 32.65, lon: 51.68, type: 'strike', title: 'Isfahan Nuclear Facility', time: 'FEB 28 18:15Z', desc: 'Strike on uranium enrichment centrifuge halls. Significant damage reported.', casualties: '~80 personnel', source: 'IAEA/Satellite' },
+    { lat: 29.62, lon: 52.53, type: 'strike', title: 'Shiraz Air Base', time: 'FEB 28 18:30Z', desc: 'Attack on fighter jet hangars and runway. Multiple aircraft destroyed.', casualties: '~45 military', source: 'Flight tracking' },
+    { lat: 36.26, lon: 59.62, type: 'strike', title: 'Mashhad Missile Base', time: 'FEB 28 19:00Z', desc: 'Strike on ballistic missile storage facility. Secondary explosions reported.', casualties: '~60 military', source: 'Seismic/OSINT' },
+    { lat: 27.18, lon: 56.27, type: 'strike', title: 'Bandar Abbas Naval', time: 'FEB 28 19:30Z', desc: 'Attack on IRIN naval base. Fast attack craft destroyed in port.', casualties: '~35 navy', source: 'Satellite' },
+    
+    // UAE Incidents
+    { lat: 25.20, lon: 55.27, type: 'missile', title: 'Dubai Missile Intercept', time: 'MAR 2 22:40Z', desc: 'Emirati air defense intercepted Iranian ballistic missile. Debris fell in Al Barsha and Business Bay.', casualties: '3 civilian KIA, 12 injured', source: 'UAE MOD/Local media' },
+    { lat: 24.45, lon: 54.37, type: 'strike', title: 'Abu Dhabi Naval Strike', time: 'MAR 1 14:32Z', desc: 'Two Shahed-136 drones struck Al Salam Naval Base. Secondary fires. Etihad HQ evacuated.', casualties: '4 military KIA', source: 'UAE MOD' },
+    { lat: 25.08, lon: 55.14, type: 'missile', title: 'Jebel Ali Port Alert', time: 'MAR 2 23:15Z', desc: 'Missile debris landed near port facility. No direct hit. Operations suspended.', casualties: 'No casualties', source: 'Port Authority' },
+    
+    // Saudi Incidents
+    { lat: 26.43, lon: 50.10, type: 'missile', title: 'Dhahran Intercept', time: 'MAR 2 19:15Z', desc: 'Patriot batteries engaged incoming ballistic missile near Aramco HQ.', casualties: 'No casualties', source: 'Saudi MOD' },
+    { lat: 26.27, lon: 50.15, type: 'military', title: 'Aramco Security Alert', time: 'MAR 2 20:00Z', desc: 'Aramco facilities on maximum security. Non-essential staff evacuated.', casualties: 'N/A', source: 'Aramco statement' },
+    { lat: 21.49, lon: 39.18, type: 'military', title: 'Jeddah Port Lockdown', time: 'MAR 1 08:00Z', desc: 'Red Sea shipping rerouted. Port operating at reduced capacity.', casualties: 'N/A', source: 'Maritime tracking' },
+    
+    // Naval/Hormuz
+    { lat: 26.25, lon: 56.50, type: 'naval', title: 'Hormuz Naval Standoff', time: 'MAR 1 23:45Z', desc: 'IRGC fast boats made aggressive approach toward USS carrier group. Warning shots fired.', casualties: 'No casualties', source: 'US CENTCOM' },
+    { lat: 26.58, lon: 56.27, type: 'naval', title: 'Tanker Harassment', time: 'MAR 2 14:20Z', desc: 'Iranian vessels approached commercial tanker. US Navy escort responded.', casualties: 'No casualties', source: 'UKMTO' },
+    { lat: 25.95, lon: 56.85, type: 'naval', title: 'Submarine Detection', time: 'MAR 2 08:00Z', desc: 'Iranian Kilo-class submarine detected in Gulf of Oman. P-8 tracking.', casualties: 'N/A', source: 'Naval intelligence' },
+    { lat: 26.80, lon: 56.10, type: 'naval', title: 'Mine Warning', time: 'MAR 3 06:00Z', desc: 'Unconfirmed reports of mine-laying activity. Shipping advised caution.', casualties: 'N/A', source: 'UKMTO' },
+    
+    // Bahrain
+    { lat: 26.23, lon: 50.58, type: 'military', title: 'US 5th Fleet Alert', time: 'MAR 1 11:20Z', desc: 'NAVCENT elevated threat level. Non-essential personnel shelter order.', casualties: 'N/A', source: 'US Navy' },
+    { lat: 26.27, lon: 50.65, type: 'missile', title: 'Bahrain Intercept', time: 'MAR 2 21:00Z', desc: 'Patriot system engaged drone approaching from northeast.', casualties: 'No casualties', source: 'BDF' },
+    
+    // Israel Retaliation
+    { lat: 32.08, lon: 34.78, type: 'missile', title: 'Tel Aviv Missiles', time: 'MAR 1 02:00Z', desc: 'Multiple Iranian ballistic missiles intercepted over central Israel. Iron Dome, Arrow engaged.', casualties: '8 civilian', source: 'IDF' },
+    { lat: 31.77, lon: 35.21, type: 'missile', title: 'Jerusalem Alert', time: 'MAR 1 02:15Z', desc: 'Missiles intercepted over Jerusalem area. Some debris damage.', casualties: '3 civilian', source: 'IDF' },
+    
+    // Iraq
+    { lat: 33.31, lon: 44.37, type: 'strike', title: 'Baghdad PMF Strike', time: 'FEB 28 20:00Z', desc: 'US strike on Iran-backed militia command post in Baghdad suburbs.', casualties: '~25 militia', source: 'US CENTCOM' },
+    { lat: 36.34, lon: 43.13, type: 'military', title: 'Mosul Base Activity', time: 'MAR 1 00:00Z', desc: 'Increased US military activity at Mosul airfield.', casualties: 'N/A', source: 'Flight tracking' },
+    
+    // Syria
+    { lat: 33.51, lon: 36.29, type: 'strike', title: 'Damascus IRGC', time: 'FEB 28 22:00Z', desc: 'Israeli strike on IRGC positions near Damascus airport.', casualties: '~15 IRGC', source: 'SOHR' },
+    { lat: 34.80, lon: 36.72, type: 'strike', title: 'Homs Weapons Depot', time: 'MAR 1 04:00Z', desc: 'Strike on Iranian weapons storage. Large secondary explosions.', casualties: 'Unknown', source: 'SOHR' },
+    
+    // Yemen/Houthi
+    { lat: 15.35, lon: 44.21, type: 'strike', title: 'Sanaa Strikes', time: 'MAR 1 16:00Z', desc: 'US strikes on Houthi missile storage and launch sites.', casualties: '~20 Houthi', source: 'US CENTCOM' },
+    { lat: 14.80, lon: 42.95, type: 'naval', title: 'Red Sea Drone Attack', time: 'MAR 2 10:00Z', desc: 'Houthi drone targeted commercial vessel. Shot down by escort.', casualties: 'No casualties', source: 'UKMTO' }
+];
+
+// Icon factory
+function createIcon(type, size = 12) {
+    const colors = {
+        strike: '#dc2626',
+        missile: '#ef4444', 
+        naval: '#3b82f6',
+        military: '#eab308',
+        airspace: '#8b5cf6'
+    };
+    const icons = { strike: '💥', missile: '🚀', naval: '⚓', military: '🎖️', airspace: '✈️' };
     return L.divIcon({
-        className: 'incident-icon',
-        html: `<div style="width:${size}px;height:${size}px;background:${c};border:2px solid #fff;border-radius:50%;box-shadow:0 0 12px ${c},0 0 20px ${c};animation:pulse 2s infinite;"></div>
-        <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}</style>`,
-        iconSize: [size, size], iconAnchor: [size/2, size/2]
+        className: 'custom-icon',
+        html: `<div style="width:${size}px;height:${size}px;background:${colors[type]};border:2px solid rgba(255,255,255,0.8);border-radius:50%;box-shadow:0 0 10px ${colors[type]},0 0 20px ${colors[type]}40;"></div>`,
+        iconSize: [size, size],
+        iconAnchor: [size/2, size/2]
     });
 }
 
-const incidents = [
-    { lat: 25.20, lon: 55.27, title: 'DUBAI MISSILE INTERCEPT', time: 'MAR 2 22:40Z', level: 'critical',
-      desc: 'Emirati air defense intercepted Iranian ballistic missile over Dubai. Debris fell in Al Barsha and Business Bay residential areas.',
-      casualties: '3 civilian KIA, 12 injured' },
-    { lat: 24.45, lon: 54.37, title: 'ABU DHABI NAVAL BASE STRIKE', time: 'MAR 1 14:32Z', level: 'critical',
-      desc: 'Two Iranian Shahed-136 kamikaze drones struck Al Salam Naval Base. Secondary fires reported. Etihad Airways HQ evacuated.',
-      casualties: '4 military KIA' },
-    { lat: 26.43, lon: 50.10, title: 'DHAHRAN INTERCEPT', time: 'MAR 2 19:15Z', level: 'critical',
-      desc: 'Saudi Patriot batteries engaged incoming projectile believed targeting Aramco HQ complex.',
-      casualties: 'No casualties' },
-    { lat: 26.25, lon: 56.50, title: 'STRAIT OF HORMUZ INCIDENT', time: 'MAR 1 23:45Z', level: 'high',
-      desc: 'IRGC fast attack boats made aggressive approach toward USS carrier group. US Navy fired warning shots. Boats withdrew.',
-      casualties: 'No casualties' },
-    { lat: 26.23, lon: 50.58, title: 'US 5TH FLEET ALERT', time: 'MAR 1 11:20Z', level: 'high',
-      desc: 'NAVCENT headquarters raised threat level. Non-essential personnel ordered to shelter. Increased patrols in Gulf waters.',
-      casualties: 'No casualties' },
-    { lat: 35.70, lon: 51.42, title: 'TEHRAN STRIKES', time: 'FEB 28 18:00Z', level: 'critical',
-      desc: 'US-Israeli joint operation struck multiple military and nuclear facilities across Iran. Start of current conflict.',
-      casualties: '~800+ Iranian military' },
-    { lat: 32.65, lon: 51.68, title: 'ISFAHAN STRIKES', time: 'FEB 28 18:30Z', level: 'critical',
-      desc: 'Multiple strikes on nuclear enrichment facilities and missile production sites.',
-      casualties: '~150 Iranian military/scientists' }
-];
+// Layer groups
+const layers = {
+    strikes: L.layerGroup(),
+    missiles: L.layerGroup(),
+    naval: L.layerGroup(),
+    military: L.layerGroup(),
+    airspace: L.layerGroup(),
+    airports: L.layerGroup()
+};
 
-const markers = {};
-incidents.forEach((inc, i) => {
-    const m = L.marker([inc.lat, inc.lon], { icon: icon(inc.level) }).addTo(map);
-    m.bindPopup(`
+// Add incidents to layers
+incidents.forEach((inc, idx) => {
+    const size = inc.type === 'strike' ? 14 : 12;
+    const marker = L.marker([inc.lat, inc.lon], { icon: createIcon(inc.type, size) });
+    marker.bindPopup(`
+        <div class="popup-header">
+            <span class="popup-type ${inc.type}">${inc.type}</span>
+        </div>
         <div class="popup-title">${inc.title}</div>
         <div class="popup-time">${inc.time}</div>
-        <div style="margin-bottom:6px;">${inc.desc}</div>
+        <div class="popup-desc">${inc.desc}</div>
         <div class="popup-casualties">${inc.casualties}</div>
+        <div class="popup-source">Source: ${inc.source}</div>
     `);
-    markers[i] = m;
+    marker.incidentData = inc;
+    marker.incidentIdx = idx;
+    
+    if (inc.type === 'strike') layers.strikes.addLayer(marker);
+    else if (inc.type === 'missile') layers.missiles.addLayer(marker);
+    else if (inc.type === 'naval') layers.naval.addLayer(marker);
+    else if (inc.type === 'military') layers.military.addLayer(marker);
 });
 
-// Closed airspace
-L.polygon([[38,44],[38,63],[25,63],[25,56],[29,48],[33,44]], 
-    { color: '#f33', weight: 2, fillColor: '#f33', fillOpacity: 0.15, dashArray: '8,4' })
-    .addTo(map).bindPopup('<div class="popup-title">CLOSED AIRSPACE</div>Iran/Iraq/Syria - All civilian flights prohibited');
+// Closed airspace polygon
+const closedAirspace = L.polygon([
+    [39, 44], [39, 63], [25, 63], [25, 57], [27, 52], [30, 48], [35, 44]
+], {
+    color: '#8b5cf6',
+    weight: 2,
+    fillColor: '#8b5cf6',
+    fillOpacity: 0.15,
+    dashArray: '10,5'
+}).bindPopup('<div class="popup-title">CLOSED AIRSPACE</div><div class="popup-desc">Iran, Iraq, Western Afghanistan - All civilian overflights prohibited</div>');
+layers.airspace.addLayer(closedAirspace);
 
-// Click timeline to zoom
-document.querySelectorAll('.timeline-item').forEach(item => {
-    item.addEventListener('click', () => {
-        const lat = parseFloat(item.dataset.lat);
-        const lon = parseFloat(item.dataset.lon);
-        if (lat && lon) {
-            map.flyTo([lat, lon], 8, { duration: 1 });
-        }
+// Airports
+const airports = [
+    { code: 'DXB', lat: 25.253, lon: 55.366, status: 'limited' },
+    { code: 'AUH', lat: 24.433, lon: 54.651, status: 'limited' },
+    { code: 'DOH', lat: 25.261, lon: 51.565, status: 'open' },
+    { code: 'BAH', lat: 26.270, lon: 50.634, status: 'limited' },
+    { code: 'MCT', lat: 23.593, lon: 58.284, status: 'open' },
+    { code: 'RUH', lat: 24.958, lon: 46.699, status: 'restricted' },
+    { code: 'JED', lat: 21.679, lon: 39.157, status: 'open' },
+    { code: 'DMM', lat: 26.471, lon: 49.798, status: 'restricted' }
+];
+
+airports.forEach(apt => {
+    const colors = { open: '#22c55e', limited: '#eab308', restricted: '#ef4444' };
+    const marker = L.marker([apt.lat, apt.lon], {
+        icon: L.divIcon({
+            className: 'apt-icon',
+            html: `<div style="background:${colors[apt.status]};color:#000;padding:2px 4px;font-size:9px;font-weight:700;border-radius:2px;white-space:nowrap;">${apt.code}</div>`,
+            iconSize: [30, 16],
+            iconAnchor: [15, 8]
+        })
     });
+    layers.airports.addLayer(marker);
 });
 
-setTimeout(()=>location.reload(), 300000);
+// Add all layers to map
+Object.values(layers).forEach(layer => layer.addTo(map));
+
+// Layer toggles
+document.getElementById('layer-strikes').onchange = e => e.target.checked ? layers.strikes.addTo(map) : map.removeLayer(layers.strikes);
+document.getElementById('layer-missiles').onchange = e => e.target.checked ? layers.missiles.addTo(map) : map.removeLayer(layers.missiles);
+document.getElementById('layer-naval').onchange = e => e.target.checked ? layers.naval.addTo(map) : map.removeLayer(layers.naval);
+document.getElementById('layer-military').onchange = e => e.target.checked ? layers.military.addTo(map) : map.removeLayer(layers.military);
+document.getElementById('layer-airspace').onchange = e => e.target.checked ? layers.airspace.addTo(map) : map.removeLayer(layers.airspace);
+document.getElementById('layer-airports').onchange = e => e.target.checked ? layers.airports.addTo(map) : map.removeLayer(layers.airports);
+
+// Base map toggle
+document.getElementById('map-dark').onchange = () => { map.removeLayer(satTiles); darkTiles.addTo(map); };
+document.getElementById('map-satellite').onchange = () => { map.removeLayer(darkTiles); satTiles.addTo(map); };
+
+// Populate feed
+const feedList = document.getElementById('feed-list');
+incidents.slice(0, 15).forEach((inc, idx) => {
+    const icons = { strike: '💥', missile: '🚀', naval: '⚓', military: '🎖️' };
+    const item = document.createElement('div');
+    item.className = 'feed-item';
+    item.innerHTML = `
+        <div class="icon ${inc.type}">${icons[inc.type] || '⚡'}</div>
+        <div class="content">
+            <div class="title">${inc.title}</div>
+            <div class="meta"><span class="time">${inc.time}</span> · <span class="loc">${inc.casualties}</span></div>
+        </div>
+    `;
+    item.onclick = () => {
+        map.flyTo([inc.lat, inc.lon], 8, { duration: 1 });
+    };
+    feedList.appendChild(item);
+});
 </script>
 </body>
 </html>
