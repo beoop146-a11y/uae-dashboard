@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UAE Situation Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🇦🇪 UAE Situation Dashboard</h1>
+            <p class="last-updated">Last updated: <span id="update-time"></span></p>
+        </header>
+
+        <main class="dashboard">
+            <section class="strikes-panel">
+                <h2>⚠️ Strike Incidents</h2>
+                
+                <div class="alert-banner critical">
+                    <span class="pulse"></span>
+                    ACTIVE SITUATION - Limited Flights Operating
+                </div>
+
+                <div class="incidents-list">
+                    <div class="incident critical">
+                        <div class="incident-header">
+                            <span class="date">Mar 1, 2026 - 14:32 UTC</span>
+                            <span class="severity critical">CRITICAL</span>
+                        </div>
+                        <h3>Iranian Drone Strike - Al Salam Naval Base</h3>
+                        <p class="location">📍 Abu Dhabi, UAE</p>
+                        <p class="details">Two Iranian drones struck the Al Salam Naval Base. Video footage captured the moment of impact. Military response ongoing.</p>
+                        <div class="tags">
+                            <span class="tag">Military Target</span>
+                            <span class="tag">Drone Strike</span>
+                            <span class="tag">Confirmed</span>
+                        </div>
+                    </div>
+
+                    <div class="incident high">
+                        <div class="incident-header">
+                            <span class="date">Mar 2, 2026 - 08:15 UTC</span>
+                            <span class="severity high">HIGH</span>
+                        </div>
+                        <h3>Missile Interception Over Dubai</h3>
+                        <p class="location">📍 Dubai Airspace</p>
+                        <p class="details">UAE air defense systems intercepted incoming projectiles over Dubai. Debris reported in multiple areas. No civilian casualties confirmed.</p>
+                        <div class="tags">
+                            <span class="tag">Intercepted</span>
+                            <span class="tag">Missile</span>
+                            <span class="tag">Urban Area</span>
+                        </div>
+                    </div>
+
+                    <div class="incident medium">
+                        <div class="incident-header">
+                            <span class="date">Mar 2, 2026 - 22:40 UTC</span>
+                            <span class="severity medium">MEDIUM</span>
+                        </div>
+                        <h3>Airspace Closure Extended</h3>
+                        <p class="location">📍 UAE National Airspace</p>
+                        <p class="details">UAE Civil Aviation Authority extended airspace restrictions. Limited commercial flights resumed March 3rd with strict routing protocols.</p>
+                        <div class="tags">
+                            <span class="tag">Airspace</span>
+                            <span class="tag">Restrictions</span>
+                            <span class="tag">Ongoing</span>
+                        </div>
+                    </div>
+
+                    <div class="incident low">
+                        <div class="incident-header">
+                            <span class="date">Mar 3, 2026 - 10:00 UTC</span>
+                            <span class="severity low">UPDATE</span>
+                        </div>
+                        <h3>Stock Exchanges Remain Closed</h3>
+                        <p class="location">📍 Abu Dhabi & Dubai</p>
+                        <p class="details">ADX and DFM remain closed due to ongoing regional instability. Reopening timeline not yet announced.</p>
+                        <div class="tags">
+                            <span class="tag">Financial</span>
+                            <span class="tag">Markets Closed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Total Incidents</div>
+                    </div>
+                    <div class="stat-card critical">
+                        <div class="stat-value">9</div>
+                        <div class="stat-label">Casualties (Gulf States)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">LIMITED</div>
+                        <div class="stat-label">Airspace Status</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">CLOSED</div>
+                        <div class="stat-label">Stock Exchanges</div>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="sidebar">
+                <div class="sidebar-card flights">
+                    <h3>✈️ Flight Status</h3>
+                    <p>Track departures, arrivals, and cancellations at UAE airports</p>
+                    <a href="flights.html" class="btn primary">View Flight Dashboard →</a>
+                </div>
+
+                <div class="sidebar-card">
+                    <h3>📡 Live Sources</h3>
+                    <ul class="source-list">
+                        <li><a href="https://www.aljazeera.com/where/united-arab-emirates/" target="_blank">Al Jazeera - UAE</a></li>
+                        <li><a href="https://www.flightradar24.com/data/airports/dxb" target="_blank">FlightRadar24 - DXB</a></li>
+                        <li><a href="https://www.dubaiairports.ae/" target="_blank">Dubai Airports Official</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-card alert">
+                    <h3>🚨 Current Advisory</h3>
+                    <p><strong>Travel Warning:</strong> Non-essential travel to/from UAE is discouraged. Contact your airline for flight status.</p>
+                </div>
+
+                <div class="sidebar-card">
+                    <h3>📊 Regional Context</h3>
+                    <p>US-Israeli operations against Iran ongoing since Feb 28. Iranian retaliation has affected multiple Gulf states.</p>
+                    <p class="small">Death toll tracker: ~1,045 Iran, 11 Israel, 6 US soldiers, 9 Gulf states</p>
+                </div>
+            </aside>
+        </main>
+
+        <footer>
+            <p>Data compiled from news sources. Not official government information.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('update-time').textContent = new Date().toLocaleString('en-US', {
+            timeZone: 'UTC',
+            dateStyle: 'medium',
+            timeStyle: 'short'
+        }) + ' UTC';
+    </script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UAE Flights Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">← Back to Strikes Dashboard</a>
+            <h1>✈️ UAE Flights Status</h1>
+            <p class="last-updated">Last updated: <span id="update-time"></span></p>
+        </header>
+
+        <div class="flight-status-banner">
+            <span class="status-indicator limited"></span>
+            <strong>AIRSPACE STATUS:</strong> Limited Operations - Restricted Routes Active
+        </div>
+
+        <main class="flights-dashboard">
+            <section class="flights-section">
+                <h2>🛫 Departed Flights</h2>
+                <p class="section-note">Successfully departed in last 24 hours</p>
+                
+                <div class="flights-table-wrapper">
+                    <table class="flights-table">
+                        <thead>
+                            <tr>
+                                <th>Flight</th>
+                                <th>Destination</th>
+                                <th>Scheduled</th>
+                                <th>Actual</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="departed">
+                                <td><strong>EK 201</strong><br><span class="airline">Emirates</span></td>
+                                <td>London Heathrow (LHR)</td>
+                                <td>08:30</td>
+                                <td>09:45</td>
+                                <td><span class="status-badge departed">DEPARTED</span></td>
+                            </tr>
+                            <tr class="departed">
+                                <td><strong>EY 101</strong><br><span class="airline">Etihad</span></td>
+                                <td>Paris CDG (CDG)</td>
+                                <td>10:00</td>
+                                <td>11:20</td>
+                                <td><span class="status-badge departed">DEPARTED</span></td>
+                            </tr>
+                            <tr class="departed">
+                                <td><strong>FZ 001</strong><br><span class="airline">FlyDubai</span></td>
+                                <td>Colombo (CMB)</td>
+                                <td>14:15</td>
+                                <td>14:30</td>
+                                <td><span class="status-badge departed">DEPARTED</span></td>
+                            </tr>
+                            <tr class="departed delayed">
+                                <td><strong>EK 412</strong><br><span class="airline">Emirates</span></td>
+                                <td>Sydney (SYD)</td>
+                                <td>02:00</td>
+                                <td>06:15</td>
+                                <td><span class="status-badge departed">DEPARTED (Delayed)</span></td>
+                            </tr>
+                            <tr class="departed">
+                                <td><strong>EY 454</strong><br><span class="airline">Etihad</span></td>
+                                <td>Mumbai (BOM)</td>
+                                <td>09:30</td>
+                                <td>10:00</td>
+                                <td><span class="status-badge departed">DEPARTED</span></td>
+                            </tr>
+                            <tr class="departed">
+                                <td><strong>EK 003</strong><br><span class="airline">Emirates</span></td>
+                                <td>New York JFK (JFK)</td>
+                                <td>03:00</td>
+                                <td>05:30</td>
+                                <td><span class="status-badge departed">DEPARTED (Rerouted)</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="summary-stats">
+                    <div class="stat">
+                        <span class="number green">47</span>
+                        <span class="label">Flights Departed (24h)</span>
+                    </div>
+                    <div class="stat">
+                        <span class="number yellow">38</span>
+                        <span class="label">With Delays</span>
+                    </div>
+                    <div class="stat">
+                        <span class="number">12</span>
+                        <span class="label">Rerouted</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="flights-section canceled">
+                <h2>❌ Canceled Flights</h2>
+                <p class="section-note">Cancellations in last 48 hours</p>
+                
+                <div class="flights-table-wrapper">
+                    <table class="flights-table">
+                        <thead>
+                            <tr>
+                                <th>Flight</th>
+                                <th>Destination</th>
+                                <th>Scheduled</th>
+                                <th>Reason</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="canceled">
+                                <td><strong>EK 871</strong><br><span class="airline">Emirates</span></td>
+                                <td>Tehran (IKA)</td>
+                                <td>Mar 2, 09:00</td>
+                                <td>Airspace Closure</td>
+                                <td><span class="status-badge canceled">CANCELED</span></td>
+                            </tr>
+                            <tr class="canceled">
+                                <td><strong>FZ 1753</strong><br><span class="airline">FlyDubai</span></td>
+                                <td>Baghdad (BGW)</td>
+                                <td>Mar 2, 11:30</td>
+                                <td>Airspace Closure</td>
+                                <td><span class="status-badge canceled">CANCELED</span></td>
+                            </tr>
+                            <tr class="canceled">
+                                <td><strong>EY 607</strong><br><span class="airline">Etihad</span></td>
+                                <td>Beirut (BEY)</td>
+                                <td>Mar 2, 13:00</td>
+                                <td>Security</td>
+                                <td><span class="status-badge canceled">CANCELED</span></td>
+                            </tr>
+                            <tr class="canceled">
+                                <td><strong>EK 925</strong><br><span class="airline">Emirates</span></td>
+                                <td>Amman (AMM)</td>
+                                <td>Mar 2, 16:45</td>
+                                <td>Airspace Closure</td>
+                                <td><span class="status-badge canceled">CANCELED</span></td>
+                            </tr>
+                            <tr class="canceled">
+                                <td><strong>FZ 203</strong><br><span class="airline">FlyDubai</span></td>
+                                <td>Kuwait (KWI)</td>
+                                <td>Mar 3, 07:00</td>
+                                <td>Operational</td>
+                                <td><span class="status-badge canceled">CANCELED</span></td>
+                            </tr>
+                            <tr class="canceled">
+                                <td><strong>EK 919</strong><br><span class="airline">Emirates</span></td>
+                                <td>Cairo (CAI)</td>
+                                <td>Mar 3, 10:15</td>
+                                <td>Airspace Restrictions</td>
+                                <td><span class="status-badge canceled">CANCELED</span></td>
+                            </tr>
+                            <tr class="canceled">
+                                <td><strong>EY 651</strong><br><span class="airline">Etihad</span></td>
+                                <td>Tel Aviv (TLV)</td>
+                                <td>Mar 2-5</td>
+                                <td>Suspended Indefinitely</td>
+                                <td><span class="status-badge canceled">SUSPENDED</span></td>
+                            </tr>
+                            <tr class="canceled">
+                                <td><strong>EK 931</strong><br><span class="airline">Emirates</span></td>
+                                <td>Doha (DOH)</td>
+                                <td>Mar 3, 14:00</td>
+                                <td>Airspace Restrictions</td>
+                                <td><span class="status-badge canceled">CANCELED</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="summary-stats">
+                    <div class="stat">
+                        <span class="number red">312</span>
+                        <span class="label">Flights Canceled (48h)</span>
+                    </div>
+                    <div class="stat">
+                        <span class="number red">~85,000</span>
+                        <span class="label">Passengers Affected</span>
+                    </div>
+                    <div class="stat">
+                        <span class="number yellow">5</span>
+                        <span class="label">Routes Suspended</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="info-section">
+                <h2>ℹ️ Passenger Information</h2>
+                <div class="info-cards">
+                    <div class="info-card">
+                        <h3>Rebooking</h3>
+                        <p>All major UAE carriers offering free rebooking for flights through March 10. Contact your airline directly.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Stranded Passengers</h3>
+                        <p>Emergency accommodation arranged at DXB Terminal 3. Hotline: +971 4 224 5555</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Alternative Routes</h3>
+                        <p>Flights via Oman (MCT) and India operating with increased capacity. Check availability.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Data compiled from airline sources. Check with your carrier for official status.</p>
+            <a href="index.html" class="btn secondary">← Return to Strikes Dashboard</a>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('update-time').textContent = new Date().toLocaleString('en-US', {
+            timeZone: 'UTC',
+            dateStyle: 'medium',
+            timeStyle: 'short'
+        }) + ' UTC';
+    </script>
+</body>
+</html>
