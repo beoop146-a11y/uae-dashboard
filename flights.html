@@ -4,205 +4,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FLIGHTS | MIDEAST</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; color: #ccc; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 12px; line-height: 1.3; }
+        .terminal { padding: 2px; }
+        .header { background: #ff6600; color: #000; padding: 3px 8px; font-weight: 700; font-size: 13px; display: flex; justify-content: space-between; }
+        .nav { background: #000; border-bottom: 1px solid #333; display: flex; }
+        .nav a { color: #fa0; text-decoration: none; padding: 4px 16px; font-size: 11px; border-right: 1px solid #333; }
+        .nav a:hover { background: #111; }
+        .nav a.active { background: #ff6600; color: #000; font-weight: 700; }
+        .ticker { background: #f33; color: #fff; padding: 3px 8px; font-size: 11px; font-weight: 700; }
+        .ticker .blink { animation: blink 1s infinite; margin-right: 8px; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        .panel { border: 1px solid #333; background: #000; margin-bottom: 2px; }
+        .panel-title { background: #ff6600; color: #000; padding: 2px 6px; font-size: 11px; font-weight: 700; display: flex; justify-content: space-between; }
+        .panel-title .tag { background: #000; color: #ff6600; padding: 0 4px; font-size: 10px; }
+        .map iframe { display: block; width: 100%; height: 350px; border: none; background: #000; }
+        .flights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+        @media(max-width:900px) { .flights-grid { grid-template-columns: 1fr; } }
+        .flight-list { max-height: 220px; overflow-y: auto; }
+        .flight-row { display: grid; grid-template-columns: 70px 1fr 70px 50px; gap: 4px; padding: 3px 6px; border-bottom: 1px solid #1a1a1a; font-size: 11px; align-items: center; }
+        .flight-row.header { background: #111; color: #fa0; font-size: 10px; font-weight: 600; }
+        .flight-row:hover:not(.header) { background: #0a0a0a; }
+        .flight-row .fnum { color: #ff6600; font-weight: 600; }
+        .flight-row .info { color: #666; }
+        .flight-row .status { font-size: 9px; font-weight: 700; padding: 1px 4px; text-align: center; }
+        .flight-row .status.airborne { background: #0c0; color: #000; }
+        .flight-row .status.scheduled { background: #0cc; color: #000; }
+        .flight-row .status.delayed { background: #ff0; color: #000; }
+        .flight-row .status.canceled { background: #f33; color: #fff; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        th { background: #111; color: #fa0; text-align: left; padding: 4px 6px; font-weight: 600; font-size: 10px; border-bottom: 1px solid #333; }
+        td { padding: 4px 6px; border-bottom: 1px solid #1a1a1a; }
+        tr:hover td { background: #0a0a0a; }
+        .code { color: #ff6600; font-weight: 700; }
+        .c-orange { color: #ff6600; } .c-green { color: #0c0; } .c-red { color: #f33; } .c-yellow { color: #ff0; } .c-dim { color: #666; }
+        .bold { font-weight: 700; }
+        .tag-status { display: inline-block; padding: 1px 4px; font-size: 9px; font-weight: 700; }
+        .tag-status.open { background: #0c0; color: #000; }
+        .tag-status.limited { background: #ff0; color: #000; }
+        .tag-status.restricted { background: #ff6600; color: #000; }
+        .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+        @media(max-width:800px) { .info-grid { grid-template-columns: 1fr 1fr; } }
+        .info-item { padding: 3px 6px; font-size: 10px; border-bottom: 1px solid #1a1a1a; }
+        .routes-grid { display: grid; grid-template-columns: repeat(6, 1fr); }
+        @media(max-width:700px) { .routes-grid { grid-template-columns: repeat(3, 1fr); } }
+        .route-item { padding: 4px 6px; border-right: 1px solid #333; border-bottom: 1px solid #333; font-size: 10px; }
+        .footer { background: #111; border-top: 1px solid #333; padding: 4px 8px; font-size: 10px; color: #666; display: flex; justify-content: space-between; }
+        .footer .key { background: #ff6600; color: #000; padding: 0 3px; font-weight: 700; margin-right: 2px; }
+        .footer .keys span { margin-right: 16px; }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #000; } ::-webkit-scrollbar-thumb { background: #333; }
+    </style>
 </head>
 <body>
 <div class="terminal">
-    <!-- Header Bar -->
-    <div class="bbg-header">
-        <span>MIDEAST FLIGHT TRACKER</span>
-        <span class="right" id="clock"></span>
-    </div>
-
-    <!-- Navigation -->
-    <div class="bbg-nav">
+    <div class="header"><span>MIDEAST FLIGHT TRACKER</span><span id="clock"></span></div>
+    <div class="nav">
         <a href="index.html">OVERVIEW</a>
         <a href="flights.html" class="active">FLIGHTS</a>
         <a href="strikes.html">INCIDENTS</a>
     </div>
+    <div class="ticker"><span class="blink">●</span> AIRSPACE: MULTIPLE RESTRICTIONS — IRAN/IRAQ CLOSED — REROUTING VIA PAK/OMAN — AVG +45MIN EASTBOUND</div>
 
-    <!-- Alert Ticker -->
-    <div class="bbg-ticker">
-        <span class="blink">●</span>
-        AIRSPACE: MULTIPLE RESTRICTIONS — IRAN/IRAQ CLOSED — REROUTING VIA PAK/OMAN CORRIDORS — AVG +45MIN EASTBOUND
+    <div class="panel">
+        <div class="panel-title">LIVE RADAR — GULF REGION <span class="tag">FLIGHTRADAR24</span></div>
+        <div class="map"><iframe src="https://www.flightradar24.com/simple_index.php?lat=25.5&lon=52&z=6&airports=1" loading="lazy"></iframe></div>
     </div>
 
-    <!-- Map -->
-    <div class="bbg-panel">
-        <div class="bbg-panel-title">LIVE RADAR — GULF REGION <span class="tag">FLIGHTRADAR24</span></div>
-        <div class="bbg-map">
-            <iframe src="https://www.flightradar24.com/simple_index.php?lat=25.5&lon=52&z=6&airports=1" loading="lazy"></iframe>
-        </div>
-    </div>
-
-    <!-- Flight Panels -->
-    <div class="bbg-flights-grid">
-        <!-- Airborne -->
-        <div class="bbg-panel">
-            <div class="bbg-panel-title">AIRBORNE <span class="tag" id="airborne-count">24</span></div>
+    <div class="flights-grid">
+        <div class="panel">
+            <div class="panel-title">AIRBORNE <span class="tag" id="airborne-count">24</span></div>
             <div class="flight-list" id="airborne-list"></div>
         </div>
-
-        <!-- Scheduled -->
-        <div class="bbg-panel">
-            <div class="bbg-panel-title">SCHEDULED <span class="tag" id="scheduled-count">18</span></div>
+        <div class="panel">
+            <div class="panel-title">SCHEDULED <span class="tag" id="scheduled-count">18</span></div>
             <div class="flight-list" id="scheduled-list"></div>
         </div>
-
-        <!-- Delayed -->
-        <div class="bbg-panel">
-            <div class="bbg-panel-title">DELAYED <span class="tag" id="delayed-count">15</span></div>
+        <div class="panel">
+            <div class="panel-title">DELAYED <span class="tag" id="delayed-count">15</span></div>
             <div class="flight-list" id="delayed-list"></div>
         </div>
-
-        <!-- Canceled -->
-        <div class="bbg-panel">
-            <div class="bbg-panel-title">CANCELED <span class="tag" id="canceled-count">32</span></div>
+        <div class="panel">
+            <div class="panel-title">CANCELED <span class="tag" id="canceled-count">32</span></div>
             <div class="flight-list" id="canceled-list"></div>
         </div>
     </div>
 
-    <!-- Airport Statistics -->
-    <div class="bbg-panel">
-        <div class="bbg-panel-title">AIRPORT STATISTICS — 24H</div>
-        <table class="bbg-airport-stats">
-            <tr>
-                <th>APT</th>
-                <th>COUNTRY</th>
-                <th>STATUS</th>
-                <th>DEPS</th>
-                <th>CXLD</th>
-                <th>CXL RATIO</th>
-                <th>AVG DLY</th>
-                <th>DEP/HR</th>
-            </tr>
-            <tr>
-                <td class="code">DXB</td>
-                <td>UAE</td>
-                <td><span class="tag-status limited">LTD</span></td>
-                <td>47</td>
-                <td class="c-red">156</td>
-                <td class="c-red bold">76.8%</td>
-                <td class="c-yellow">142m</td>
-                <td>1.96</td>
-            </tr>
-            <tr>
-                <td class="code">AUH</td>
-                <td>UAE</td>
-                <td><span class="tag-status limited">LTD</span></td>
-                <td>23</td>
-                <td class="c-red">87</td>
-                <td class="c-red bold">79.1%</td>
-                <td class="c-red">186m</td>
-                <td>0.96</td>
-            </tr>
-            <tr>
-                <td class="code">DOH</td>
-                <td>QAT</td>
-                <td><span class="tag-status limited">RTG</span></td>
-                <td>134</td>
-                <td class="c-yellow">45</td>
-                <td class="c-yellow">25.1%</td>
-                <td class="c-yellow">89m</td>
-                <td>5.58</td>
-            </tr>
-            <tr>
-                <td class="code">RUH</td>
-                <td>KSA</td>
-                <td><span class="tag-status restricted">RST</span></td>
-                <td>89</td>
-                <td class="c-red">112</td>
-                <td class="c-red">55.7%</td>
-                <td class="c-yellow">98m</td>
-                <td>3.71</td>
-            </tr>
-            <tr>
-                <td class="code">JED</td>
-                <td>KSA</td>
-                <td><span class="tag-status open">OPR</span></td>
-                <td>156</td>
-                <td class="c-yellow">34</td>
-                <td class="c-yellow">17.9%</td>
-                <td class="c-yellow">54m</td>
-                <td>6.50</td>
-            </tr>
-            <tr>
-                <td class="code">DMM</td>
-                <td>KSA</td>
-                <td><span class="tag-status restricted">RST</span></td>
-                <td>12</td>
-                <td class="c-red">67</td>
-                <td class="c-red bold">84.8%</td>
-                <td class="c-red">210m</td>
-                <td>0.50</td>
-            </tr>
-            <tr>
-                <td class="code">BAH</td>
-                <td>BHR</td>
-                <td><span class="tag-status limited">MIL</span></td>
-                <td>34</td>
-                <td class="c-red">56</td>
-                <td class="c-red">62.2%</td>
-                <td class="c-yellow">124m</td>
-                <td>1.42</td>
-            </tr>
-            <tr>
-                <td class="code">MCT</td>
-                <td>OMN</td>
-                <td><span class="tag-status open">OPR</span></td>
-                <td>187</td>
-                <td>8</td>
-                <td class="c-green bold">4.1%</td>
-                <td class="c-green">23m</td>
-                <td class="c-green bold">7.79</td>
-            </tr>
+    <div class="panel">
+        <div class="panel-title">AIRPORT STATISTICS — 24H</div>
+        <table>
+            <tr><th>APT</th><th>COUNTRY</th><th>STATUS</th><th>DEPS</th><th>CXLD</th><th>CXL RATIO</th><th>AVG DLY</th><th>DEP/HR</th></tr>
+            <tr><td class="code">DXB</td><td>UAE</td><td><span class="tag-status limited">LTD</span></td><td>47</td><td class="c-red">156</td><td class="c-red bold">76.8%</td><td class="c-yellow">142m</td><td>1.96</td></tr>
+            <tr><td class="code">AUH</td><td>UAE</td><td><span class="tag-status limited">LTD</span></td><td>23</td><td class="c-red">87</td><td class="c-red bold">79.1%</td><td class="c-red">186m</td><td>0.96</td></tr>
+            <tr><td class="code">DOH</td><td>QAT</td><td><span class="tag-status limited">RTG</span></td><td>134</td><td class="c-yellow">45</td><td class="c-yellow">25.1%</td><td class="c-yellow">89m</td><td>5.58</td></tr>
+            <tr><td class="code">RUH</td><td>KSA</td><td><span class="tag-status restricted">RST</span></td><td>89</td><td class="c-red">112</td><td class="c-red">55.7%</td><td class="c-yellow">98m</td><td>3.71</td></tr>
+            <tr><td class="code">JED</td><td>KSA</td><td><span class="tag-status open">OPR</span></td><td>156</td><td class="c-yellow">34</td><td class="c-yellow">17.9%</td><td class="c-yellow">54m</td><td>6.50</td></tr>
+            <tr><td class="code">DMM</td><td>KSA</td><td><span class="tag-status restricted">RST</span></td><td>12</td><td class="c-red">67</td><td class="c-red bold">84.8%</td><td class="c-red">210m</td><td>0.50</td></tr>
+            <tr><td class="code">BAH</td><td>BHR</td><td><span class="tag-status limited">MIL</span></td><td>34</td><td class="c-red">56</td><td class="c-red">62.2%</td><td class="c-yellow">124m</td><td>1.42</td></tr>
+            <tr><td class="code">MCT</td><td>OMN</td><td><span class="tag-status open">OPR</span></td><td>187</td><td>8</td><td class="c-green bold">4.1%</td><td class="c-green">23m</td><td class="c-green bold">7.79</td></tr>
         </table>
     </div>
 
-    <!-- Suspended Routes -->
-    <div class="bbg-panel">
-        <div class="bbg-panel-title">SUSPENDED ROUTES</div>
-        <div class="bbg-grid cols-6">
-            <div class="bbg-row"><span class="c-red">ALL→IKA</span> <span class="c-dim">INDEF</span></div>
-            <div class="bbg-row"><span class="c-red">ALL→BGW</span> <span class="c-dim">INDEF</span></div>
-            <div class="bbg-row"><span class="c-red">ALL→TLV</span> <span class="c-dim">INDEF</span></div>
-            <div class="bbg-row"><span class="c-red">ALL→BEY</span> <span class="c-dim">SUSP</span></div>
-            <div class="bbg-row"><span class="c-red">ALL→DAM</span> <span class="c-dim">INDEF</span></div>
-            <div class="bbg-row"><span class="c-orange">EK/EY→AMM</span> <span class="c-dim">RDCD</span></div>
+    <div class="panel">
+        <div class="panel-title">SUSPENDED ROUTES</div>
+        <div class="routes-grid">
+            <div class="route-item"><span class="c-red">ALL→IKA</span> <span class="c-dim">INDEF</span></div>
+            <div class="route-item"><span class="c-red">ALL→BGW</span> <span class="c-dim">INDEF</span></div>
+            <div class="route-item"><span class="c-red">ALL→TLV</span> <span class="c-dim">INDEF</span></div>
+            <div class="route-item"><span class="c-red">ALL→BEY</span> <span class="c-dim">SUSP</span></div>
+            <div class="route-item"><span class="c-red">ALL→DAM</span> <span class="c-dim">INDEF</span></div>
+            <div class="route-item"><span class="c-orange">EK/EY→AMM</span> <span class="c-dim">RDCD</span></div>
         </div>
     </div>
 
-    <!-- Passenger Info -->
-    <div class="bbg-grid cols-4">
-        <div class="bbg-panel">
-            <div class="bbg-panel-title">REBOOKING</div>
-            <div class="bbg-sidebar-item">Free rebooking thru Mar 15</div>
-            <div class="bbg-sidebar-item">EK EY QR SV GF WY</div>
-        </div>
-        <div class="bbg-panel">
-            <div class="bbg-panel-title">STRANDED PAX</div>
-            <div class="bbg-sidebar-item"><span class="c-orange">DXB</span> T3 emergency accom</div>
-            <div class="bbg-sidebar-item"><span class="c-orange">DOH</span> Oryx Hotel assist</div>
-        </div>
-        <div class="bbg-panel">
-            <div class="bbg-panel-title">ALT ROUTES</div>
-            <div class="bbg-sidebar-item">Via MCT +capacity</div>
-            <div class="bbg-sidebar-item">Via BOM available</div>
-        </div>
-        <div class="bbg-panel">
-            <div class="bbg-panel-title">DELAYS</div>
-            <div class="bbg-sidebar-item">Westbound: <span class="c-yellow">2-4h</span></div>
-            <div class="bbg-sidebar-item">Eastbound: <span class="c-red">4-8h</span></div>
-        </div>
+    <div class="info-grid">
+        <div class="panel"><div class="panel-title">REBOOKING</div><div class="info-item">Free rebooking thru Mar 15</div><div class="info-item">EK EY QR SV GF WY</div></div>
+        <div class="panel"><div class="panel-title">STRANDED PAX</div><div class="info-item"><span class="c-orange">DXB</span> T3 emergency accom</div><div class="info-item"><span class="c-orange">DOH</span> Oryx Hotel assist</div></div>
+        <div class="panel"><div class="panel-title">ALT ROUTES</div><div class="info-item">Via MCT +capacity</div><div class="info-item">Via BOM available</div></div>
+        <div class="panel"><div class="panel-title">DELAYS</div><div class="info-item">Westbound: <span class="c-yellow">2-4h</span></div><div class="info-item">Eastbound: <span class="c-red">4-8h</span></div></div>
     </div>
 
-    <!-- Footer -->
-    <div class="bbg-footer">
-        <div class="keys">
-            <span><span class="key">F1</span>HELP</span>
-            <span><span class="key">F2</span>OVERVIEW</span>
-            <span><span class="key">F3</span>INCIDENTS</span>
-        </div>
+    <div class="footer">
+        <div class="keys"><span><span class="key">F1</span>HELP</span><span><span class="key">F2</span>OVERVIEW</span><span><span class="key">F3</span>INCIDENTS</span></div>
         <span>SIMULATED DATA | REFRESH 30S</span>
     </div>
 </div>
@@ -210,79 +133,41 @@
 <script>
 function updateClock() {
     document.getElementById('clock').textContent = new Date().toLocaleString('en-US', {
-        timeZone: 'UTC',
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
+        timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
     }) + ' UTC';
 }
-updateClock();
-setInterval(updateClock, 1000);
+updateClock(); setInterval(updateClock, 1000);
 
-const airlines = [
-    { code: 'EK', base: 'DXB' },
-    { code: 'EY', base: 'AUH' },
-    { code: 'QR', base: 'DOH' },
-    { code: 'SV', base: 'RUH' },
-    { code: 'GF', base: 'BAH' },
-    { code: 'WY', base: 'MCT' }
-];
-
+const airlines = [{code:'EK',base:'DXB'},{code:'EY',base:'AUH'},{code:'QR',base:'DOH'},{code:'SV',base:'RUH'},{code:'GF',base:'BAH'},{code:'WY',base:'MCT'}];
 const dests = ['LHR','CDG','JFK','SIN','BKK','DEL','BOM','IST','FRA','CAI','KWI','CMB'];
-const aircraft = ['B77W','A388','A359','B789','A321','B738'];
 const reasons = ['AIRSPACE','SECURITY','REROUTE','CREW','MIL OPS'];
+function rnd(a){return a[Math.floor(Math.random()*a.length)]}
+function rndNum(min,max){return min+Math.floor(Math.random()*(max-min))}
 
-function rnd(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-function rndNum(min, max) { return min + Math.floor(Math.random() * (max - min)); }
-
-function renderFlights(listId, countId, count, statusClass, statusText, infoFn) {
+function render(listId, countId, count, cls, txt, infoFn) {
     const list = document.getElementById(listId);
     document.getElementById(countId).textContent = count;
-    
-    let html = `<div class="bbg-flight-row header">
-        <span>FLT</span><span>ROUTE</span><span>INFO</span><span>STS</span>
-    </div>`;
-    
-    for (let i = 0; i < Math.min(count, 8); i++) {
+    let html = '<div class="flight-row header"><span>FLT</span><span>ROUTE</span><span>INFO</span><span>STS</span></div>';
+    for(let i=0; i<Math.min(count,8); i++) {
         const al = rnd(airlines);
-        const fn = al.code + rndNum(100, 999);
-        const dest = rnd(dests);
-        const info = infoFn();
-        html += `<div class="bbg-flight-row">
-            <span class="fnum">${fn}</span>
-            <span class="route">${al.base}→${dest}</span>
-            <span class="info">${info}</span>
-            <span class="status ${statusClass}">${statusText}</span>
-        </div>`;
+        html += `<div class="flight-row"><span class="fnum">${al.code}${rndNum(100,999)}</span><span>${al.base}→${rnd(dests)}</span><span class="info">${infoFn()}</span><span class="status ${cls}">${txt}</span></div>`;
     }
     list.innerHTML = html;
 }
 
 function update() {
-    renderFlights('airborne-list', 'airborne-count', rndNum(18, 30), 'airborne', 'AIR', 
-        () => 'FL' + rndNum(280, 420));
-    
+    render('airborne-list','airborne-count',rndNum(18,30),'airborne','AIR',()=>'FL'+rndNum(280,420));
     const now = new Date();
-    renderFlights('scheduled-list', 'scheduled-count', rndNum(14, 22), 'scheduled', 'SCHED',
-        () => {
-            const t = new Date(now.getTime() + rndNum(15, 180) * 60000);
-            return t.toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'UTC'}) + 'Z';
-        });
-    
-    renderFlights('delayed-list', 'delayed-count', rndNum(12, 20), 'delayed', 'DLY',
-        () => '+' + rndNum(30, 180) + 'M');
-    
-    renderFlights('canceled-list', 'canceled-count', rndNum(28, 40), 'canceled', 'CXL',
-        () => rnd(reasons));
+    render('scheduled-list','scheduled-count',rndNum(14,22),'scheduled','SCHED',()=>{
+        const t = new Date(now.getTime()+rndNum(15,180)*60000);
+        return t.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'UTC'})+'Z';
+    });
+    render('delayed-list','delayed-count',rndNum(12,20),'delayed','DLY',()=>'+'+rndNum(30,180)+'M');
+    render('canceled-list','canceled-count',rndNum(28,40),'canceled','CXL',()=>rnd(reasons));
 }
-
-update();
-setInterval(update, 30000);
-setTimeout(() => location.reload(), 300000);
+update(); setInterval(update, 30000);
+setTimeout(()=>location.reload(), 300000);
 </script>
 </body>
 </html>

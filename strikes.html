@@ -4,177 +4,135 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INCIDENTS | MIDEAST</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; color: #ccc; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 12px; line-height: 1.3; }
+        .terminal { padding: 2px; }
+        .header { background: #ff6600; color: #000; padding: 3px 8px; font-weight: 700; font-size: 13px; display: flex; justify-content: space-between; }
+        .nav { background: #000; border-bottom: 1px solid #333; display: flex; }
+        .nav a { color: #fa0; text-decoration: none; padding: 4px 16px; font-size: 11px; border-right: 1px solid #333; }
+        .nav a:hover { background: #111; }
+        .nav a.active { background: #ff6600; color: #000; font-weight: 700; }
+        .ticker { background: #f33; color: #fff; padding: 3px 8px; font-size: 11px; font-weight: 700; }
+        .ticker .blink { animation: blink 1s infinite; margin-right: 8px; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        .panel { border: 1px solid #333; background: #000; margin-bottom: 2px; }
+        .panel-title { background: #ff6600; color: #000; padding: 2px 6px; font-size: 11px; font-weight: 700; display: flex; justify-content: space-between; }
+        .panel-title .tag { background: #000; color: #ff6600; padding: 0 4px; font-size: 10px; }
+        .toll-grid { display: grid; grid-template-columns: repeat(6, 1fr); }
+        @media(max-width:700px) { .toll-grid { grid-template-columns: repeat(3, 1fr); } }
+        .toll { padding: 8px; text-align: center; border-right: 1px solid #333; border-bottom: 1px solid #333; }
+        .toll .region { font-size: 9px; color: #666; }
+        .toll .num { font-size: 22px; font-weight: 700; color: #f33; }
+        .toll .type { font-size: 8px; color: #666; }
+        .timeline-item { display: grid; grid-template-columns: 130px 100px 1fr; gap: 8px; padding: 4px 6px; border-bottom: 1px solid #1a1a1a; font-size: 11px; border-left: 3px solid transparent; }
+        .timeline-item:hover { background: #0a0a0a; }
+        .timeline-item.critical { border-left-color: #f33; }
+        .timeline-item.high { border-left-color: #ff6600; }
+        .timeline-item.medium { border-left-color: #ff0; }
+        .timeline-item .time { color: #ff6600; font-size: 10px; }
+        .timeline-item .loc { color: #0cc; font-size: 10px; }
+        .country-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2px; }
+        .incident-block { padding: 6px; border-bottom: 1px solid #1a1a1a; }
+        .incident-block .meta { display: flex; gap: 12px; margin-bottom: 4px; font-size: 10px; }
+        .incident-block .meta .time { color: #ff6600; }
+        .incident-block .meta .type { padding: 0 4px; font-weight: 700; font-size: 9px; }
+        .incident-block .meta .type.strike { background: #f33; color: #fff; }
+        .incident-block .meta .type.intercept { background: #ff0; color: #000; }
+        .incident-block .meta .type.military { background: #0cc; color: #000; }
+        .incident-block h4 { color: #fff; font-size: 11px; margin-bottom: 3px; }
+        .incident-block p { color: #ccc; font-size: 10px; line-height: 1.4; }
+        .incident-block .impact { margin-top: 4px; font-size: 9px; color: #666; border-top: 1px dotted #333; padding-top: 4px; }
+        .incident-block .impact strong { color: #ff0; }
+        .no-incidents { padding: 12px; text-align: center; color: #0c0; font-size: 11px; }
+        .c-dim { color: #666; }
+        .footer { background: #111; border-top: 1px solid #333; padding: 4px 8px; font-size: 10px; color: #666; display: flex; justify-content: space-between; }
+        .footer .key { background: #ff6600; color: #000; padding: 0 3px; font-weight: 700; margin-right: 2px; }
+        .footer .keys span { margin-right: 16px; }
+    </style>
 </head>
 <body>
 <div class="terminal">
-    <!-- Header Bar -->
-    <div class="bbg-header">
-        <span>MIDEAST INCIDENT TRACKER</span>
-        <span class="right" id="clock"></span>
-    </div>
-
-    <!-- Navigation -->
-    <div class="bbg-nav">
+    <div class="header"><span>MIDEAST INCIDENT TRACKER</span><span id="clock"></span></div>
+    <div class="nav">
         <a href="index.html">OVERVIEW</a>
         <a href="flights.html">FLIGHTS</a>
         <a href="strikes.html" class="active">INCIDENTS</a>
     </div>
+    <div class="ticker"><span class="blink">●</span> ONGOING: US-ISRAELI OPS VS IRAN — IRANIAN RETALIATION AFFECTING GULF STATES — MULTIPLE INTERCEPTIONS</div>
 
-    <!-- Alert Ticker -->
-    <div class="bbg-ticker">
-        <span class="blink">●</span>
-        ONGOING: US-ISRAELI OPS VS IRAN — IRANIAN RETALIATION AFFECTING GULF STATES — MULTIPLE INTERCEPTIONS REPORTED
-    </div>
-
-    <!-- Death Toll -->
-    <div class="bbg-panel">
-        <div class="bbg-panel-title">CONFIRMED CASUALTIES FEB 28 - MAR 5</div>
-        <div class="bbg-toll-grid">
-            <div class="bbg-toll">
-                <div class="region">IRAN</div>
-                <div class="num">~1,045</div>
-                <div class="type">MIL+CIV</div>
-            </div>
-            <div class="bbg-toll">
-                <div class="region">ISRAEL</div>
-                <div class="num">11</div>
-                <div class="type">CIVILIAN</div>
-            </div>
-            <div class="bbg-toll">
-                <div class="region">USA</div>
-                <div class="num">6</div>
-                <div class="type">MILITARY</div>
-            </div>
-            <div class="bbg-toll">
-                <div class="region">UAE</div>
-                <div class="num">7</div>
-                <div class="type">CIVILIAN</div>
-            </div>
-            <div class="bbg-toll">
-                <div class="region">SAUDI</div>
-                <div class="num">2</div>
-                <div class="type">MILITARY</div>
-            </div>
-            <div class="bbg-toll">
-                <div class="region">TOTAL</div>
-                <div class="num">~1,071</div>
-                <div class="type">CONFIRMED</div>
-            </div>
+    <div class="panel">
+        <div class="panel-title">CONFIRMED CASUALTIES FEB 28 - MAR 5</div>
+        <div class="toll-grid">
+            <div class="toll"><div class="region">IRAN</div><div class="num">~1,045</div><div class="type">MIL+CIV</div></div>
+            <div class="toll"><div class="region">ISRAEL</div><div class="num">11</div><div class="type">CIVILIAN</div></div>
+            <div class="toll"><div class="region">USA</div><div class="num">6</div><div class="type">MILITARY</div></div>
+            <div class="toll"><div class="region">UAE</div><div class="num">7</div><div class="type">CIVILIAN</div></div>
+            <div class="toll"><div class="region">SAUDI</div><div class="num">2</div><div class="type">MILITARY</div></div>
+            <div class="toll"><div class="region">TOTAL</div><div class="num">~1,071</div><div class="type">CONFIRMED</div></div>
         </div>
     </div>
 
-    <!-- Timeline -->
-    <div class="bbg-panel">
-        <div class="bbg-panel-title">INCIDENT TIMELINE</div>
-        <div class="bbg-panel-content">
-            <div class="bbg-timeline-item critical">
-                <span class="time">MAR 2 22:40Z</span>
-                <span class="loc">DUBAI UAE</span>
-                <span class="desc"><strong>Missile intercept</strong> — Debris Al Barsha/Business Bay. 3 casualties.</span>
-            </div>
-            <div class="bbg-timeline-item critical">
-                <span class="time">MAR 2 19:15Z</span>
-                <span class="loc">DHAHRAN KSA</span>
-                <span class="desc"><strong>Patriot intercept</strong> — Incoming projectile near Aramco HQ neutralized.</span>
-            </div>
-            <div class="bbg-timeline-item critical">
-                <span class="time">MAR 1 14:32Z</span>
-                <span class="loc">ABU DHABI UAE</span>
-                <span class="desc"><strong>Drone strike</strong> — Shahed-136 hit Al Salam Naval Base. 4 KIA.</span>
-            </div>
-            <div class="bbg-timeline-item high">
-                <span class="time">MAR 1 23:45Z</span>
-                <span class="loc">HORMUZ</span>
-                <span class="desc"><strong>Naval incident</strong> — IRGC boats approached USS group. Warning shots.</span>
-            </div>
-            <div class="bbg-timeline-item high">
-                <span class="time">MAR 1 11:20Z</span>
-                <span class="loc">BAHRAIN</span>
-                <span class="desc"><strong>Base alert</strong> — US 5th Fleet elevated readiness. Personnel evac.</span>
-            </div>
-            <div class="bbg-timeline-item medium">
-                <span class="time">FEB 28 18:00Z</span>
-                <span class="loc">TEHRAN IRAN</span>
-                <span class="desc"><strong>Conflict begins</strong> — US-Israeli strikes on military targets.</span>
-            </div>
-        </div>
+    <div class="panel">
+        <div class="panel-title">INCIDENT TIMELINE</div>
+        <div class="timeline-item critical"><span class="time">MAR 2 22:40Z</span><span class="loc">DUBAI UAE</span><span><strong>Missile intercept</strong> — Debris Al Barsha/Business Bay. 3 casualties.</span></div>
+        <div class="timeline-item critical"><span class="time">MAR 2 19:15Z</span><span class="loc">DHAHRAN KSA</span><span><strong>Patriot intercept</strong> — Incoming projectile near Aramco HQ neutralized.</span></div>
+        <div class="timeline-item critical"><span class="time">MAR 1 14:32Z</span><span class="loc">ABU DHABI UAE</span><span><strong>Drone strike</strong> — Shahed-136 hit Al Salam Naval Base. 4 KIA.</span></div>
+        <div class="timeline-item high"><span class="time">MAR 1 23:45Z</span><span class="loc">HORMUZ</span><span><strong>Naval incident</strong> — IRGC boats approached USS group. Warning shots.</span></div>
+        <div class="timeline-item high"><span class="time">MAR 1 11:20Z</span><span class="loc">BAHRAIN</span><span><strong>Base alert</strong> — US 5th Fleet elevated readiness. Personnel evac.</span></div>
+        <div class="timeline-item medium"><span class="time">FEB 28 18:00Z</span><span class="loc">TEHRAN IRAN</span><span><strong>Conflict begins</strong> — US-Israeli strikes on military targets.</span></div>
     </div>
 
-    <!-- Country Breakdown -->
     <div class="country-grid">
-        <div class="bbg-panel">
-            <div class="bbg-panel-title">UAE <span class="tag">2 STRIKES</span></div>
+        <div class="panel">
+            <div class="panel-title">UAE <span class="tag">2 STRIKES</span></div>
             <div class="incident-block">
-                <div class="meta">
-                    <span class="time">MAR 2 22:40Z</span>
-                    <span class="type intercept">INTERCEPT</span>
-                </div>
+                <div class="meta"><span class="time">MAR 2 22:40Z</span><span class="type intercept">INTERCEPT</span></div>
                 <h4>Dubai Missile Interception</h4>
                 <p>Emirati air defense intercepted ballistic missile over Dubai. Debris fell Al Barsha and Business Bay. 3 civilian casualties, multiple injuries.</p>
                 <div class="impact"><strong>Impact:</strong> DXB suspended 4h. Sheikh Zayed Rd closed.</div>
             </div>
             <div class="incident-block">
-                <div class="meta">
-                    <span class="time">MAR 1 14:32Z</span>
-                    <span class="type strike">STRIKE</span>
-                </div>
+                <div class="meta"><span class="time">MAR 1 14:32Z</span><span class="type strike">STRIKE</span></div>
                 <h4>Abu Dhabi Naval Base Attack</h4>
                 <p>Two Iranian Shahed-136 drones struck Al Salam Naval Base. 4 military KIA. Secondary fires. Etihad HQ evacuated.</p>
                 <div class="impact"><strong>Impact:</strong> AUH closed 8h. Threat level maximum.</div>
             </div>
         </div>
 
-        <div class="bbg-panel">
-            <div class="bbg-panel-title">SAUDI ARABIA <span class="tag">1 INTERCEPT</span></div>
+        <div class="panel">
+            <div class="panel-title">SAUDI ARABIA <span class="tag">1 INTERCEPT</span></div>
             <div class="incident-block">
-                <div class="meta">
-                    <span class="time">MAR 2 19:15Z</span>
-                    <span class="type intercept">INTERCEPT</span>
-                </div>
+                <div class="meta"><span class="time">MAR 2 19:15Z</span><span class="type intercept">INTERCEPT</span></div>
                 <h4>Dhahran Interception</h4>
                 <p>Saudi Patriot batteries engaged incoming projectile near Dhahran. Target believed Aramco HQ. No casualties. E Province airspace closed.</p>
                 <div class="impact"><strong>Impact:</strong> DMM halted. Eastern route closures expanded.</div>
             </div>
         </div>
 
-        <div class="bbg-panel">
-            <div class="bbg-panel-title">QATAR <span class="tag">NO STRIKES</span></div>
-            <div class="no-incidents">
-                NO DIRECT INCIDENTS<br>
-                <span class="c-dim">Rerouting active. Al Udeid high readiness.</span>
-            </div>
+        <div class="panel">
+            <div class="panel-title">QATAR <span class="tag">NO STRIKES</span></div>
+            <div class="no-incidents">NO DIRECT INCIDENTS<br><span class="c-dim">Rerouting active. Al Udeid high readiness.</span></div>
         </div>
 
-        <div class="bbg-panel">
-            <div class="bbg-panel-title">BAHRAIN <span class="tag">MIL ACTIVITY</span></div>
+        <div class="panel">
+            <div class="panel-title">BAHRAIN <span class="tag">MIL ACTIVITY</span></div>
             <div class="incident-block">
-                <div class="meta">
-                    <span class="time">MAR 1 11:20Z</span>
-                    <span class="type military">MILITARY</span>
-                </div>
+                <div class="meta"><span class="time">MAR 1 11:20Z</span><span class="type military">MILITARY</span></div>
                 <h4>US 5th Fleet Alert</h4>
                 <p>NAVCENT raised alert NSA Bahrain. Non-essential shelter order. Increased Gulf patrol. Commercial shipping alternate routes.</p>
                 <div class="impact"><strong>Impact:</strong> BAH reduced capacity. Military priority.</div>
             </div>
         </div>
 
-        <div class="bbg-panel">
-            <div class="bbg-panel-title">OMAN <span class="tag">NEUTRAL</span></div>
-            <div class="no-incidents">
-                NO INCIDENTS<br>
-                <span class="c-dim">Neutral. MCT diversion hub.</span>
-            </div>
+        <div class="panel">
+            <div class="panel-title">OMAN <span class="tag">NEUTRAL</span></div>
+            <div class="no-incidents">NO INCIDENTS<br><span class="c-dim">Neutral. MCT diversion hub.</span></div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <div class="bbg-footer">
-        <div class="keys">
-            <span><span class="key">F1</span>HELP</span>
-            <span><span class="key">F2</span>OVERVIEW</span>
-            <span><span class="key">F3</span>FLIGHTS</span>
-        </div>
+    <div class="footer">
+        <div class="keys"><span><span class="key">F1</span>HELP</span><span><span class="key">F2</span>OVERVIEW</span><span><span class="key">F3</span>FLIGHTS</span></div>
         <span>CASUALTY FIGURES PRELIMINARY | REFRESH 5M</span>
     </div>
 </div>
@@ -182,19 +140,12 @@
 <script>
 function updateClock() {
     document.getElementById('clock').textContent = new Date().toLocaleString('en-US', {
-        timeZone: 'UTC',
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
+        timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
     }) + ' UTC';
 }
-updateClock();
-setInterval(updateClock, 1000);
-setTimeout(() => location.reload(), 300000);
+updateClock(); setInterval(updateClock, 1000);
+setTimeout(()=>location.reload(), 300000);
 </script>
 </body>
 </html>
