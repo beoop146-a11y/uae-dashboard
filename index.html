@@ -3,205 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Middle East Crisis Dashboard</title>
+    <title>MIDEAST CRISIS | Aviation Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🌍 Middle East Crisis Dashboard</h1>
-            <p class="subtitle">UAE · Qatar · Saudi Arabia · Bahrain · Oman</p>
-            <p class="last-updated">Last updated: <span id="update-time"></span></p>
+            <div>
+                <h1>MIDEAST CRISIS DASHBOARD</h1>
+                <p class="subtitle">UAE • QATAR • SAUDI ARABIA • BAHRAIN • OMAN</p>
+            </div>
+            <p class="last-updated">LIVE <span id="update-time"></span></p>
         </header>
 
         <nav class="main-nav">
-            <a href="index.html" class="nav-link active">📊 Overview</a>
-            <a href="flights.html" class="nav-link">✈️ Live Flights</a>
-            <a href="strikes.html" class="nav-link">⚠️ Incidents</a>
+            <a href="index.html" class="nav-link active">OVERVIEW</a>
+            <a href="flights.html" class="nav-link">LIVE FLIGHTS</a>
+            <a href="strikes.html" class="nav-link">INCIDENTS</a>
         </nav>
 
         <div class="alert-banner critical">
             <span class="pulse"></span>
-            REGIONAL ALERT - Limited Airspace Operations Across Gulf States
+            REGIONAL ALERT — LIMITED AIRSPACE OPERATIONS ACROSS GULF STATES — EASTERN ROUTES VIA IRAN/IRAQ CLOSED
         </div>
 
         <main class="dashboard-grid">
-            <!-- Regional Overview -->
-            <section class="overview-section">
-                <h2>Regional Status</h2>
-                <div class="country-cards">
-                    <div class="country-card uae">
-                        <div class="country-flag">🇦🇪</div>
-                        <h3>United Arab Emirates</h3>
-                        <div class="status-row">
-                            <span class="label">Airspace:</span>
-                            <span class="status limited">LIMITED</span>
+            <div class="main-content">
+                <!-- Regional Overview -->
+                <section class="overview-section">
+                    <h2>REGIONAL STATUS</h2>
+                    <div class="country-cards">
+                        <div class="country-card uae">
+                            <h3>UNITED ARAB EMIRATES</h3>
+                            <div class="status-row">
+                                <span class="label">Airspace</span>
+                                <span class="status limited">LIMITED</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="label">Airports</span>
+                                <span class="value">DXB, AUH operational (restricted)</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="label">Incidents</span>
+                                <span class="value critical">2 strike events</span>
+                            </div>
+                            <a href="strikes.html#uae" class="card-link">VIEW DETAILS →</a>
                         </div>
-                        <div class="status-row">
-                            <span class="label">Airports:</span>
-                            <span class="value">DXB, AUH operational (restricted)</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="label">Incidents:</span>
-                            <span class="value critical">2 strike events</span>
-                        </div>
-                        <a href="strikes.html#uae" class="card-link">View Details →</a>
-                    </div>
 
-                    <div class="country-card qatar">
-                        <div class="country-flag">🇶🇦</div>
-                        <h3>Qatar</h3>
-                        <div class="status-row">
-                            <span class="label">Airspace:</span>
-                            <span class="status limited">LIMITED</span>
+                        <div class="country-card qatar">
+                            <h3>QATAR</h3>
+                            <div class="status-row">
+                                <span class="label">Airspace</span>
+                                <span class="status limited">LIMITED</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="label">Airports</span>
+                                <span class="value">DOH operational (rerouting active)</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="label">Incidents</span>
+                                <span class="value warning">No direct strikes</span>
+                            </div>
+                            <a href="strikes.html#qatar" class="card-link">VIEW DETAILS →</a>
                         </div>
-                        <div class="status-row">
-                            <span class="label">Airports:</span>
-                            <span class="value">DOH operational (rerouting active)</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="label">Incidents:</span>
-                            <span class="value warning">No direct strikes</span>
-                        </div>
-                        <a href="strikes.html#qatar" class="card-link">View Details →</a>
-                    </div>
 
-                    <div class="country-card saudi">
-                        <div class="country-flag">🇸🇦</div>
-                        <h3>Saudi Arabia</h3>
-                        <div class="status-row">
-                            <span class="label">Airspace:</span>
-                            <span class="status restricted">RESTRICTED</span>
+                        <div class="country-card saudi">
+                            <h3>SAUDI ARABIA</h3>
+                            <div class="status-row">
+                                <span class="label">Airspace</span>
+                                <span class="status restricted">RESTRICTED</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="label">Airports</span>
+                                <span class="value">RUH, JED operational (eastern routes closed)</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="label">Incidents</span>
+                                <span class="value critical">1 interception event</span>
+                            </div>
+                            <a href="strikes.html#saudi" class="card-link">VIEW DETAILS →</a>
                         </div>
-                        <div class="status-row">
-                            <span class="label">Airports:</span>
-                            <span class="value">RUH, JED operational (eastern routes closed)</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="label">Incidents:</span>
-                            <span class="value critical">1 interception event</span>
-                        </div>
-                        <a href="strikes.html#saudi" class="card-link">View Details →</a>
-                    </div>
 
-                    <div class="country-card bahrain">
-                        <div class="country-flag">🇧🇭</div>
-                        <h3>Bahrain</h3>
-                        <div class="status-row">
-                            <span class="label">Airspace:</span>
-                            <span class="status limited">LIMITED</span>
+                        <div class="country-card bahrain">
+                            <h3>BAHRAIN</h3>
+                            <div class="status-row">
+                                <span class="label">Airspace</span>
+                                <span class="status limited">LIMITED</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="label">Airports</span>
+                                <span class="value">BAH operational (US base activity high)</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="label">Incidents</span>
+                                <span class="value warning">Military activity only</span>
+                            </div>
+                            <a href="strikes.html#bahrain" class="card-link">VIEW DETAILS →</a>
                         </div>
-                        <div class="status-row">
-                            <span class="label">Airports:</span>
-                            <span class="value">BAH operational (US base activity high)</span>
-                        </div>
-                        <div class="status-row">
-                            <span class="label">Incidents:</span>
-                            <span class="value warning">Military activity only</span>
-                        </div>
-                        <a href="strikes.html#bahrain" class="card-link">View Details →</a>
-                    </div>
 
-                    <div class="country-card oman">
-                        <div class="country-flag">🇴🇲</div>
-                        <h3>Oman</h3>
-                        <div class="status-row">
-                            <span class="label">Airspace:</span>
-                            <span class="status open">OPEN</span>
+                        <div class="country-card oman">
+                            <h3>OMAN</h3>
+                            <div class="status-row">
+                                <span class="label">Airspace</span>
+                                <span class="status open">OPEN</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="label">Airports</span>
+                                <span class="value">MCT fully operational (increased traffic)</span>
+                            </div>
+                            <div class="status-row">
+                                <span class="label">Incidents</span>
+                                <span class="value safe">None reported</span>
+                            </div>
+                            <a href="strikes.html#oman" class="card-link">VIEW DETAILS →</a>
                         </div>
-                        <div class="status-row">
-                            <span class="label">Airports:</span>
-                            <span class="value">MCT fully operational (increased traffic)</span>
+                    </div>
+                </section>
+
+                <!-- Quick Stats -->
+                <section class="stats-section">
+                    <h2>REGIONAL IMPACT (48H)</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value red">847</div>
+                            <div class="stat-label">Flights Canceled</div>
                         </div>
-                        <div class="status-row">
-                            <span class="label">Incidents:</span>
-                            <span class="value safe">None reported</span>
+                        <div class="stat-card">
+                            <div class="stat-value yellow">312</div>
+                            <div class="stat-label">Flights Rerouted</div>
                         </div>
-                        <a href="strikes.html#oman" class="card-link">View Details →</a>
+                        <div class="stat-card">
+                            <div class="stat-value">~230K</div>
+                            <div class="stat-label">Passengers Affected</div>
+                        </div>
+                        <div class="stat-card critical">
+                            <div class="stat-value">9</div>
+                            <div class="stat-label">Gulf Casualties</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value red">5</div>
+                            <div class="stat-label">Routes Suspended</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value yellow">3</div>
+                            <div class="stat-label">Markets Closed</div>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Quick Stats -->
-            <section class="stats-section">
-                <h2>Regional Impact (48h)</h2>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value red">847</div>
-                        <div class="stat-label">Flights Canceled</div>
+                <!-- Live Flight Tracker Preview -->
+                <section class="flights-preview">
+                    <h2>LIVE FLIGHT ACTIVITY</h2>
+                    <div class="map-embed">
+                        <iframe 
+                            src="https://www.flightradar24.com/simple_index.php?lat=24.5&lon=54&z=5&airports=1" 
+                            width="100%" 
+                            height="400" 
+                            frameborder="0"
+                            loading="lazy">
+                        </iframe>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-value yellow">312</div>
-                        <div class="stat-label">Flights Rerouted</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">~230K</div>
-                        <div class="stat-label">Passengers Affected</div>
-                    </div>
-                    <div class="stat-card critical">
-                        <div class="stat-value">9</div>
-                        <div class="stat-label">Gulf Casualties</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">5</div>
-                        <div class="stat-label">Routes Suspended</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">3</div>
-                        <div class="stat-label">Stock Markets Closed</div>
-                    </div>
-                </div>
-            </section>
+                    <a href="flights.html" class="btn primary full-width">OPEN FULL FLIGHT DASHBOARD →</a>
+                </section>
 
-            <!-- Live Flight Tracker Preview -->
-            <section class="flights-preview">
-                <h2>✈️ Live Flight Activity</h2>
-                <div class="map-embed">
-                    <iframe 
-                        src="https://www.flightradar24.com/simple_index.php?lat=24.5&lon=54&z=5&airports=1" 
-                        width="100%" 
-                        height="400" 
-                        frameborder="0"
-                        loading="lazy">
-                    </iframe>
-                </div>
-                <a href="flights.html" class="btn primary full-width">View Full Flight Dashboard →</a>
-            </section>
-
-            <!-- Latest Incidents -->
-            <section class="incidents-preview">
-                <h2>⚠️ Latest Incidents</h2>
-                <div class="incident-list">
-                    <div class="incident critical">
-                        <span class="incident-time">Mar 2, 22:40 UTC</span>
-                        <span class="incident-location">🇦🇪 Dubai</span>
-                        <p>Missile interception over Dubai airspace. Debris reported in multiple areas.</p>
+                <!-- Latest Incidents -->
+                <section class="incidents-preview">
+                    <h2>LATEST INCIDENTS</h2>
+                    <div class="incident-list">
+                        <div class="incident critical">
+                            <span class="incident-time">MAR 2, 22:40 UTC</span>
+                            <span class="incident-location">DUBAI, UAE</span>
+                            <p>Missile interception over Dubai airspace. Debris reported in multiple areas.</p>
+                        </div>
+                        <div class="incident critical">
+                            <span class="incident-time">MAR 1, 14:32 UTC</span>
+                            <span class="incident-location">ABU DHABI, UAE</span>
+                            <p>Iranian drones struck Al Salam Naval Base. Two confirmed hits.</p>
+                        </div>
+                        <div class="incident high">
+                            <span class="incident-time">MAR 2, 19:15 UTC</span>
+                            <span class="incident-location">DHAHRAN, KSA</span>
+                            <p>Saudi air defense intercepted projectile near Dhahran.</p>
+                        </div>
+                        <div class="incident high">
+                            <span class="incident-time">MAR 2, 08:22 UTC</span>
+                            <span class="incident-location">EASTERN PROVINCE, KSA</span>
+                            <p>Aramco facility on heightened alert. No impact reported.</p>
+                        </div>
+                        <div class="incident">
+                            <span class="incident-time">MAR 1, 23:45 UTC</span>
+                            <span class="incident-location">STRAIT OF HORMUZ</span>
+                            <p>US Navy reports increased Iranian naval activity. Commercial shipping advised alternate routes.</p>
+                        </div>
                     </div>
-                    <div class="incident critical">
-                        <span class="incident-time">Mar 1, 14:32 UTC</span>
-                        <span class="incident-location">🇦🇪 Abu Dhabi</span>
-                        <p>Iranian drones struck Al Salam Naval Base. Two confirmed hits.</p>
-                    </div>
-                    <div class="incident high">
-                        <span class="incident-time">Mar 2, 19:15 UTC</span>
-                        <span class="incident-location">🇸🇦 Eastern Province</span>
-                        <p>Saudi air defense intercepted projectile near Dhahran.</p>
-                    </div>
-                </div>
-                <a href="strikes.html" class="btn secondary full-width">View All Incidents →</a>
-            </section>
+                    <a href="strikes.html" class="btn secondary full-width">VIEW ALL INCIDENTS →</a>
+                </section>
+            </div>
 
             <!-- Sidebar -->
             <aside class="sidebar">
                 <div class="sidebar-card alert">
-                    <h3>🚨 Travel Advisory</h3>
-                    <p><strong>Level 4:</strong> Do not travel to Iran, Iraq, Yemen, Syria</p>
-                    <p><strong>Level 3:</strong> Reconsider travel to UAE, Saudi Arabia, Bahrain</p>
-                    <p><strong>Level 2:</strong> Exercise caution in Qatar, Oman, Kuwait</p>
+                    <h3>TRAVEL ADVISORY</h3>
+                    <p><strong>LEVEL 4:</strong> Do not travel to Iran, Iraq, Yemen, Syria</p>
+                    <p><strong>LEVEL 3:</strong> Reconsider travel to UAE, Saudi Arabia, Bahrain</p>
+                    <p><strong>LEVEL 2:</strong> Exercise caution in Qatar, Oman, Kuwait</p>
                 </div>
 
                 <div class="sidebar-card">
-                    <h3>📡 Live Sources</h3>
+                    <h3>LIVE SOURCES</h3>
                     <ul class="source-list">
                         <li><a href="https://www.flightradar24.com" target="_blank">FlightRadar24</a></li>
                         <li><a href="https://www.aljazeera.com" target="_blank">Al Jazeera</a></li>
@@ -211,22 +220,30 @@
                 </div>
 
                 <div class="sidebar-card">
-                    <h3>🌐 Regional Context</h3>
+                    <h3>REGIONAL CONTEXT</h3>
                     <p>US-Israeli military operations against Iran began Feb 28, 2026. Iranian retaliation has affected multiple Gulf states.</p>
                     <p class="small">Global death toll: ~1,045 Iran, 11 Israel, 6 US soldiers, 9 Gulf states</p>
                 </div>
 
                 <div class="sidebar-card info">
-                    <h3>📞 Emergency Contacts</h3>
+                    <h3>EMERGENCY CONTACTS</h3>
                     <p><strong>UAE:</strong> +971 4 224 5555 (DXB)<br>
-                    <strong>Qatar:</strong> +974 4010 6666 (DOH)<br>
-                    <strong>Saudi:</strong> +966 11 220 7000 (RUH)</p>
+                    <strong>QAT:</strong> +974 4010 6666 (DOH)<br>
+                    <strong>KSA:</strong> +966 11 220 7000 (RUH)</p>
+                </div>
+
+                <div class="sidebar-card">
+                    <h3>MARKET IMPACT</h3>
+                    <p><strong>OIL:</strong> Brent +8.2% ($94.50)</p>
+                    <p><strong>DFM:</strong> Suspended trading</p>
+                    <p><strong>TASI:</strong> -4.3% (halted)</p>
+                    <p><strong>QSE:</strong> -2.8%</p>
                 </div>
             </aside>
         </main>
 
         <footer>
-            <p>Data compiled from news and aviation sources. Not official government information. Refresh for updates.</p>
+            <p>DATA COMPILED FROM NEWS AND AVIATION SOURCES. NOT OFFICIAL GOVERNMENT INFORMATION. AUTO-REFRESH: 5 MIN</p>
         </footer>
     </div>
 
