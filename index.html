@@ -4,186 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MIDEAST CRISIS</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background: #000; 
-            color: #ccc; 
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace; 
-            font-size: 12px; 
-            line-height: 1.3; 
-        }
+        body { background: #000; color: #ccc; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 12px; line-height: 1.3; }
         .terminal { padding: 2px; }
-        
-        /* Header */
-        .header { 
-            background: #ff6600; 
-            color: #000; 
-            padding: 3px 8px; 
-            font-weight: 700; 
-            font-size: 13px; 
-            display: flex; 
-            justify-content: space-between; 
-        }
-        
-        /* Nav */
-        .nav { 
-            background: #000; 
-            border-bottom: 1px solid #333; 
-            display: flex; 
-        }
-        .nav a { 
-            color: #fa0; 
-            text-decoration: none; 
-            padding: 4px 16px; 
-            font-size: 11px; 
-            border-right: 1px solid #333; 
-        }
+        .header { background: #ff6600; color: #000; padding: 3px 8px; font-weight: 700; font-size: 13px; display: flex; justify-content: space-between; }
+        .nav { background: #000; border-bottom: 1px solid #333; display: flex; }
+        .nav a { color: #fa0; text-decoration: none; padding: 4px 16px; font-size: 11px; border-right: 1px solid #333; }
         .nav a:hover { background: #111; }
         .nav a.active { background: #ff6600; color: #000; font-weight: 700; }
-        
-        /* Ticker */
-        .ticker { 
-            background: #f33; 
-            color: #fff; 
-            padding: 3px 8px; 
-            font-size: 11px; 
-            font-weight: 700; 
-        }
+        .ticker { background: #f33; color: #fff; padding: 3px 8px; font-size: 11px; font-weight: 700; }
         .ticker .blink { animation: blink 1s infinite; margin-right: 8px; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-        
-        /* Grid */
         .grid { display: grid; gap: 2px; padding: 2px; }
         .grid-main { grid-template-columns: 1fr 280px; }
         @media(max-width:900px) { .grid-main { grid-template-columns: 1fr; } }
-        
-        /* Panel */
         .panel { border: 1px solid #333; background: #000; }
-        .panel-title { 
-            background: #ff6600; 
-            color: #000; 
-            padding: 2px 6px; 
-            font-size: 11px; 
-            font-weight: 700; 
-            display: flex;
-            justify-content: space-between;
-        }
+        .panel-title { background: #ff6600; color: #000; padding: 2px 6px; font-size: 11px; font-weight: 700; display: flex; justify-content: space-between; }
         .panel-title .tag { background: #000; color: #ff6600; padding: 0 4px; font-size: 10px; }
-        
-        /* Stats */
         .stats { display: grid; grid-template-columns: repeat(6, 1fr); border-top: 1px solid #333; }
         @media(max-width:700px) { .stats { grid-template-columns: repeat(3, 1fr); } }
-        .stat { 
-            padding: 8px 6px; 
-            text-align: center; 
-            border-right: 1px solid #333; 
-            border-bottom: 1px solid #333; 
-        }
+        .stat { padding: 8px 6px; text-align: center; border-right: 1px solid #333; border-bottom: 1px solid #333; }
         .stat:last-child { border-right: none; }
         .stat .num { font-size: 20px; font-weight: 700; line-height: 1; }
         .stat .lbl { font-size: 9px; color: #666; margin-top: 2px; }
-        
-        /* Table */
         table { width: 100%; border-collapse: collapse; font-size: 11px; }
-        th { 
-            background: #111; 
-            color: #fa0; 
-            text-align: left; 
-            padding: 3px 6px; 
-            font-weight: 600; 
-            font-size: 10px; 
-            border-bottom: 1px solid #333; 
-        }
+        th { background: #111; color: #fa0; text-align: left; padding: 3px 6px; font-weight: 600; font-size: 10px; border-bottom: 1px solid #333; }
         td { padding: 3px 6px; border-bottom: 1px solid #1a1a1a; }
         tr:hover td { background: #0a0a0a; }
-        
-        /* Colors */
-        .c-orange { color: #ff6600; }
-        .c-amber { color: #fa0; }
-        .c-green { color: #0c0; }
-        .c-red { color: #f33; }
-        .c-yellow { color: #ff0; }
-        .c-cyan { color: #0cc; }
-        .c-dim { color: #666; }
+        .c-orange { color: #ff6600; } .c-green { color: #0c0; } .c-red { color: #f33; } .c-yellow { color: #ff0; } .c-cyan { color: #0cc; } .c-dim { color: #666; }
         .bold { font-weight: 700; }
-        
-        /* Tags */
-        .tag-status { 
-            display: inline-block; 
-            padding: 1px 4px; 
-            font-size: 9px; 
-            font-weight: 700; 
-        }
+        .tag-status { display: inline-block; padding: 1px 4px; font-size: 9px; font-weight: 700; }
         .tag-status.open { background: #0c0; color: #000; }
         .tag-status.limited { background: #ff0; color: #000; }
         .tag-status.restricted { background: #ff6600; color: #000; }
-        
-        /* News */
-        .news-item { 
-            padding: 4px 6px; 
-            border-bottom: 1px solid #1a1a1a; 
-            font-size: 11px; 
-            display: grid; 
-            grid-template-columns: 110px 90px 1fr; 
-            gap: 8px; 
-        }
+        .news-item { padding: 4px 6px; border-bottom: 1px solid #1a1a1a; font-size: 11px; display: grid; grid-template-columns: 110px 90px 1fr; gap: 8px; }
         .news-item:hover { background: #0a0a0a; }
         .news-item .time { color: #ff6600; font-size: 10px; }
         .news-item .loc { color: #0cc; font-size: 10px; }
         .news-item.critical .time { color: #f33; }
         .news-item.high .time { color: #ff0; }
-        
-        /* Map */
-        .map { background: #000; border: 1px solid #333; }
-        .map iframe { display: block; width: 100%; height: 350px; border: none; }
-        
-        /* Sidebar */
+        #map { height: 320px; background: #111; }
         .sidebar .panel { margin-bottom: 2px; }
         .sidebar-item { padding: 3px 6px; font-size: 10px; border-bottom: 1px solid #1a1a1a; }
         .sidebar-item .key { color: #fa0; }
-        
-        /* Links */
         a.link { color: #0cc; text-decoration: none; font-size: 10px; }
         a.link:hover { text-decoration: underline; }
-        
-        /* Footer */
-        .footer { 
-            background: #111; 
-            border-top: 1px solid #333; 
-            padding: 4px 8px; 
-            font-size: 10px; 
-            color: #666; 
-            display: flex; 
-            justify-content: space-between; 
-        }
-        .footer .key { 
-            background: #ff6600; 
-            color: #000; 
-            padding: 0 3px; 
-            font-weight: 700; 
-            margin-right: 2px; 
-        }
+        .footer { background: #111; border-top: 1px solid #333; padding: 4px 8px; font-size: 10px; color: #666; display: flex; justify-content: space-between; }
+        .footer .key { background: #ff6600; color: #000; padding: 0 3px; font-weight: 700; margin-right: 2px; }
         .footer .keys span { margin-right: 16px; }
+        .leaflet-popup-content-wrapper { background: #111; color: #ccc; border-radius: 0; font-family: monospace; font-size: 11px; }
+        .leaflet-popup-tip { background: #111; }
+        .leaflet-popup-content { margin: 8px; }
+        .popup-title { color: #ff6600; font-weight: 700; margin-bottom: 4px; }
+        .popup-critical { border-left: 3px solid #f33; padding-left: 6px; }
+        .popup-high { border-left: 3px solid #ff6600; padding-left: 6px; }
     </style>
 </head>
 <body>
 <div class="terminal">
-    <div class="header">
-        <span>MIDEAST CRISIS MONITOR</span>
-        <span id="clock"></span>
-    </div>
-
+    <div class="header"><span>MIDEAST CRISIS MONITOR</span><span id="clock"></span></div>
     <div class="nav">
         <a href="index.html" class="active">OVERVIEW</a>
         <a href="flights.html">FLIGHTS</a>
         <a href="strikes.html">INCIDENTS</a>
     </div>
-
-    <div class="ticker">
-        <span class="blink">●</span>
-        ALERT: REGIONAL AIRSPACE RESTRICTED — EASTERN ROUTES CLOSED — IRAN/IRAQ AIRSPACE UNAVAILABLE — REROUTING VIA PAKISTAN/OMAN
-    </div>
+    <div class="ticker"><span class="blink">●</span> ALERT: REGIONAL AIRSPACE RESTRICTED — EASTERN ROUTES CLOSED — IRAN/IRAQ AIRSPACE UNAVAILABLE — REROUTING VIA PAKISTAN/OMAN</div>
 
     <div class="grid grid-main">
         <div class="main-col">
@@ -203,131 +91,66 @@
                 <div class="panel-title">REGIONAL STATUS</div>
                 <table>
                     <tr><th>COUNTRY</th><th>AIRSPACE</th><th>AIRPORTS</th><th>INCIDENTS</th></tr>
-                    <tr>
-                        <td class="c-orange bold">UAE</td>
-                        <td><span class="tag-status limited">LIMITED</span></td>
-                        <td>DXB, AUH operational (restricted)</td>
-                        <td class="c-red">2 strike events</td>
-                    </tr>
-                    <tr>
-                        <td class="c-orange bold">QATAR</td>
-                        <td><span class="tag-status limited">LIMITED</span></td>
-                        <td>DOH operational (rerouting)</td>
-                        <td class="c-yellow">No direct strikes</td>
-                    </tr>
-                    <tr>
-                        <td class="c-orange bold">SAUDI</td>
-                        <td><span class="tag-status restricted">RESTRICTED</span></td>
-                        <td>RUH, JED oper. (E routes closed)</td>
-                        <td class="c-red">1 interception</td>
-                    </tr>
-                    <tr>
-                        <td class="c-orange bold">BAHRAIN</td>
-                        <td><span class="tag-status limited">LIMITED</span></td>
-                        <td>BAH operational (mil. activity)</td>
-                        <td class="c-yellow">Military only</td>
-                    </tr>
-                    <tr>
-                        <td class="c-orange bold">OMAN</td>
-                        <td><span class="tag-status open">OPEN</span></td>
-                        <td>MCT fully operational (+capacity)</td>
-                        <td class="c-green">None</td>
-                    </tr>
+                    <tr><td class="c-orange bold">UAE</td><td><span class="tag-status limited">LIMITED</span></td><td>DXB, AUH operational (restricted)</td><td class="c-red">2 strike events</td></tr>
+                    <tr><td class="c-orange bold">QATAR</td><td><span class="tag-status limited">LIMITED</span></td><td>DOH operational (rerouting)</td><td class="c-yellow">No direct strikes</td></tr>
+                    <tr><td class="c-orange bold">SAUDI</td><td><span class="tag-status restricted">RESTRICTED</span></td><td>RUH, JED oper. (E routes closed)</td><td class="c-red">1 interception</td></tr>
+                    <tr><td class="c-orange bold">BAHRAIN</td><td><span class="tag-status limited">LIMITED</span></td><td>BAH operational (mil. activity)</td><td class="c-yellow">Military only</td></tr>
+                    <tr><td class="c-orange bold">OMAN</td><td><span class="tag-status open">OPEN</span></td><td>MCT fully operational (+capacity)</td><td class="c-green">None</td></tr>
                 </table>
             </div>
 
             <div class="panel">
-                <div class="panel-title">LIVE FLIGHT MAP <span class="tag">FLIGHTRADAR24</span></div>
-                <div class="map">
-                    <a href="https://www.flightradar24.com/25.27,55.33/8" target="_blank" style="display:block;height:350px;background:#111;display:flex;align-items:center;justify-content:center;color:#ff6600;text-decoration:none;font-size:14px;">▶ OPEN FLIGHTRADAR24 LIVE MAP</a>
-                </div>
+                <div class="panel-title">INCIDENT MAP <span class="tag">LIVE</span></div>
+                <div id="map"></div>
             </div>
 
             <div class="panel">
                 <div class="panel-title">LATEST INCIDENTS</div>
-                <div class="news-item critical">
-                    <span class="time">MAR 2 22:40Z</span>
-                    <span class="loc">DUBAI UAE</span>
-                    <span>Missile interception over Dubai. Debris in Al Barsha, Business Bay. 3 casualties.</span>
-                </div>
-                <div class="news-item critical">
-                    <span class="time">MAR 2 19:15Z</span>
-                    <span class="loc">DHAHRAN KSA</span>
-                    <span>Saudi Patriot engaged incoming projectile near Aramco HQ.</span>
-                </div>
-                <div class="news-item critical">
-                    <span class="time">MAR 1 14:32Z</span>
-                    <span class="loc">ABU DHABI UAE</span>
-                    <span>Iranian drones struck Al Salam Naval Base. 4 casualties confirmed.</span>
-                </div>
-                <div class="news-item high">
-                    <span class="time">MAR 1 23:45Z</span>
-                    <span class="loc">HORMUZ STRAIT</span>
-                    <span>IRGC fast boats approached USS carrier group. Warning shots fired.</span>
-                </div>
-                <div class="news-item high">
-                    <span class="time">MAR 1 11:20Z</span>
-                    <span class="loc">BAHRAIN</span>
-                    <span>US 5th Fleet HQ elevated readiness. Non-essential personnel evacuated.</span>
-                </div>
+                <div class="news-item critical"><span class="time">MAR 2 22:40Z</span><span class="loc">DUBAI UAE</span><span>Missile interception over Dubai. Debris in Al Barsha, Business Bay. 3 casualties.</span></div>
+                <div class="news-item critical"><span class="time">MAR 2 19:15Z</span><span class="loc">DHAHRAN KSA</span><span>Saudi Patriot engaged incoming projectile near Aramco HQ.</span></div>
+                <div class="news-item critical"><span class="time">MAR 1 14:32Z</span><span class="loc">ABU DHABI UAE</span><span>Iranian drones struck Al Salam Naval Base. 4 casualties confirmed.</span></div>
+                <div class="news-item high"><span class="time">MAR 1 23:45Z</span><span class="loc">HORMUZ STRAIT</span><span>IRGC fast boats approached USS carrier group. Warning shots fired.</span></div>
+                <div class="news-item high"><span class="time">MAR 1 11:20Z</span><span class="loc">BAHRAIN</span><span>US 5th Fleet HQ elevated readiness. Non-essential personnel evacuated.</span></div>
             </div>
         </div>
 
         <div class="sidebar">
-            <div class="panel">
-                <div class="panel-title">TRAVEL ADVISORY</div>
+            <div class="panel"><div class="panel-title">TRAVEL ADVISORY</div>
                 <div class="sidebar-item c-red"><span class="key">LVL 4:</span> Iran, Iraq, Yemen, Syria</div>
                 <div class="sidebar-item c-orange"><span class="key">LVL 3:</span> UAE, Saudi, Bahrain</div>
                 <div class="sidebar-item c-yellow"><span class="key">LVL 2:</span> Qatar, Oman, Kuwait</div>
             </div>
-
-            <div class="panel">
-                <div class="panel-title">MARKET IMPACT</div>
+            <div class="panel"><div class="panel-title">MARKET IMPACT</div>
                 <div class="sidebar-item"><span class="key">BRENT</span> <span class="c-green">+8.2% $94.50</span></div>
                 <div class="sidebar-item"><span class="key">DFM</span> <span class="c-red">SUSPENDED</span></div>
                 <div class="sidebar-item"><span class="key">TASI</span> <span class="c-red">-4.3% HALTED</span></div>
                 <div class="sidebar-item"><span class="key">QSE</span> <span class="c-red">-2.8%</span></div>
                 <div class="sidebar-item"><span class="key">GOLD</span> <span class="c-green">+2.1% $2,847</span></div>
             </div>
-
-            <div class="panel">
-                <div class="panel-title">SUSPENDED ROUTES</div>
+            <div class="panel"><div class="panel-title">SUSPENDED ROUTES</div>
                 <div class="sidebar-item"><span class="c-red">ALL → IKA</span> TEHRAN</div>
                 <div class="sidebar-item"><span class="c-red">ALL → BGW</span> BAGHDAD</div>
                 <div class="sidebar-item"><span class="c-red">ALL → TLV</span> TEL AVIV</div>
                 <div class="sidebar-item"><span class="c-red">ALL → BEY</span> BEIRUT</div>
                 <div class="sidebar-item"><span class="c-red">ALL → DAM</span> DAMASCUS</div>
             </div>
-
-            <div class="panel">
-                <div class="panel-title">EMERGENCY</div>
+            <div class="panel"><div class="panel-title">EMERGENCY</div>
                 <div class="sidebar-item"><span class="key">DXB</span> +971 4 224 5555</div>
                 <div class="sidebar-item"><span class="key">DOH</span> +974 4010 6666</div>
                 <div class="sidebar-item"><span class="key">RUH</span> +966 11 220 7000</div>
             </div>
-
-            <div class="panel">
-                <div class="panel-title">SOURCES</div>
+            <div class="panel"><div class="panel-title">SOURCES</div>
                 <div class="sidebar-item"><a href="https://www.flightradar24.com" class="link">FlightRadar24</a></div>
                 <div class="sidebar-item"><a href="https://www.aljazeera.com" class="link">Al Jazeera</a></div>
                 <div class="sidebar-item"><a href="https://liveuamap.com" class="link">LiveUA Map</a></div>
             </div>
-
-            <div class="panel">
-                <div class="panel-title">CONTEXT</div>
-                <div class="sidebar-item" style="line-height:1.4">
-                    US-Israeli ops vs Iran began Feb 28. Iranian retaliation affecting Gulf states. Death toll: ~1,045 Iran, 11 Israel, 6 US, 9 Gulf.
-                </div>
+            <div class="panel"><div class="panel-title">CONTEXT</div>
+                <div class="sidebar-item" style="line-height:1.4">US-Israeli ops vs Iran began Feb 28. Iranian retaliation affecting Gulf states. Death toll: ~1,045 Iran, 11 Israel, 6 US, 9 Gulf.</div>
             </div>
         </div>
     </div>
-
     <div class="footer">
-        <div class="keys">
-            <span><span class="key">F1</span>HELP</span>
-            <span><span class="key">F2</span>FLIGHTS</span>
-            <span><span class="key">F3</span>INCIDENTS</span>
-        </div>
+        <div class="keys"><span><span class="key">F1</span>HELP</span><span><span class="key">F2</span>FLIGHTS</span><span><span class="key">F3</span>INCIDENTS</span></div>
         <span>AUTO-REFRESH 5M | NOT OFFICIAL DATA</span>
     </div>
 </div>
@@ -339,8 +162,49 @@ function updateClock() {
         hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
     }) + ' UTC';
 }
-updateClock();
-setInterval(updateClock, 1000);
+updateClock(); setInterval(updateClock, 1000);
+
+// Dark map tiles
+const map = L.map('map', { zoomControl: false }).setView([25.5, 52], 5);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© OpenStreetMap © CARTO',
+    maxZoom: 19
+}).addTo(map);
+L.control.zoom({ position: 'topright' }).addTo(map);
+
+// Custom icons
+function icon(color) {
+    return L.divIcon({
+        className: 'custom-icon',
+        html: `<div style="width:12px;height:12px;background:${color};border:2px solid #fff;border-radius:50%;box-shadow:0 0 8px ${color};"></div>`,
+        iconSize: [12, 12],
+        iconAnchor: [6, 6]
+    });
+}
+
+// Incidents
+const incidents = [
+    { lat: 25.20, lon: 55.27, title: 'DUBAI INTERCEPT', time: 'MAR 2 22:40Z', desc: 'Missile interception. Debris Al Barsha/Business Bay. 3 KIA.', level: 'critical' },
+    { lat: 24.45, lon: 54.37, title: 'ABU DHABI STRIKE', time: 'MAR 1 14:32Z', desc: 'Shahed-136 drones hit Al Salam Naval Base. 4 KIA.', level: 'critical' },
+    { lat: 26.43, lon: 50.10, title: 'DHAHRAN INTERCEPT', time: 'MAR 2 19:15Z', desc: 'Patriot engaged projectile near Aramco HQ. No casualties.', level: 'critical' },
+    { lat: 26.25, lon: 56.50, title: 'HORMUZ INCIDENT', time: 'MAR 1 23:45Z', desc: 'IRGC boats approached USS group. Warning shots.', level: 'high' },
+    { lat: 26.23, lon: 50.58, title: 'BAHRAIN ALERT', time: 'MAR 1 11:20Z', desc: 'US 5th Fleet elevated readiness.', level: 'high' }
+];
+
+incidents.forEach(i => {
+    const color = i.level === 'critical' ? '#f33' : '#ff6600';
+    L.marker([i.lat, i.lon], { icon: icon(color) })
+        .addTo(map)
+        .bindPopup(`<div class="popup-${i.level}"><div class="popup-title">${i.title}</div><div style="color:#666;margin-bottom:4px;">${i.time}</div>${i.desc}</div>`);
+});
+
+// Closed airspace overlay (approximate)
+L.polygon([
+    [38, 44], [38, 63], [25, 63], [25, 56], [29, 48], [33, 44]
+], { color: '#f33', weight: 1, fillColor: '#f33', fillOpacity: 0.15, dashArray: '5,5' })
+    .addTo(map)
+    .bindPopup('<div class="popup-title">CLOSED AIRSPACE</div>Iran/Iraq - No civilian overflights');
+
 setTimeout(() => location.reload(), 300000);
 </script>
 </body>

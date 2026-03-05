@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INCIDENTS | MIDEAST</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #000; color: #ccc; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 12px; line-height: 1.3; }
@@ -19,6 +21,7 @@
         .panel { border: 1px solid #333; background: #000; margin-bottom: 2px; }
         .panel-title { background: #ff6600; color: #000; padding: 2px 6px; font-size: 11px; font-weight: 700; display: flex; justify-content: space-between; }
         .panel-title .tag { background: #000; color: #ff6600; padding: 0 4px; font-size: 10px; }
+        #map { height: 350px; background: #111; }
         .toll-grid { display: grid; grid-template-columns: repeat(6, 1fr); }
         @media(max-width:700px) { .toll-grid { grid-template-columns: repeat(3, 1fr); } }
         .toll { padding: 8px; text-align: center; border-right: 1px solid #333; border-bottom: 1px solid #333; }
@@ -26,7 +29,7 @@
         .toll .num { font-size: 22px; font-weight: 700; color: #f33; }
         .toll .type { font-size: 8px; color: #666; }
         .timeline-item { display: grid; grid-template-columns: 130px 100px 1fr; gap: 8px; padding: 4px 6px; border-bottom: 1px solid #1a1a1a; font-size: 11px; border-left: 3px solid transparent; }
-        .timeline-item:hover { background: #0a0a0a; }
+        .timeline-item:hover { background: #0a0a0a; cursor: pointer; }
         .timeline-item.critical { border-left-color: #f33; }
         .timeline-item.high { border-left-color: #ff6600; }
         .timeline-item.medium { border-left-color: #ff0; }
@@ -49,6 +52,12 @@
         .footer { background: #111; border-top: 1px solid #333; padding: 4px 8px; font-size: 10px; color: #666; display: flex; justify-content: space-between; }
         .footer .key { background: #ff6600; color: #000; padding: 0 3px; font-weight: 700; margin-right: 2px; }
         .footer .keys span { margin-right: 16px; }
+        .leaflet-popup-content-wrapper { background: #111; color: #ccc; border-radius: 0; font-family: monospace; font-size: 11px; }
+        .leaflet-popup-tip { background: #111; }
+        .leaflet-popup-content { margin: 8px; max-width: 250px; }
+        .popup-title { color: #ff6600; font-weight: 700; margin-bottom: 4px; font-size: 12px; }
+        .popup-time { color: #666; margin-bottom: 6px; }
+        .popup-casualties { color: #f33; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -74,13 +83,18 @@
     </div>
 
     <div class="panel">
+        <div class="panel-title">INCIDENT MAP <span class="tag">CLICK FOR DETAILS</span></div>
+        <div id="map"></div>
+    </div>
+
+    <div class="panel">
         <div class="panel-title">INCIDENT TIMELINE</div>
-        <div class="timeline-item critical"><span class="time">MAR 2 22:40Z</span><span class="loc">DUBAI UAE</span><span><strong>Missile intercept</strong> — Debris Al Barsha/Business Bay. 3 casualties.</span></div>
-        <div class="timeline-item critical"><span class="time">MAR 2 19:15Z</span><span class="loc">DHAHRAN KSA</span><span><strong>Patriot intercept</strong> — Incoming projectile near Aramco HQ neutralized.</span></div>
-        <div class="timeline-item critical"><span class="time">MAR 1 14:32Z</span><span class="loc">ABU DHABI UAE</span><span><strong>Drone strike</strong> — Shahed-136 hit Al Salam Naval Base. 4 KIA.</span></div>
-        <div class="timeline-item high"><span class="time">MAR 1 23:45Z</span><span class="loc">HORMUZ</span><span><strong>Naval incident</strong> — IRGC boats approached USS group. Warning shots.</span></div>
-        <div class="timeline-item high"><span class="time">MAR 1 11:20Z</span><span class="loc">BAHRAIN</span><span><strong>Base alert</strong> — US 5th Fleet elevated readiness. Personnel evac.</span></div>
-        <div class="timeline-item medium"><span class="time">FEB 28 18:00Z</span><span class="loc">TEHRAN IRAN</span><span><strong>Conflict begins</strong> — US-Israeli strikes on military targets.</span></div>
+        <div class="timeline-item critical" data-lat="25.20" data-lon="55.27"><span class="time">MAR 2 22:40Z</span><span class="loc">DUBAI UAE</span><span><strong>Missile intercept</strong> — Debris Al Barsha/Business Bay. 3 casualties.</span></div>
+        <div class="timeline-item critical" data-lat="26.43" data-lon="50.10"><span class="time">MAR 2 19:15Z</span><span class="loc">DHAHRAN KSA</span><span><strong>Patriot intercept</strong> — Incoming projectile near Aramco HQ neutralized.</span></div>
+        <div class="timeline-item critical" data-lat="24.45" data-lon="54.37"><span class="time">MAR 1 14:32Z</span><span class="loc">ABU DHABI UAE</span><span><strong>Drone strike</strong> — Shahed-136 hit Al Salam Naval Base. 4 KIA.</span></div>
+        <div class="timeline-item high" data-lat="26.25" data-lon="56.50"><span class="time">MAR 1 23:45Z</span><span class="loc">HORMUZ</span><span><strong>Naval incident</strong> — IRGC boats approached USS group. Warning shots.</span></div>
+        <div class="timeline-item high" data-lat="26.23" data-lon="50.58"><span class="time">MAR 1 11:20Z</span><span class="loc">BAHRAIN</span><span><strong>Base alert</strong> — US 5th Fleet elevated readiness. Personnel evac.</span></div>
+        <div class="timeline-item medium" data-lat="35.70" data-lon="51.42"><span class="time">FEB 28 18:00Z</span><span class="loc">TEHRAN IRAN</span><span><strong>Conflict begins</strong> — US-Israeli strikes on military targets.</span></div>
     </div>
 
     <div class="country-grid">
@@ -145,6 +159,78 @@ function updateClock() {
     }) + ' UTC';
 }
 updateClock(); setInterval(updateClock, 1000);
+
+// Map
+const map = L.map('map', { zoomControl: false }).setView([27, 52], 5);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© OSM © CARTO', maxZoom: 19
+}).addTo(map);
+L.control.zoom({ position: 'topright' }).addTo(map);
+
+function icon(level) {
+    const colors = { critical: '#f33', high: '#ff6600', medium: '#ff0' };
+    const c = colors[level] || '#666';
+    const size = level === 'critical' ? 16 : 12;
+    return L.divIcon({
+        className: 'incident-icon',
+        html: `<div style="width:${size}px;height:${size}px;background:${c};border:2px solid #fff;border-radius:50%;box-shadow:0 0 12px ${c},0 0 20px ${c};animation:pulse 2s infinite;"></div>
+        <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}</style>`,
+        iconSize: [size, size], iconAnchor: [size/2, size/2]
+    });
+}
+
+const incidents = [
+    { lat: 25.20, lon: 55.27, title: 'DUBAI MISSILE INTERCEPT', time: 'MAR 2 22:40Z', level: 'critical',
+      desc: 'Emirati air defense intercepted Iranian ballistic missile over Dubai. Debris fell in Al Barsha and Business Bay residential areas.',
+      casualties: '3 civilian KIA, 12 injured' },
+    { lat: 24.45, lon: 54.37, title: 'ABU DHABI NAVAL BASE STRIKE', time: 'MAR 1 14:32Z', level: 'critical',
+      desc: 'Two Iranian Shahed-136 kamikaze drones struck Al Salam Naval Base. Secondary fires reported. Etihad Airways HQ evacuated.',
+      casualties: '4 military KIA' },
+    { lat: 26.43, lon: 50.10, title: 'DHAHRAN INTERCEPT', time: 'MAR 2 19:15Z', level: 'critical',
+      desc: 'Saudi Patriot batteries engaged incoming projectile believed targeting Aramco HQ complex.',
+      casualties: 'No casualties' },
+    { lat: 26.25, lon: 56.50, title: 'STRAIT OF HORMUZ INCIDENT', time: 'MAR 1 23:45Z', level: 'high',
+      desc: 'IRGC fast attack boats made aggressive approach toward USS carrier group. US Navy fired warning shots. Boats withdrew.',
+      casualties: 'No casualties' },
+    { lat: 26.23, lon: 50.58, title: 'US 5TH FLEET ALERT', time: 'MAR 1 11:20Z', level: 'high',
+      desc: 'NAVCENT headquarters raised threat level. Non-essential personnel ordered to shelter. Increased patrols in Gulf waters.',
+      casualties: 'No casualties' },
+    { lat: 35.70, lon: 51.42, title: 'TEHRAN STRIKES', time: 'FEB 28 18:00Z', level: 'critical',
+      desc: 'US-Israeli joint operation struck multiple military and nuclear facilities across Iran. Start of current conflict.',
+      casualties: '~800+ Iranian military' },
+    { lat: 32.65, lon: 51.68, title: 'ISFAHAN STRIKES', time: 'FEB 28 18:30Z', level: 'critical',
+      desc: 'Multiple strikes on nuclear enrichment facilities and missile production sites.',
+      casualties: '~150 Iranian military/scientists' }
+];
+
+const markers = {};
+incidents.forEach((inc, i) => {
+    const m = L.marker([inc.lat, inc.lon], { icon: icon(inc.level) }).addTo(map);
+    m.bindPopup(`
+        <div class="popup-title">${inc.title}</div>
+        <div class="popup-time">${inc.time}</div>
+        <div style="margin-bottom:6px;">${inc.desc}</div>
+        <div class="popup-casualties">${inc.casualties}</div>
+    `);
+    markers[i] = m;
+});
+
+// Closed airspace
+L.polygon([[38,44],[38,63],[25,63],[25,56],[29,48],[33,44]], 
+    { color: '#f33', weight: 2, fillColor: '#f33', fillOpacity: 0.15, dashArray: '8,4' })
+    .addTo(map).bindPopup('<div class="popup-title">CLOSED AIRSPACE</div>Iran/Iraq/Syria - All civilian flights prohibited');
+
+// Click timeline to zoom
+document.querySelectorAll('.timeline-item').forEach(item => {
+    item.addEventListener('click', () => {
+        const lat = parseFloat(item.dataset.lat);
+        const lon = parseFloat(item.dataset.lon);
+        if (lat && lon) {
+            map.flyTo([lat, lon], 8, { duration: 1 });
+        }
+    });
+});
+
 setTimeout(()=>location.reload(), 300000);
 </script>
 </body>
