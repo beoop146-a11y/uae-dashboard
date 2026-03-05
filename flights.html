@@ -9,129 +9,160 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #000; color: #ccc; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 12px; line-height: 1.3; }
-        .terminal { padding: 2px; }
-        .header { background: #ff6600; color: #000; padding: 3px 8px; font-weight: 700; font-size: 13px; display: flex; justify-content: space-between; }
-        .nav { background: #000; border-bottom: 1px solid #333; display: flex; }
+        .terminal { display: flex; flex-direction: column; height: 100vh; }
+        .header { background: #ff6600; color: #000; padding: 3px 8px; font-weight: 700; font-size: 13px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .nav { background: #000; border-bottom: 1px solid #333; display: flex; flex-shrink: 0; }
         .nav a { color: #fa0; text-decoration: none; padding: 4px 16px; font-size: 11px; border-right: 1px solid #333; }
         .nav a:hover { background: #111; }
         .nav a.active { background: #ff6600; color: #000; font-weight: 700; }
-        .ticker { background: #f33; color: #fff; padding: 3px 8px; font-size: 11px; font-weight: 700; }
-        .ticker .blink { animation: blink 1s infinite; margin-right: 8px; }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-        .panel { border: 1px solid #333; background: #000; margin-bottom: 2px; }
-        .panel-title { background: #ff6600; color: #000; padding: 2px 6px; font-size: 11px; font-weight: 700; display: flex; justify-content: space-between; }
-        .panel-title .tag { background: #000; color: #ff6600; padding: 0 4px; font-size: 10px; }
-        #map { height: 320px; background: #111; }
-        .flights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
-        @media(max-width:900px) { .flights-grid { grid-template-columns: 1fr; } }
-        .flight-list { max-height: 200px; overflow-y: auto; }
-        .flight-row { display: grid; grid-template-columns: 70px 1fr 70px 50px; gap: 4px; padding: 3px 6px; border-bottom: 1px solid #1a1a1a; font-size: 11px; align-items: center; }
-        .flight-row.header { background: #111; color: #fa0; font-size: 10px; font-weight: 600; }
-        .flight-row:hover:not(.header) { background: #0a0a0a; }
+        .ticker { background: #111; border-bottom: 1px solid #333; padding: 4px 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .ticker .label { color: #ff6600; }
+        .ticker select { background: #000; color: #ff6600; border: 1px solid #333; padding: 2px 8px; font-family: inherit; font-size: 11px; cursor: pointer; }
+        .ticker .count { color: #0cc; }
+        
+        .main { display: flex; flex: 1; min-height: 0; }
+        .map-container { flex: 1; position: relative; }
+        #map { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+        
+        .sidebar { width: 340px; background: #000; border-left: 1px solid #333; display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; }
+        .panel { border-bottom: 1px solid #333; }
+        .panel-title { background: #ff6600; color: #000; padding: 3px 6px; font-weight: 700; font-size: 10px; display: flex; justify-content: space-between; }
+        .panel-title .tag { background: #000; color: #ff6600; padding: 0 4px; font-size: 9px; }
+        
+        .flight-list { max-height: 160px; overflow-y: auto; }
+        .flight-row { display: grid; grid-template-columns: 65px 90px 1fr 45px; gap: 4px; padding: 3px 6px; border-bottom: 1px solid #1a1a1a; font-size: 10px; align-items: center; }
+        .flight-row.header { background: #111; color: #fa0; font-weight: 600; }
+        .flight-row:hover:not(.header) { background: #0a0a0a; cursor: pointer; }
         .flight-row .fnum { color: #ff6600; font-weight: 600; }
         .flight-row .info { color: #666; }
-        .flight-row .status { font-size: 9px; font-weight: 700; padding: 1px 4px; text-align: center; }
+        .flight-row .status { font-size: 8px; font-weight: 700; padding: 1px 3px; text-align: center; }
         .flight-row .status.airborne { background: #0c0; color: #000; }
         .flight-row .status.scheduled { background: #0cc; color: #000; }
         .flight-row .status.delayed { background: #ff0; color: #000; }
         .flight-row .status.canceled { background: #f33; color: #fff; }
-        table { width: 100%; border-collapse: collapse; font-size: 11px; }
-        th { background: #111; color: #fa0; text-align: left; padding: 4px 6px; font-weight: 600; font-size: 10px; border-bottom: 1px solid #333; }
-        td { padding: 4px 6px; border-bottom: 1px solid #1a1a1a; }
-        tr:hover td { background: #0a0a0a; }
-        .code { color: #ff6600; font-weight: 700; }
-        .c-orange { color: #ff6600; } .c-green { color: #0c0; } .c-red { color: #f33; } .c-yellow { color: #ff0; } .c-dim { color: #666; }
-        .bold { font-weight: 700; }
-        .tag-status { display: inline-block; padding: 1px 4px; font-size: 9px; font-weight: 700; }
+        
+        .apt-table { font-size: 10px; }
+        .apt-row { display: grid; grid-template-columns: 40px 55px 50px 45px 45px; gap: 4px; padding: 3px 6px; border-bottom: 1px solid #1a1a1a; }
+        .apt-row.header { background: #111; color: #fa0; font-weight: 600; }
+        .apt-row:hover:not(.header) { background: #0a0a0a; cursor: pointer; }
+        .apt-row .code { color: #ff6600; font-weight: 700; }
+        .tag-status { display: inline-block; padding: 1px 3px; font-size: 8px; font-weight: 700; }
         .tag-status.open { background: #0c0; color: #000; }
         .tag-status.limited { background: #ff0; color: #000; }
         .tag-status.restricted { background: #ff6600; color: #000; }
-        .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
-        @media(max-width:800px) { .info-grid { grid-template-columns: 1fr 1fr; } }
+        
+        .route-item { padding: 3px 6px; font-size: 10px; border-bottom: 1px solid #1a1a1a; }
         .info-item { padding: 3px 6px; font-size: 10px; border-bottom: 1px solid #1a1a1a; }
-        .routes-grid { display: grid; grid-template-columns: repeat(6, 1fr); }
-        @media(max-width:700px) { .routes-grid { grid-template-columns: repeat(3, 1fr); } }
-        .route-item { padding: 4px 6px; border-right: 1px solid #333; border-bottom: 1px solid #333; font-size: 10px; }
-        .footer { background: #111; border-top: 1px solid #333; padding: 4px 8px; font-size: 10px; color: #666; display: flex; justify-content: space-between; }
+        .info-item .key { color: #fa0; }
+        
+        .c-red { color: #f33; } .c-orange { color: #ff6600; } .c-yellow { color: #ff0; } .c-green { color: #0c0; } .c-cyan { color: #0cc; } .c-dim { color: #666; }
+        .bold { font-weight: 700; }
+        
+        .footer { background: #111; border-top: 1px solid #333; padding: 4px 8px; font-size: 10px; color: #666; display: flex; justify-content: space-between; flex-shrink: 0; }
         .footer .key { background: #ff6600; color: #000; padding: 0 3px; font-weight: 700; margin-right: 2px; }
-        .footer .keys span { margin-right: 16px; }
-        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #000; } ::-webkit-scrollbar-thumb { background: #333; }
-        .leaflet-popup-content-wrapper { background: #111; color: #ccc; border-radius: 0; font-family: monospace; font-size: 11px; }
+        
+        /* Leaflet */
+        .leaflet-popup-content-wrapper { background: #111; color: #ccc; border-radius: 0; border: 1px solid #333; font-family: 'Consolas', monospace; font-size: 11px; }
         .leaflet-popup-tip { background: #111; }
-        .leaflet-popup-content { margin: 8px; }
-        .popup-title { color: #ff6600; font-weight: 700; margin-bottom: 4px; }
+        .leaflet-popup-content { margin: 10px; min-width: 200px; }
+        .leaflet-popup-close-button { color: #666 !important; }
+        .leaflet-popup-close-button:hover { color: #ff6600 !important; }
+        .popup-type { color: #ff6600; font-weight: 700; font-size: 11px; text-transform: uppercase; margin-bottom: 8px; }
+        .popup-row { margin: 4px 0; }
+        .popup-row .k { color: #666; }
+        .popup-row .v { color: #ccc; }
+        .popup-row a { color: #0cc; text-decoration: underline; }
+        .leaflet-control-zoom { border: none !important; }
+        .leaflet-control-zoom a { background: #111 !important; color: #ff6600 !important; border: 1px solid #333 !important; }
+        .leaflet-control-zoom a:hover { background: #222 !important; }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; }
     </style>
 </head>
 <body>
 <div class="terminal">
-    <div class="header"><span>MIDEAST FLIGHT TRACKER</span><span id="clock"></span></div>
+    <div class="header">
+        <span>MIDEAST FLIGHT TRACKER</span>
+        <span id="clock"></span>
+    </div>
     <div class="nav">
         <a href="index.html">OVERVIEW</a>
         <a href="flights.html" class="active">FLIGHTS</a>
         <a href="strikes.html">INCIDENTS</a>
     </div>
-    <div class="ticker"><span class="blink">●</span> AIRSPACE: MULTIPLE RESTRICTIONS — IRAN/IRAQ CLOSED — REROUTING VIA PAK/OMAN — AVG +45MIN EASTBOUND</div>
-
-    <div class="panel">
-        <div class="panel-title">AIRPORT STATUS MAP <span class="tag">LIVE</span></div>
-        <div id="map"></div>
-    </div>
-
-    <div class="flights-grid">
-        <div class="panel">
-            <div class="panel-title">AIRBORNE <span class="tag" id="airborne-count">24</span></div>
-            <div class="flight-list" id="airborne-list"></div>
+    <div class="ticker">
+        <div>
+            <span class="label">AIRPORT:</span>
+            <select id="airportFilter">
+                <option value="all">ALL AIRPORTS</option>
+                <option value="DXB">DXB - Dubai</option>
+                <option value="AUH">AUH - Abu Dhabi</option>
+                <option value="DOH">DOH - Doha</option>
+                <option value="RUH">RUH - Riyadh</option>
+                <option value="JED">JED - Jeddah</option>
+                <option value="MCT">MCT - Muscat</option>
+            </select>
         </div>
-        <div class="panel">
-            <div class="panel-title">SCHEDULED <span class="tag" id="scheduled-count">18</span></div>
-            <div class="flight-list" id="scheduled-list"></div>
+        <div class="count">TOTAL FLIGHTS: <span id="totalCount">89</span> | CANCELED: <span id="canceledCount" class="c-red">32</span></div>
+    </div>
+    
+    <div class="main">
+        <div class="map-container">
+            <div id="map"></div>
         </div>
-        <div class="panel">
-            <div class="panel-title">DELAYED <span class="tag" id="delayed-count">15</span></div>
-            <div class="flight-list" id="delayed-list"></div>
-        </div>
-        <div class="panel">
-            <div class="panel-title">CANCELED <span class="tag" id="canceled-count">32</span></div>
-            <div class="flight-list" id="canceled-list"></div>
+        <div class="sidebar">
+            <div class="panel">
+                <div class="panel-title">AIRPORT STATUS <span class="tag">24H</span></div>
+                <div class="apt-table">
+                    <div class="apt-row header"><span>APT</span><span>STATUS</span><span>CXL%</span><span>DLY</span><span>DEP/H</span></div>
+                    <div class="apt-row" data-code="DXB"><span class="code">DXB</span><span class="tag-status limited">LTD</span><span class="c-red bold">76.8%</span><span class="c-yellow">142m</span><span>1.96</span></div>
+                    <div class="apt-row" data-code="AUH"><span class="code">AUH</span><span class="tag-status limited">LTD</span><span class="c-red bold">79.1%</span><span class="c-red">186m</span><span>0.96</span></div>
+                    <div class="apt-row" data-code="DOH"><span class="code">DOH</span><span class="tag-status limited">RTG</span><span class="c-yellow">25.1%</span><span class="c-yellow">89m</span><span>5.58</span></div>
+                    <div class="apt-row" data-code="RUH"><span class="code">RUH</span><span class="tag-status restricted">RST</span><span class="c-red">55.7%</span><span class="c-yellow">98m</span><span>3.71</span></div>
+                    <div class="apt-row" data-code="JED"><span class="code">JED</span><span class="tag-status open">OPR</span><span class="c-yellow">17.9%</span><span class="c-yellow">54m</span><span>6.50</span></div>
+                    <div class="apt-row" data-code="DMM"><span class="code">DMM</span><span class="tag-status restricted">RST</span><span class="c-red bold">84.8%</span><span class="c-red">210m</span><span>0.50</span></div>
+                    <div class="apt-row" data-code="BAH"><span class="code">BAH</span><span class="tag-status limited">MIL</span><span class="c-red">62.2%</span><span class="c-yellow">124m</span><span>1.42</span></div>
+                    <div class="apt-row" data-code="MCT"><span class="code">MCT</span><span class="tag-status open">OPR</span><span class="c-green bold">4.1%</span><span class="c-green">23m</span><span class="c-green bold">7.79</span></div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-title">AIRBORNE <span class="tag" id="airborne-count">24</span></div>
+                <div class="flight-list" id="airborne-list"></div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-title">DELAYED <span class="tag" id="delayed-count">15</span></div>
+                <div class="flight-list" id="delayed-list"></div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-title">CANCELED <span class="tag" id="cxl-count">32</span></div>
+                <div class="flight-list" id="canceled-list"></div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-title">SUSPENDED ROUTES</div>
+                <div class="route-item"><span class="c-red">ALL → IKA</span> <span class="c-dim">TEHRAN — INDEF</span></div>
+                <div class="route-item"><span class="c-red">ALL → BGW</span> <span class="c-dim">BAGHDAD — INDEF</span></div>
+                <div class="route-item"><span class="c-red">ALL → TLV</span> <span class="c-dim">TEL AVIV — INDEF</span></div>
+                <div class="route-item"><span class="c-red">ALL → BEY</span> <span class="c-dim">BEIRUT — SUSP</span></div>
+                <div class="route-item"><span class="c-red">ALL → DAM</span> <span class="c-dim">DAMASCUS — INDEF</span></div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-title">INFO</div>
+                <div class="info-item"><span class="key">REBOOKING</span> Free thru Mar 15</div>
+                <div class="info-item"><span class="key">DELAYS</span> W: <span class="c-yellow">2-4h</span> E: <span class="c-red">4-8h</span></div>
+                <div class="info-item"><span class="key">ALT ROUTE</span> Via MCT +capacity</div>
+            </div>
         </div>
     </div>
-
-    <div class="panel">
-        <div class="panel-title">AIRPORT STATISTICS — 24H</div>
-        <table>
-            <tr><th>APT</th><th>COUNTRY</th><th>STATUS</th><th>DEPS</th><th>CXLD</th><th>CXL RATIO</th><th>AVG DLY</th><th>DEP/HR</th></tr>
-            <tr><td class="code">DXB</td><td>UAE</td><td><span class="tag-status limited">LTD</span></td><td>47</td><td class="c-red">156</td><td class="c-red bold">76.8%</td><td class="c-yellow">142m</td><td>1.96</td></tr>
-            <tr><td class="code">AUH</td><td>UAE</td><td><span class="tag-status limited">LTD</span></td><td>23</td><td class="c-red">87</td><td class="c-red bold">79.1%</td><td class="c-red">186m</td><td>0.96</td></tr>
-            <tr><td class="code">DOH</td><td>QAT</td><td><span class="tag-status limited">RTG</span></td><td>134</td><td class="c-yellow">45</td><td class="c-yellow">25.1%</td><td class="c-yellow">89m</td><td>5.58</td></tr>
-            <tr><td class="code">RUH</td><td>KSA</td><td><span class="tag-status restricted">RST</span></td><td>89</td><td class="c-red">112</td><td class="c-red">55.7%</td><td class="c-yellow">98m</td><td>3.71</td></tr>
-            <tr><td class="code">JED</td><td>KSA</td><td><span class="tag-status open">OPR</span></td><td>156</td><td class="c-yellow">34</td><td class="c-yellow">17.9%</td><td class="c-yellow">54m</td><td>6.50</td></tr>
-            <tr><td class="code">DMM</td><td>KSA</td><td><span class="tag-status restricted">RST</span></td><td>12</td><td class="c-red">67</td><td class="c-red bold">84.8%</td><td class="c-red">210m</td><td>0.50</td></tr>
-            <tr><td class="code">BAH</td><td>BHR</td><td><span class="tag-status limited">MIL</span></td><td>34</td><td class="c-red">56</td><td class="c-red">62.2%</td><td class="c-yellow">124m</td><td>1.42</td></tr>
-            <tr><td class="code">MCT</td><td>OMN</td><td><span class="tag-status open">OPR</span></td><td>187</td><td>8</td><td class="c-green bold">4.1%</td><td class="c-green">23m</td><td class="c-green bold">7.79</td></tr>
-        </table>
-    </div>
-
-    <div class="panel">
-        <div class="panel-title">SUSPENDED ROUTES</div>
-        <div class="routes-grid">
-            <div class="route-item"><span class="c-red">ALL→IKA</span> <span class="c-dim">INDEF</span></div>
-            <div class="route-item"><span class="c-red">ALL→BGW</span> <span class="c-dim">INDEF</span></div>
-            <div class="route-item"><span class="c-red">ALL→TLV</span> <span class="c-dim">INDEF</span></div>
-            <div class="route-item"><span class="c-red">ALL→BEY</span> <span class="c-dim">SUSP</span></div>
-            <div class="route-item"><span class="c-red">ALL→DAM</span> <span class="c-dim">INDEF</span></div>
-            <div class="route-item"><span class="c-orange">EK/EY→AMM</span> <span class="c-dim">RDCD</span></div>
-        </div>
-    </div>
-
-    <div class="info-grid">
-        <div class="panel"><div class="panel-title">REBOOKING</div><div class="info-item">Free rebooking thru Mar 15</div><div class="info-item">EK EY QR SV GF WY</div></div>
-        <div class="panel"><div class="panel-title">STRANDED PAX</div><div class="info-item"><span class="c-orange">DXB</span> T3 emergency accom</div><div class="info-item"><span class="c-orange">DOH</span> Oryx Hotel assist</div></div>
-        <div class="panel"><div class="panel-title">ALT ROUTES</div><div class="info-item">Via MCT +capacity</div><div class="info-item">Via BOM available</div></div>
-        <div class="panel"><div class="panel-title">DELAYS</div><div class="info-item">Westbound: <span class="c-yellow">2-4h</span></div><div class="info-item">Eastbound: <span class="c-red">4-8h</span></div></div>
-    </div>
-
+    
     <div class="footer">
-        <div class="keys"><span><span class="key">F1</span>HELP</span><span><span class="key">F2</span>OVERVIEW</span><span><span class="key">F3</span>INCIDENTS</span></div>
+        <div><span class="key">F1</span>HELP <span class="key">F2</span>OVERVIEW <span class="key">F3</span>INCIDENTS</div>
         <span>SIMULATED DATA | REFRESH 30S</span>
     </div>
 </div>
@@ -145,47 +176,66 @@ function updateClock() {
 }
 updateClock(); setInterval(updateClock, 1000);
 
-// Map
-const map = L.map('map', { zoomControl: false }).setView([24, 50], 5);
+const map = L.map('map', { zoomControl: true }).setView([24, 50], 5);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     attribution: '© OSM © CARTO', maxZoom: 19
 }).addTo(map);
-L.control.zoom({ position: 'topright' }).addTo(map);
 
-function aptIcon(status) {
+// Airports
+const airports = [
+    { code: 'DXB', lat: 25.253, lon: 55.366, status: 'limited', name: 'Dubai International', country: 'UAE', cxl: '76.8%', dly: '142m', deph: '1.96', deps: 47 },
+    { code: 'AUH', lat: 24.433, lon: 54.651, status: 'limited', name: 'Abu Dhabi International', country: 'UAE', cxl: '79.1%', dly: '186m', deph: '0.96', deps: 23 },
+    { code: 'DOH', lat: 25.261, lon: 51.565, status: 'limited', name: 'Hamad International', country: 'Qatar', cxl: '25.1%', dly: '89m', deph: '5.58', deps: 134 },
+    { code: 'RUH', lat: 24.958, lon: 46.699, status: 'restricted', name: 'King Khalid International', country: 'Saudi Arabia', cxl: '55.7%', dly: '98m', deph: '3.71', deps: 89 },
+    { code: 'JED', lat: 21.679, lon: 39.157, status: 'open', name: 'King Abdulaziz International', country: 'Saudi Arabia', cxl: '17.9%', dly: '54m', deph: '6.50', deps: 156 },
+    { code: 'DMM', lat: 26.471, lon: 49.798, status: 'restricted', name: 'King Fahd International', country: 'Saudi Arabia', cxl: '84.8%', dly: '210m', deph: '0.50', deps: 12 },
+    { code: 'BAH', lat: 26.270, lon: 50.634, status: 'limited', name: 'Bahrain International', country: 'Bahrain', cxl: '62.2%', dly: '124m', deph: '1.42', deps: 34 },
+    { code: 'MCT', lat: 23.593, lon: 58.284, status: 'open', name: 'Muscat International', country: 'Oman', cxl: '4.1%', dly: '23m', deph: '7.79', deps: 187 }
+];
+
+function airportIcon(status) {
     const colors = { open: '#0c0', limited: '#ff0', restricted: '#ff6600' };
-    const c = colors[status] || '#666';
     return L.divIcon({
-        className: 'apt-icon',
-        html: `<div style="width:16px;height:16px;background:${c};border:2px solid #fff;transform:rotate(45deg);box-shadow:0 0 8px ${c};"></div>`,
-        iconSize: [16, 16], iconAnchor: [8, 8]
+        className: 'apt-marker',
+        html: `<div style="width:14px;height:14px;background:${colors[status]};border:2px solid #fff;transform:rotate(45deg);box-shadow:0 0 8px ${colors[status]};"></div>`,
+        iconSize: [14, 14], iconAnchor: [7, 7]
     });
 }
 
-const airports = [
-    { code: 'DXB', name: 'Dubai Intl', lat: 25.253, lon: 55.366, status: 'limited', cxl: '76.8%', dly: '142m' },
-    { code: 'AUH', name: 'Abu Dhabi Intl', lat: 24.433, lon: 54.651, status: 'limited', cxl: '79.1%', dly: '186m' },
-    { code: 'DOH', name: 'Hamad Intl', lat: 25.261, lon: 51.565, status: 'limited', cxl: '25.1%', dly: '89m' },
-    { code: 'RUH', name: 'King Khalid Intl', lat: 24.958, lon: 46.699, status: 'restricted', cxl: '55.7%', dly: '98m' },
-    { code: 'JED', name: 'King Abdulaziz Intl', lat: 21.679, lon: 39.157, status: 'open', cxl: '17.9%', dly: '54m' },
-    { code: 'DMM', name: 'King Fahd Intl', lat: 26.471, lon: 49.798, status: 'restricted', cxl: '84.8%', dly: '210m' },
-    { code: 'BAH', name: 'Bahrain Intl', lat: 26.270, lon: 50.634, status: 'limited', cxl: '62.2%', dly: '124m' },
-    { code: 'MCT', name: 'Muscat Intl', lat: 23.593, lon: 58.284, status: 'open', cxl: '4.1%', dly: '23m' }
-];
-
-airports.forEach(a => {
-    L.marker([a.lat, a.lon], { icon: aptIcon(a.status) })
-        .addTo(map)
-        .bindPopup(`<div class="popup-title">${a.code} - ${a.name}</div>
-            <div>Status: <span style="color:${a.status==='open'?'#0c0':a.status==='limited'?'#ff0':'#ff6600'}">${a.status.toUpperCase()}</span></div>
-            <div>Cancel Rate: <span style="color:#f33">${a.cxl}</span></div>
-            <div>Avg Delay: ${a.dly}</div>`);
+const airportMarkers = {};
+airports.forEach(apt => {
+    const m = L.marker([apt.lat, apt.lon], { icon: airportIcon(apt.status) }).addTo(map);
+    m.bindPopup(`
+        <div class="popup-type">AIRPORT</div>
+        <div class="popup-row"><span class="k">code:</span> <span class="v">${apt.code}</span></div>
+        <div class="popup-row"><span class="k">name:</span> <span class="v">${apt.name}</span></div>
+        <div class="popup-row"><span class="k">country:</span> <span class="v">${apt.country}</span></div>
+        <div class="popup-row"><span class="k">status:</span> <span class="v" style="color:${apt.status==='open'?'#0c0':apt.status==='limited'?'#ff0':'#ff6600'}">${apt.status.toUpperCase()}</span></div>
+        <div class="popup-row"><span class="k">cancel_rate:</span> <span class="v">${apt.cxl}</span></div>
+        <div class="popup-row"><span class="k">avg_delay:</span> <span class="v">${apt.dly}</span></div>
+        <div class="popup-row"><span class="k">departures_24h:</span> <span class="v">${apt.deps}</span></div>
+        <div class="popup-row"><span class="k">dep_per_hour:</span> <span class="v">${apt.deph}</span></div>
+    `);
+    airportMarkers[apt.code] = m;
 });
 
 // Closed airspace
 L.polygon([[38,44],[38,63],[25,63],[25,56],[29,48],[33,44]], 
     { color: '#f33', weight: 1, fillColor: '#f33', fillOpacity: 0.1, dashArray: '5,5' })
-    .addTo(map).bindPopup('<div class="popup-title">CLOSED AIRSPACE</div>Iran/Iraq - No overflights');
+    .addTo(map).bindPopup('<div class="popup-type">CLOSED AIRSPACE</div><div class="popup-row"><span class="k">region:</span> <span class="v">Iran, Iraq, W. Afghanistan</span></div><div class="popup-row"><span class="k">status:</span> <span class="v" style="color:#f33">NO CIVILIAN OVERFLIGHTS</span></div>');
+
+// Click airport rows to zoom
+document.querySelectorAll('.apt-row[data-code]').forEach(row => {
+    row.style.cursor = 'pointer';
+    row.addEventListener('click', () => {
+        const code = row.dataset.code;
+        const apt = airports.find(a => a.code === code);
+        if (apt) {
+            map.flyTo([apt.lat, apt.lon], 10, { duration: 0.5 });
+            airportMarkers[code].openPopup();
+        }
+    });
+});
 
 // Flight lists
 const airlines = [{code:'EK',base:'DXB'},{code:'EY',base:'AUH'},{code:'QR',base:'DOH'},{code:'SV',base:'RUH'},{code:'GF',base:'BAH'},{code:'WY',base:'MCT'}];
@@ -198,7 +248,7 @@ function render(listId, countId, count, cls, txt, infoFn) {
     const list = document.getElementById(listId);
     document.getElementById(countId).textContent = count;
     let html = '<div class="flight-row header"><span>FLT</span><span>ROUTE</span><span>INFO</span><span>STS</span></div>';
-    for(let i=0; i<Math.min(count,8); i++) {
+    for(let i=0; i<Math.min(count,6); i++) {
         const al = rnd(airlines);
         html += `<div class="flight-row"><span class="fnum">${al.code}${rndNum(100,999)}</span><span>${al.base}→${rnd(dests)}</span><span class="info">${infoFn()}</span><span class="status ${cls}">${txt}</span></div>`;
     }
@@ -207,16 +257,27 @@ function render(listId, countId, count, cls, txt, infoFn) {
 
 function update() {
     render('airborne-list','airborne-count',rndNum(18,30),'airborne','AIR',()=>'FL'+rndNum(280,420));
-    const now = new Date();
-    render('scheduled-list','scheduled-count',rndNum(14,22),'scheduled','SCHED',()=>{
-        const t = new Date(now.getTime()+rndNum(15,180)*60000);
-        return t.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'UTC'})+'Z';
-    });
     render('delayed-list','delayed-count',rndNum(12,20),'delayed','DLY',()=>'+'+rndNum(30,180)+'M');
-    render('canceled-list','canceled-count',rndNum(28,40),'canceled','CXL',()=>rnd(reasons));
+    render('canceled-list','cxl-count',rndNum(28,40),'canceled','CXL',()=>rnd(reasons));
+    document.getElementById('canceledCount').textContent = document.getElementById('cxl-count').textContent;
 }
 update(); setInterval(update, 30000);
-setTimeout(()=>location.reload(), 300000);
+
+// Airport filter
+document.getElementById('airportFilter').onchange = function() {
+    const code = this.value;
+    if (code === 'all') {
+        map.setView([24, 50], 5);
+    } else {
+        const apt = airports.find(a => a.code === code);
+        if (apt) {
+            map.flyTo([apt.lat, apt.lon], 10, { duration: 0.5 });
+            airportMarkers[code].openPopup();
+        }
+    }
+};
+
+setTimeout(() => location.reload(), 300000);
 </script>
 </body>
 </html>
