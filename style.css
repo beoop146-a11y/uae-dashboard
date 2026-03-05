@@ -1,21 +1,19 @@
-/* Bloomberg Terminal Theme - UAE Crisis Dashboard */
+/* Bloomberg Terminal - Authentic Style */
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 
 :root {
     --bbg-black: #000000;
-    --bbg-dark: #0a0a0a;
-    --bbg-panel: #111111;
-    --bbg-border: #333333;
     --bbg-orange: #ff6600;
-    --bbg-orange-dim: #cc5200;
-    --bbg-green: #00ff00;
+    --bbg-amber: #ffaa00;
+    --bbg-green: #00cc00;
     --bbg-red: #ff3333;
-    --bbg-yellow: #ffcc00;
-    --bbg-blue: #3399ff;
-    --bbg-white: #ffffff;
-    --bbg-gray: #888888;
-    --bbg-light: #cccccc;
-    --font-mono: 'IBM Plex Mono', 'Consolas', 'Monaco', monospace;
+    --bbg-yellow: #ffff00;
+    --bbg-cyan: #00cccc;
+    --bbg-white: #cccccc;
+    --bbg-bright: #ffffff;
+    --bbg-dim: #666666;
+    --bbg-border: #333333;
+    --font: 'IBM Plex Mono', 'Consolas', 'Courier New', monospace;
 }
 
 * {
@@ -24,826 +22,561 @@
     box-sizing: border-box;
 }
 
-body {
+html, body {
     background: var(--bbg-black);
     color: var(--bbg-white);
-    font-family: var(--font-mono);
-    font-size: 13px;
-    line-height: 1.4;
+    font-family: var(--font);
+    font-size: 12px;
+    line-height: 1.3;
     min-height: 100vh;
 }
 
-.container {
-    max-width: 1800px;
-    margin: 0 auto;
-    padding: 8px;
-}
-
-.container.wide {
+/* Terminal Container */
+.terminal {
+    padding: 2px;
     max-width: 100%;
-    padding: 8px 16px;
 }
 
-/* Header */
-header {
-    background: var(--bbg-panel);
-    border: 1px solid var(--bbg-border);
-    padding: 12px 16px;
-    margin-bottom: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-header h1 {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--bbg-orange);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.subtitle {
-    color: var(--bbg-gray);
-    font-size: 11px;
-}
-
-.last-updated {
-    color: var(--bbg-green);
-    font-size: 11px;
-}
-
-/* Navigation */
-.main-nav {
-    display: flex;
-    gap: 2px;
-    margin-bottom: 8px;
-    background: var(--bbg-panel);
-    border: 1px solid var(--bbg-border);
-    padding: 4px;
-}
-
-.nav-link {
-    color: var(--bbg-light);
-    text-decoration: none;
-    padding: 8px 16px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    transition: all 0.1s;
-    border: 1px solid transparent;
-}
-
-.nav-link:hover {
-    background: var(--bbg-dark);
-    color: var(--bbg-orange);
-}
-
-.nav-link.active {
+/* Bloomberg Header Bar */
+.bbg-header {
     background: var(--bbg-orange);
     color: var(--bbg-black);
-    border-color: var(--bbg-orange);
+    padding: 2px 8px;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-/* Alert Banner */
-.alert-banner {
+.bbg-header .right {
+    font-weight: 400;
+}
+
+/* Navigation Tabs */
+.bbg-nav {
+    background: var(--bbg-black);
+    border-bottom: 1px solid var(--bbg-border);
+    display: flex;
+    padding: 0;
+}
+
+.bbg-nav a {
+    color: var(--bbg-amber);
+    text-decoration: none;
+    padding: 4px 16px;
+    font-size: 11px;
+    border-right: 1px solid var(--bbg-border);
+    text-transform: uppercase;
+}
+
+.bbg-nav a:hover {
+    background: #111;
+}
+
+.bbg-nav a.active {
+    background: var(--bbg-orange);
+    color: var(--bbg-black);
+    font-weight: 700;
+}
+
+/* Alert Ticker */
+.bbg-ticker {
     background: var(--bbg-red);
-    color: var(--bbg-white);
-    padding: 8px 16px;
-    font-size: 12px;
+    color: var(--bbg-bright);
+    padding: 3px 8px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    animation: pulse-bg 2s infinite;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
-@keyframes pulse-bg {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.85; }
-}
-
-.alert-banner .pulse {
-    width: 8px;
-    height: 8px;
-    background: var(--bbg-white);
-    border-radius: 50%;
+.bbg-ticker .blink {
     animation: blink 1s infinite;
+    margin-right: 8px;
 }
 
 @keyframes blink {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+    50% { opacity: 0; }
 }
 
-.flight-status-banner {
-    background: var(--bbg-panel);
-    border: 1px solid var(--bbg-yellow);
-    color: var(--bbg-yellow);
-    padding: 8px 16px;
-    font-size: 12px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.status-indicator {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-}
-
-.status-indicator.limited { background: var(--bbg-yellow); }
-.status-indicator.open { background: var(--bbg-green); }
-.status-indicator.closed { background: var(--bbg-red); }
-
-/* Dashboard Grid */
-.dashboard-grid {
+/* Panel System */
+.bbg-grid {
     display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 8px;
+    gap: 2px;
+    padding: 2px;
 }
 
-@media (max-width: 1200px) {
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Section Headers */
-section h2 {
-    background: var(--bbg-orange);
-    color: var(--bbg-black);
-    padding: 6px 12px;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    margin-bottom: 0;
-}
-
-/* Overview Section */
-.overview-section {
-    background: var(--bbg-panel);
-    border: 1px solid var(--bbg-border);
-    margin-bottom: 8px;
-}
-
-.country-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1px;
-    background: var(--bbg-border);
-}
-
-.country-card {
-    background: var(--bbg-dark);
-    padding: 12px;
-}
-
-.country-flag {
-    display: none;
-}
-
-.country-card h3 {
-    color: var(--bbg-orange);
-    font-size: 13px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    border-bottom: 1px solid var(--bbg-border);
-    padding-bottom: 6px;
-}
-
-.status-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0;
-    font-size: 12px;
-    border-bottom: 1px dotted var(--bbg-border);
-}
-
-.status-row .label {
-    color: var(--bbg-gray);
-}
-
-.status-row .value {
-    color: var(--bbg-light);
-}
-
-.status-row .value.critical { color: var(--bbg-red); }
-.status-row .value.warning { color: var(--bbg-yellow); }
-.status-row .value.safe { color: var(--bbg-green); }
-
-.status {
-    padding: 2px 8px;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.status.open { background: var(--bbg-green); color: var(--bbg-black); }
-.status.limited { background: var(--bbg-yellow); color: var(--bbg-black); }
-.status.restricted { background: var(--bbg-orange); color: var(--bbg-black); }
-.status.closed { background: var(--bbg-red); color: var(--bbg-white); }
-
-.card-link {
-    display: block;
-    color: var(--bbg-orange);
-    font-size: 11px;
-    margin-top: 8px;
-    text-decoration: none;
-}
-
-.card-link:hover {
-    text-decoration: underline;
-}
-
-/* Stats Section */
-.stats-section {
-    background: var(--bbg-panel);
-    border: 1px solid var(--bbg-border);
-    margin-bottom: 8px;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 1px;
-    background: var(--bbg-border);
-}
+.bbg-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.bbg-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.bbg-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.bbg-grid.cols-5 { grid-template-columns: repeat(5, 1fr); }
+.bbg-grid.cols-6 { grid-template-columns: repeat(6, 1fr); }
+.bbg-grid.main { grid-template-columns: 1fr 280px; }
 
 @media (max-width: 900px) {
-    .stats-grid {
-        grid-template-columns: repeat(3, 1fr);
+    .bbg-grid.cols-2, .bbg-grid.cols-3, .bbg-grid.cols-4, .bbg-grid.main { 
+        grid-template-columns: 1fr; 
     }
 }
 
-.stat-card {
-    background: var(--bbg-dark);
-    padding: 16px 12px;
-    text-align: center;
-}
-
-.stat-card.critical {
-    background: rgba(255, 51, 51, 0.15);
-}
-
-.stat-value {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--bbg-white);
-    line-height: 1;
-}
-
-.stat-value.red { color: var(--bbg-red); }
-.stat-value.yellow { color: var(--bbg-yellow); }
-.stat-value.green { color: var(--bbg-green); }
-
-.stat-label {
-    font-size: 10px;
-    color: var(--bbg-gray);
-    text-transform: uppercase;
-    margin-top: 6px;
-}
-
-/* Flights Preview */
-.flights-preview {
-    background: var(--bbg-panel);
+/* Panel */
+.bbg-panel {
     border: 1px solid var(--bbg-border);
-    margin-bottom: 8px;
-}
-
-.map-embed, .map-container {
     background: var(--bbg-black);
-    padding: 4px;
 }
 
-.map-embed iframe, .map-container iframe {
-    border: 1px solid var(--bbg-border);
-}
-
-.map-note {
-    color: var(--bbg-gray);
-    font-size: 10px;
-    padding: 8px;
-    text-align: center;
-}
-
-/* Incidents */
-.incidents-preview {
-    background: var(--bbg-panel);
-    border: 1px solid var(--bbg-border);
-    margin-bottom: 8px;
-}
-
-.incident-list {
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-.incident {
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--bbg-border);
-    display: grid;
-    grid-template-columns: 140px 100px 1fr;
-    gap: 12px;
-    align-items: start;
-    font-size: 12px;
-}
-
-.incident:hover {
-    background: var(--bbg-dark);
-}
-
-.incident.critical .incident-time { color: var(--bbg-red); }
-.incident.high .incident-time { color: var(--bbg-yellow); }
-
-.incident-time {
-    color: var(--bbg-orange);
-    font-size: 11px;
-    font-weight: 600;
-}
-
-.incident-location {
-    color: var(--bbg-blue);
-    font-size: 11px;
-}
-
-.incident p {
-    color: var(--bbg-light);
-    margin: 0;
-}
-
-/* Sidebar */
-.sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.sidebar-card {
-    background: var(--bbg-panel);
-    border: 1px solid var(--bbg-border);
-    padding: 12px;
-}
-
-.sidebar-card.alert {
-    border-color: var(--bbg-red);
-    background: rgba(255, 51, 51, 0.1);
-}
-
-.sidebar-card.info {
-    border-color: var(--bbg-blue);
-}
-
-.sidebar-card h3 {
-    color: var(--bbg-orange);
+.bbg-panel-title {
+    background: var(--bbg-orange);
+    color: var(--bbg-black);
+    padding: 2px 6px;
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    margin-bottom: 8px;
-    padding-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.bbg-panel-title .tag {
+    background: var(--bbg-black);
+    color: var(--bbg-orange);
+    padding: 0 4px;
+    font-size: 10px;
+}
+
+.bbg-panel-content {
+    padding: 0;
+}
+
+/* Data Table */
+.bbg-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+}
+
+.bbg-table th {
+    background: #111;
+    color: var(--bbg-amber);
+    text-align: left;
+    padding: 3px 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 10px;
     border-bottom: 1px solid var(--bbg-border);
 }
 
-.sidebar-card p {
-    font-size: 11px;
-    color: var(--bbg-light);
-    margin-bottom: 6px;
-}
-
-.sidebar-card p.small {
-    font-size: 10px;
-    color: var(--bbg-gray);
-}
-
-.sidebar-card strong {
+.bbg-table td {
+    padding: 3px 6px;
+    border-bottom: 1px solid #1a1a1a;
     color: var(--bbg-white);
 }
 
-.source-list {
-    list-style: none;
+.bbg-table tr:hover td {
+    background: #0a0a0a;
 }
 
-.source-list li {
-    padding: 4px 0;
-    border-bottom: 1px dotted var(--bbg-border);
-}
+/* Data Colors */
+.c-orange { color: var(--bbg-orange); }
+.c-amber { color: var(--bbg-amber); }
+.c-green { color: var(--bbg-green); }
+.c-red { color: var(--bbg-red); }
+.c-yellow { color: var(--bbg-yellow); }
+.c-cyan { color: var(--bbg-cyan); }
+.c-white { color: var(--bbg-bright); }
+.c-dim { color: var(--bbg-dim); }
 
-.source-list a {
-    color: var(--bbg-blue);
-    text-decoration: none;
-    font-size: 11px;
-}
+.bold { font-weight: 700; }
 
-.source-list a:hover {
-    color: var(--bbg-orange);
-}
-
-/* Buttons */
-.btn {
+/* Status Tags */
+.tag-status {
     display: inline-block;
-    padding: 8px 16px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    text-decoration: none;
-    border: 1px solid;
-    cursor: pointer;
-    transition: all 0.1s;
-}
-
-.btn.primary {
-    background: var(--bbg-orange);
-    color: var(--bbg-black);
-    border-color: var(--bbg-orange);
-}
-
-.btn.primary:hover {
-    background: var(--bbg-orange-dim);
-}
-
-.btn.secondary {
-    background: transparent;
-    color: var(--bbg-orange);
-    border-color: var(--bbg-orange);
-}
-
-.btn.secondary:hover {
-    background: var(--bbg-orange);
-    color: var(--bbg-black);
-}
-
-.btn.small {
-    padding: 4px 8px;
-    font-size: 10px;
-}
-
-.btn.full-width {
-    display: block;
-    text-align: center;
-    margin: 8px;
-}
-
-/* Footer */
-footer {
-    background: var(--bbg-panel);
-    border: 1px solid var(--bbg-border);
-    padding: 12px;
-    margin-top: 8px;
-    text-align: center;
-}
-
-footer p {
-    color: var(--bbg-gray);
-    font-size: 10px;
-}
-
-/* ===== FLIGHTS PAGE SPECIFIC ===== */
-
-.flights-main {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.live-map-section {
-    background: var(--bbg-panel);
-    border: 1px solid var(--bbg-border);
-}
-
-/* Airport Tabs */
-.airport-section {
-    background: var(--bbg-panel);
-    border: 1px solid var(--bbg-border);
-}
-
-.airport-tabs {
-    display: flex;
-    gap: 2px;
-    padding: 8px;
-    background: var(--bbg-dark);
-    flex-wrap: wrap;
-}
-
-.tab-btn {
-    background: var(--bbg-panel);
-    color: var(--bbg-light);
-    border: 1px solid var(--bbg-border);
-    padding: 8px 16px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 600;
-    cursor: pointer;
-    text-transform: uppercase;
-}
-
-.tab-btn:hover {
-    border-color: var(--bbg-orange);
-    color: var(--bbg-orange);
-}
-
-.tab-btn.active {
-    background: var(--bbg-orange);
-    color: var(--bbg-black);
-    border-color: var(--bbg-orange);
-}
-
-.tab-content {
-    display: none;
-    padding: 12px;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-.airport-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 8px;
-}
-
-.airport-card {
-    background: var(--bbg-dark);
-    border: 1px solid var(--bbg-border);
-    padding: 12px;
-}
-
-.airport-card.highlight {
-    border-color: var(--bbg-green);
-}
-
-.airport-card h3 {
-    color: var(--bbg-white);
-    font-size: 13px;
-    margin-bottom: 8px;
-}
-
-.airport-status {
-    display: inline-block;
-    padding: 2px 8px;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-}
-
-.airport-status.open { background: var(--bbg-green); color: var(--bbg-black); }
-.airport-status.limited { background: var(--bbg-yellow); color: var(--bbg-black); }
-.airport-status.restricted { background: var(--bbg-orange); color: var(--bbg-black); }
-.airport-status.closed { background: var(--bbg-red); color: var(--bbg-white); }
-
-.airport-stats {
-    display: flex;
-    gap: 16px;
-    margin: 12px 0;
-}
-
-.airport-stats .stat {
-    text-align: center;
-}
-
-.airport-stats .num {
-    display: block;
-    font-size: 20px;
-    font-weight: 700;
-}
-
-.airport-stats .num.green { color: var(--bbg-green); }
-.airport-stats .num.red { color: var(--bbg-red); }
-.airport-stats .num.yellow { color: var(--bbg-yellow); }
-
-.airport-stats .lbl {
+    padding: 1px 4px;
     font-size: 9px;
-    color: var(--bbg-gray);
+    font-weight: 700;
     text-transform: uppercase;
 }
 
-.airport-card .note {
-    font-size: 10px;
-    color: var(--bbg-gray);
-    font-style: italic;
+.tag-status.open { background: var(--bbg-green); color: #000; }
+.tag-status.limited { background: var(--bbg-yellow); color: #000; }
+.tag-status.restricted { background: var(--bbg-orange); color: #000; }
+.tag-status.closed { background: var(--bbg-red); color: #fff; }
+
+/* Data Row */
+.bbg-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 6px;
+    border-bottom: 1px solid #1a1a1a;
+    font-size: 11px;
 }
 
-.country-note {
-    padding: 12px;
-    font-size: 11px;
-    color: var(--bbg-light);
-    background: var(--bbg-dark);
+.bbg-row:hover {
+    background: #0a0a0a;
+}
+
+.bbg-row .label {
+    color: var(--bbg-dim);
+}
+
+.bbg-row .value {
+    color: var(--bbg-white);
+}
+
+/* Stats Grid */
+.bbg-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     border-top: 1px solid var(--bbg-border);
 }
 
-/* Canceled Section */
-.canceled-section {
-    background: var(--bbg-panel);
+.bbg-stat {
+    padding: 8px 6px;
+    text-align: center;
+    border-right: 1px solid var(--bbg-border);
+    border-bottom: 1px solid var(--bbg-border);
+}
+
+.bbg-stat:last-child {
+    border-right: none;
+}
+
+.bbg-stat .num {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.bbg-stat .lbl {
+    font-size: 9px;
+    color: var(--bbg-dim);
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+
+/* News/Incident List */
+.bbg-news-item {
+    padding: 4px 6px;
+    border-bottom: 1px solid #1a1a1a;
+    font-size: 11px;
+    display: grid;
+    grid-template-columns: 110px 90px 1fr;
+    gap: 8px;
+}
+
+.bbg-news-item:hover {
+    background: #0a0a0a;
+}
+
+.bbg-news-item .time {
+    color: var(--bbg-orange);
+    font-size: 10px;
+}
+
+.bbg-news-item .loc {
+    color: var(--bbg-cyan);
+    font-size: 10px;
+}
+
+.bbg-news-item .text {
+    color: var(--bbg-white);
+}
+
+.bbg-news-item.critical .time { color: var(--bbg-red); }
+.bbg-news-item.high .time { color: var(--bbg-yellow); }
+
+/* Map Container */
+.bbg-map {
+    background: #000;
     border: 1px solid var(--bbg-border);
 }
 
-.canceled-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1px;
-    background: var(--bbg-border);
+.bbg-map iframe {
+    display: block;
+    width: 100%;
+    height: 350px;
+    border: none;
 }
 
-.canceled-route {
-    background: var(--bbg-dark);
-    padding: 10px 12px;
+/* Sidebar */
+.bbg-sidebar .bbg-panel {
+    margin-bottom: 2px;
+}
+
+.bbg-sidebar-item {
+    padding: 3px 6px;
+    font-size: 10px;
+    border-bottom: 1px solid #1a1a1a;
+}
+
+.bbg-sidebar-item .key {
+    color: var(--bbg-amber);
+}
+
+.bbg-sidebar-item .val {
+    color: var(--bbg-white);
+}
+
+/* Link Style */
+a.bbg-link {
+    color: var(--bbg-cyan);
+    text-decoration: none;
+    font-size: 10px;
+}
+
+a.bbg-link:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+.bbg-footer {
+    background: #111;
+    border-top: 1px solid var(--bbg-border);
+    padding: 4px 8px;
+    font-size: 10px;
+    color: var(--bbg-dim);
     display: flex;
     justify-content: space-between;
-    align-items: center;
 }
 
-.canceled-route .route {
-    color: var(--bbg-light);
-    font-size: 12px;
+.bbg-footer .keys span {
+    margin-right: 16px;
 }
 
-.canceled-route .status {
-    background: var(--bbg-red);
-    color: var(--bbg-white);
-    padding: 2px 8px;
-    font-size: 9px;
+.bbg-footer .keys .key {
+    background: var(--bbg-orange);
+    color: var(--bbg-black);
+    padding: 0 3px;
     font-weight: 700;
+    margin-right: 2px;
 }
 
-/* Passenger Info */
-.passenger-info {
-    background: var(--bbg-panel);
-    border: 1px solid var(--bbg-border);
-}
+/* ===== FLIGHTS PAGE ===== */
 
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1px;
-    background: var(--bbg-border);
-}
-
-.info-card {
-    background: var(--bbg-dark);
-    padding: 12px;
-}
-
-.info-card h3 {
-    color: var(--bbg-orange);
-    font-size: 12px;
-    margin-bottom: 8px;
-}
-
-.info-card p {
-    font-size: 11px;
-    color: var(--bbg-light);
-}
-
-.info-card strong {
-    color: var(--bbg-white);
-}
-
-/* ===== FLIGHTS DASHBOARD - LIVE TRACKING ===== */
-
-.flights-grid {
+.bbg-flights-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 2px;
 }
 
 @media (max-width: 1000px) {
-    .flights-grid {
-        grid-template-columns: 1fr;
-    }
+    .bbg-flights-grid { grid-template-columns: 1fr; }
 }
 
-.flight-panel {
-    background: var(--bbg-panel);
-    border: 1px solid var(--bbg-border);
-}
-
-.flight-panel h2 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.flight-panel h2 .count {
-    background: var(--bbg-black);
-    padding: 2px 8px;
-    font-size: 11px;
-}
-
-.flight-list {
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-.flight-row {
+.bbg-flight-row {
     display: grid;
-    grid-template-columns: 80px 1fr 80px 60px;
-    gap: 8px;
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--bbg-border);
+    grid-template-columns: 70px 1fr 70px 60px;
+    gap: 4px;
+    padding: 3px 6px;
+    border-bottom: 1px solid #1a1a1a;
     font-size: 11px;
     align-items: center;
 }
 
-.flight-row:hover {
-    background: var(--bbg-dark);
-}
-
-.flight-row.header {
-    background: var(--bbg-dark);
-    color: var(--bbg-gray);
-    font-weight: 600;
-    text-transform: uppercase;
+.bbg-flight-row.header {
+    background: #111;
+    color: var(--bbg-amber);
     font-size: 10px;
+    font-weight: 600;
 }
 
-.flight-num {
+.bbg-flight-row:hover:not(.header) {
+    background: #0a0a0a;
+}
+
+.bbg-flight-row .fnum {
     color: var(--bbg-orange);
     font-weight: 600;
 }
 
-.flight-route {
-    color: var(--bbg-light);
+.bbg-flight-row .route {
+    color: var(--bbg-white);
 }
 
-.flight-aircraft {
-    color: var(--bbg-gray);
+.bbg-flight-row .info {
+    color: var(--bbg-dim);
 }
 
-.flight-status-tag {
-    padding: 2px 6px;
+.bbg-flight-row .status {
     font-size: 9px;
     font-weight: 700;
+    padding: 1px 4px;
     text-align: center;
 }
 
-.flight-status-tag.airborne { background: var(--bbg-green); color: var(--bbg-black); }
-.flight-status-tag.scheduled { background: var(--bbg-blue); color: var(--bbg-white); }
-.flight-status-tag.delayed { background: var(--bbg-yellow); color: var(--bbg-black); }
-.flight-status-tag.canceled { background: var(--bbg-red); color: var(--bbg-white); }
+.bbg-flight-row .status.airborne { background: var(--bbg-green); color: #000; }
+.bbg-flight-row .status.scheduled { background: var(--bbg-cyan); color: #000; }
+.bbg-flight-row .status.delayed { background: var(--bbg-yellow); color: #000; }
+.bbg-flight-row .status.canceled { background: var(--bbg-red); color: #fff; }
+
+.flight-list {
+    max-height: 250px;
+    overflow-y: auto;
+}
 
 /* Airport Stats Table */
-.stats-table-section {
-    background: var(--bbg-panel);
-    border: 1px solid var(--bbg-border);
-}
-
-.stats-table {
+.bbg-airport-stats {
     width: 100%;
-    border-collapse: collapse;
+    font-size: 11px;
 }
 
-.stats-table th,
-.stats-table td {
-    padding: 10px 12px;
+.bbg-airport-stats th {
+    background: #111;
+    color: var(--bbg-amber);
+    padding: 4px 6px;
     text-align: left;
-    border-bottom: 1px solid var(--bbg-border);
-    font-size: 12px;
-}
-
-.stats-table th {
-    background: var(--bbg-dark);
-    color: var(--bbg-gray);
     font-weight: 600;
-    text-transform: uppercase;
     font-size: 10px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--bbg-border);
 }
 
-.stats-table tr:hover td {
-    background: var(--bbg-dark);
+.bbg-airport-stats td {
+    padding: 4px 6px;
+    border-bottom: 1px solid #1a1a1a;
 }
 
-.stats-table td.airport-code {
+.bbg-airport-stats tr:hover td {
+    background: #0a0a0a;
+}
+
+.bbg-airport-stats .code {
     color: var(--bbg-orange);
     font-weight: 700;
 }
 
-.stats-table td.val-green { color: var(--bbg-green); }
-.stats-table td.val-yellow { color: var(--bbg-yellow); }
-.stats-table td.val-red { color: var(--bbg-red); }
+/* ===== STRIKES PAGE ===== */
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+.bbg-timeline-item {
+    display: grid;
+    grid-template-columns: 130px 100px 1fr;
+    gap: 8px;
+    padding: 4px 6px;
+    border-bottom: 1px solid #1a1a1a;
+    font-size: 11px;
+    border-left: 3px solid transparent;
 }
 
-::-webkit-scrollbar-track {
-    background: var(--bbg-black);
+.bbg-timeline-item:hover {
+    background: #0a0a0a;
 }
 
-::-webkit-scrollbar-thumb {
-    background: var(--bbg-border);
+.bbg-timeline-item.critical { border-left-color: var(--bbg-red); }
+.bbg-timeline-item.high { border-left-color: var(--bbg-orange); }
+.bbg-timeline-item.medium { border-left-color: var(--bbg-yellow); }
+
+.bbg-timeline-item .time {
+    color: var(--bbg-orange);
+    font-size: 10px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: var(--bbg-gray);
+.bbg-timeline-item .loc {
+    color: var(--bbg-cyan);
+    font-size: 10px;
 }
+
+.bbg-timeline-item .desc {
+    color: var(--bbg-white);
+}
+
+.bbg-toll-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.bbg-toll {
+    padding: 8px;
+    text-align: center;
+    border-right: 1px solid var(--bbg-border);
+    border-bottom: 1px solid var(--bbg-border);
+}
+
+.bbg-toll .region {
+    font-size: 9px;
+    color: var(--bbg-dim);
+    text-transform: uppercase;
+}
+
+.bbg-toll .num {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--bbg-red);
+}
+
+.bbg-toll .type {
+    font-size: 8px;
+    color: var(--bbg-dim);
+}
+
+/* Country Panel */
+.country-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2px;
+}
+
+.incident-block {
+    padding: 6px;
+    border-bottom: 1px solid #1a1a1a;
+}
+
+.incident-block .meta {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 4px;
+    font-size: 10px;
+}
+
+.incident-block .meta .time {
+    color: var(--bbg-orange);
+}
+
+.incident-block .meta .type {
+    padding: 0 4px;
+    font-weight: 700;
+    font-size: 9px;
+}
+
+.incident-block .meta .type.strike { background: var(--bbg-red); color: #fff; }
+.incident-block .meta .type.intercept { background: var(--bbg-yellow); color: #000; }
+.incident-block .meta .type.military { background: var(--bbg-cyan); color: #000; }
+
+.incident-block h4 {
+    color: var(--bbg-bright);
+    font-size: 11px;
+    margin-bottom: 3px;
+}
+
+.incident-block p {
+    color: var(--bbg-white);
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+.incident-block .impact {
+    margin-top: 4px;
+    font-size: 9px;
+    color: var(--bbg-dim);
+    border-top: 1px dotted #333;
+    padding-top: 4px;
+}
+
+.incident-block .impact strong {
+    color: var(--bbg-yellow);
+}
+
+.no-incidents {
+    padding: 12px;
+    text-align: center;
+    color: var(--bbg-green);
+    font-size: 11px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: #333; }
+::-webkit-scrollbar-thumb:hover { background: #444; }

@@ -3,450 +3,286 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIVE FLIGHTS | Middle East Dashboard</title>
+    <title>FLIGHTS | MIDEAST</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container wide">
-        <header>
-            <div>
-                <h1>MIDEAST LIVE FLIGHTS</h1>
-                <p class="subtitle">REAL-TIME TRACKING • DEPARTURES • CANCELLATIONS</p>
-            </div>
-            <p class="last-updated">LIVE <span id="update-time"></span></p>
-        </header>
-
-        <nav class="main-nav">
-            <a href="index.html" class="nav-link">OVERVIEW</a>
-            <a href="flights.html" class="nav-link active">LIVE FLIGHTS</a>
-            <a href="strikes.html" class="nav-link">INCIDENTS</a>
-        </nav>
-
-        <div class="flight-status-banner">
-            <span class="status-indicator limited"></span>
-            <strong>REGIONAL AIRSPACE:</strong> Multiple restrictions active — Eastern routes via Iran/Iraq closed — Rerouting via Pakistan/Oman corridors
-        </div>
-
-        <main class="flights-main">
-            <!-- Live Map -->
-            <section class="live-map-section">
-                <h2>LIVE FLIGHT MAP — GULF REGION</h2>
-                <div class="map-container">
-                    <iframe 
-                        src="https://www.flightradar24.com/simple_index.php?lat=25.5&lon=52&z=6&airports=1" 
-                        width="100%" 
-                        height="450" 
-                        frameborder="0"
-                        loading="lazy">
-                    </iframe>
-                </div>
-            </section>
-
-            <!-- Flight Panels Grid -->
-            <div class="flights-grid">
-                <!-- Currently Airborne -->
-                <section class="flight-panel">
-                    <h2>
-                        <span>CURRENTLY AIRBORNE</span>
-                        <span class="count" id="airborne-count">24 FLIGHTS</span>
-                    </h2>
-                    <div class="flight-list" id="airborne-list">
-                        <div class="flight-row header">
-                            <span>FLIGHT</span>
-                            <span>ROUTE</span>
-                            <span>AIRCRAFT</span>
-                            <span>STATUS</span>
-                        </div>
-                        <!-- Populated by JS -->
-                    </div>
-                </section>
-
-                <!-- Scheduled Departures -->
-                <section class="flight-panel">
-                    <h2>
-                        <span>SCHEDULED DEPARTURES</span>
-                        <span class="count" id="scheduled-count">18 FLIGHTS</span>
-                    </h2>
-                    <div class="flight-list" id="scheduled-list">
-                        <div class="flight-row header">
-                            <span>FLIGHT</span>
-                            <span>ROUTE</span>
-                            <span>TIME</span>
-                            <span>STATUS</span>
-                        </div>
-                        <!-- Populated by JS -->
-                    </div>
-                </section>
-
-                <!-- Canceled Flights -->
-                <section class="flight-panel">
-                    <h2>
-                        <span>CANCELED FLIGHTS</span>
-                        <span class="count" id="canceled-count">32 FLIGHTS</span>
-                    </h2>
-                    <div class="flight-list" id="canceled-list">
-                        <div class="flight-row header">
-                            <span>FLIGHT</span>
-                            <span>ROUTE</span>
-                            <span>REASON</span>
-                            <span>STATUS</span>
-                        </div>
-                        <!-- Populated by JS -->
-                    </div>
-                </section>
-
-                <!-- Delayed Flights -->
-                <section class="flight-panel">
-                    <h2>
-                        <span>DELAYED FLIGHTS</span>
-                        <span class="count" id="delayed-count">15 FLIGHTS</span>
-                    </h2>
-                    <div class="flight-list" id="delayed-list">
-                        <div class="flight-row header">
-                            <span>FLIGHT</span>
-                            <span>ROUTE</span>
-                            <span>DELAY</span>
-                            <span>STATUS</span>
-                        </div>
-                        <!-- Populated by JS -->
-                    </div>
-                </section>
-            </div>
-
-            <!-- Airport Statistics -->
-            <section class="stats-table-section">
-                <h2>AIRPORT STATISTICS — LAST 24 HOURS</h2>
-                <table class="stats-table">
-                    <thead>
-                        <tr>
-                            <th>AIRPORT</th>
-                            <th>COUNTRY</th>
-                            <th>STATUS</th>
-                            <th>DEPARTURES</th>
-                            <th>CANCELED</th>
-                            <th>CANCEL RATIO</th>
-                            <th>AVG DELAY</th>
-                            <th>DEP RATE/HR</th>
-                        </tr>
-                    </thead>
-                    <tbody id="stats-table-body">
-                        <tr>
-                            <td class="airport-code">DXB</td>
-                            <td>UAE</td>
-                            <td><span class="status limited">LIMITED</span></td>
-                            <td>47</td>
-                            <td class="val-red">156</td>
-                            <td class="val-red">76.8%</td>
-                            <td class="val-yellow">142 min</td>
-                            <td>1.96</td>
-                        </tr>
-                        <tr>
-                            <td class="airport-code">AUH</td>
-                            <td>UAE</td>
-                            <td><span class="status limited">LIMITED</span></td>
-                            <td>23</td>
-                            <td class="val-red">87</td>
-                            <td class="val-red">79.1%</td>
-                            <td class="val-red">186 min</td>
-                            <td>0.96</td>
-                        </tr>
-                        <tr>
-                            <td class="airport-code">DOH</td>
-                            <td>QATAR</td>
-                            <td><span class="status limited">REROUTING</span></td>
-                            <td>134</td>
-                            <td class="val-yellow">45</td>
-                            <td class="val-yellow">25.1%</td>
-                            <td class="val-yellow">89 min</td>
-                            <td>5.58</td>
-                        </tr>
-                        <tr>
-                            <td class="airport-code">RUH</td>
-                            <td>KSA</td>
-                            <td><span class="status restricted">E-ROUTES CLOSED</span></td>
-                            <td>89</td>
-                            <td class="val-red">112</td>
-                            <td class="val-red">55.7%</td>
-                            <td class="val-yellow">98 min</td>
-                            <td>3.71</td>
-                        </tr>
-                        <tr>
-                            <td class="airport-code">JED</td>
-                            <td>KSA</td>
-                            <td><span class="status open">OPERATIONAL</span></td>
-                            <td>156</td>
-                            <td class="val-yellow">34</td>
-                            <td class="val-yellow">17.9%</td>
-                            <td class="val-yellow">54 min</td>
-                            <td>6.50</td>
-                        </tr>
-                        <tr>
-                            <td class="airport-code">DMM</td>
-                            <td>KSA</td>
-                            <td><span class="status restricted">RESTRICTED</span></td>
-                            <td>12</td>
-                            <td class="val-red">67</td>
-                            <td class="val-red">84.8%</td>
-                            <td class="val-red">210 min</td>
-                            <td>0.50</td>
-                        </tr>
-                        <tr>
-                            <td class="airport-code">BAH</td>
-                            <td>BAHRAIN</td>
-                            <td><span class="status limited">MIL ACTIVITY</span></td>
-                            <td>34</td>
-                            <td class="val-red">56</td>
-                            <td class="val-red">62.2%</td>
-                            <td class="val-yellow">124 min</td>
-                            <td>1.42</td>
-                        </tr>
-                        <tr>
-                            <td class="airport-code">MCT</td>
-                            <td>OMAN</td>
-                            <td><span class="status open">OPERATIONAL</span></td>
-                            <td>187</td>
-                            <td>8</td>
-                            <td class="val-green">4.1%</td>
-                            <td class="val-green">23 min</td>
-                            <td class="val-green">7.79</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-
-            <!-- Suspended Routes -->
-            <section class="canceled-section">
-                <h2>SUSPENDED ROUTES</h2>
-                <div class="canceled-grid">
-                    <div class="canceled-route">
-                        <span class="route">ALL → TEHRAN (IKA)</span>
-                        <span class="status">INDEFINITE</span>
-                    </div>
-                    <div class="canceled-route">
-                        <span class="route">ALL → BAGHDAD (BGW)</span>
-                        <span class="status">INDEFINITE</span>
-                    </div>
-                    <div class="canceled-route">
-                        <span class="route">ALL → TEL AVIV (TLV)</span>
-                        <span class="status">INDEFINITE</span>
-                    </div>
-                    <div class="canceled-route">
-                        <span class="route">ALL → BEIRUT (BEY)</span>
-                        <span class="status">SUSPENDED</span>
-                    </div>
-                    <div class="canceled-route">
-                        <span class="route">ALL → DAMASCUS (DAM)</span>
-                        <span class="status">INDEFINITE</span>
-                    </div>
-                    <div class="canceled-route">
-                        <span class="route">EK/EY → AMMAN (AMM)</span>
-                        <span class="status">REDUCED</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Passenger Info -->
-            <section class="passenger-info">
-                <h2>PASSENGER INFORMATION</h2>
-                <div class="info-grid">
-                    <div class="info-card">
-                        <h3>REBOOKING</h3>
-                        <p>All major Gulf carriers offering <strong>free rebooking</strong> through March 15 for affected routes. Emirates, Etihad, Qatar Airways, Saudia, Gulf Air, Oman Air.</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>STRANDED PASSENGERS</h3>
-                        <p><strong>DXB:</strong> Emergency accommodation T3<br>
-                        <strong>DOH:</strong> Oryx Airport Hotel<br>
-                        <strong>RUH:</strong> GACA coordination center</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>ALTERNATIVE ROUTES</h3>
-                        <p>Flights via <strong>MCT</strong> and <strong>BOM</strong> operating with increased capacity. Route via Oman for eastbound travel.</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>EXPECTED DELAYS</h3>
-                        <p>Westbound: <strong>2-4 hours</strong><br>
-                        Eastbound (alt routing): <strong>4-8 hours</strong></p>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <p>FLIGHT DATA FROM FLIGHTRADAR24 AND AIRLINE SOURCES. SIMULATED DISPLAY. AUTO-REFRESH: 30 SEC</p>
-            <a href="index.html" class="btn secondary">← BACK TO OVERVIEW</a>
-        </footer>
+<div class="terminal">
+    <!-- Header Bar -->
+    <div class="bbg-header">
+        <span>MIDEAST FLIGHT TRACKER</span>
+        <span class="right" id="clock"></span>
     </div>
 
-    <script>
-        // Update time
-        function updateTime() {
-            document.getElementById('update-time').textContent = new Date().toLocaleString('en-US', {
-                timeZone: 'UTC',
-                dateStyle: 'medium',
-                timeStyle: 'medium'
-            }) + ' UTC';
-        }
-        updateTime();
-        setInterval(updateTime, 1000);
+    <!-- Navigation -->
+    <div class="bbg-nav">
+        <a href="index.html">OVERVIEW</a>
+        <a href="flights.html" class="active">FLIGHTS</a>
+        <a href="strikes.html">INCIDENTS</a>
+    </div>
 
-        // Flight data simulation
-        const airlines = [
-            { code: 'EK', name: 'Emirates', base: 'DXB' },
-            { code: 'EY', name: 'Etihad', base: 'AUH' },
-            { code: 'QR', name: 'Qatar Airways', base: 'DOH' },
-            { code: 'SV', name: 'Saudia', base: 'RUH' },
-            { code: 'GF', name: 'Gulf Air', base: 'BAH' },
-            { code: 'WY', name: 'Oman Air', base: 'MCT' }
-        ];
+    <!-- Alert Ticker -->
+    <div class="bbg-ticker">
+        <span class="blink">●</span>
+        AIRSPACE: MULTIPLE RESTRICTIONS — IRAN/IRAQ CLOSED — REROUTING VIA PAK/OMAN CORRIDORS — AVG +45MIN EASTBOUND
+    </div>
 
-        const destinations = [
-            { code: 'LHR', city: 'London' },
-            { code: 'CDG', city: 'Paris' },
-            { code: 'JFK', city: 'New York' },
-            { code: 'SIN', city: 'Singapore' },
-            { code: 'BKK', city: 'Bangkok' },
-            { code: 'DEL', city: 'Delhi' },
-            { code: 'BOM', city: 'Mumbai' },
-            { code: 'IST', city: 'Istanbul' },
-            { code: 'FRA', city: 'Frankfurt' },
-            { code: 'CAI', city: 'Cairo' },
-            { code: 'KWI', city: 'Kuwait' },
-            { code: 'CMB', city: 'Colombo' }
-        ];
+    <!-- Map -->
+    <div class="bbg-panel">
+        <div class="bbg-panel-title">LIVE RADAR — GULF REGION <span class="tag">FLIGHTRADAR24</span></div>
+        <div class="bbg-map">
+            <iframe src="https://www.flightradar24.com/simple_index.php?lat=25.5&lon=52&z=6&airports=1" loading="lazy"></iframe>
+        </div>
+    </div>
 
-        const aircraft = ['B77W', 'A388', 'A359', 'B789', 'A321', 'B738'];
-        const cancelReasons = ['AIRSPACE CLOSURE', 'SECURITY', 'REROUTING', 'CREW UNAVAIL', 'MILITARY OPS'];
+    <!-- Flight Panels -->
+    <div class="bbg-flights-grid">
+        <!-- Airborne -->
+        <div class="bbg-panel">
+            <div class="bbg-panel-title">AIRBORNE <span class="tag" id="airborne-count">24</span></div>
+            <div class="flight-list" id="airborne-list"></div>
+        </div>
 
-        function randomFlight(airline) {
-            const dest = destinations[Math.floor(Math.random() * destinations.length)];
-            const ac = aircraft[Math.floor(Math.random() * aircraft.length)];
-            const flightNum = airline.code + (100 + Math.floor(Math.random() * 900));
-            return { airline, dest, ac, flightNum };
-        }
+        <!-- Scheduled -->
+        <div class="bbg-panel">
+            <div class="bbg-panel-title">SCHEDULED <span class="tag" id="scheduled-count">18</span></div>
+            <div class="flight-list" id="scheduled-list"></div>
+        </div>
 
-        function renderAirborneFlights() {
-            const list = document.getElementById('airborne-list');
-            const count = 18 + Math.floor(Math.random() * 12);
-            document.getElementById('airborne-count').textContent = count + ' FLIGHTS';
-            
-            let html = `<div class="flight-row header">
-                <span>FLIGHT</span>
-                <span>ROUTE</span>
-                <span>AIRCRAFT</span>
-                <span>STATUS</span>
-            </div>`;
-            
-            for (let i = 0; i < Math.min(count, 12); i++) {
-                const airline = airlines[Math.floor(Math.random() * airlines.length)];
-                const f = randomFlight(airline);
-                const alt = (28000 + Math.floor(Math.random() * 14000)).toLocaleString();
-                html += `<div class="flight-row">
-                    <span class="flight-num">${f.flightNum}</span>
-                    <span class="flight-route">${f.airline.base} → ${f.dest.code}</span>
-                    <span class="flight-aircraft">${f.ac}</span>
-                    <span class="flight-status-tag airborne">FL${Math.floor(alt/100)}</span>
-                </div>`;
-            }
-            list.innerHTML = html;
-        }
+        <!-- Delayed -->
+        <div class="bbg-panel">
+            <div class="bbg-panel-title">DELAYED <span class="tag" id="delayed-count">15</span></div>
+            <div class="flight-list" id="delayed-list"></div>
+        </div>
 
-        function renderScheduledFlights() {
-            const list = document.getElementById('scheduled-list');
-            const count = 14 + Math.floor(Math.random() * 8);
-            document.getElementById('scheduled-count').textContent = count + ' FLIGHTS';
-            
-            let html = `<div class="flight-row header">
-                <span>FLIGHT</span>
-                <span>ROUTE</span>
-                <span>DEPART</span>
-                <span>STATUS</span>
-            </div>`;
-            
-            const now = new Date();
-            for (let i = 0; i < Math.min(count, 10); i++) {
-                const airline = airlines[Math.floor(Math.random() * airlines.length)];
-                const f = randomFlight(airline);
-                const depTime = new Date(now.getTime() + (15 + i * 25 + Math.random() * 30) * 60000);
-                const timeStr = depTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' });
-                const isDelayed = Math.random() > 0.6;
-                html += `<div class="flight-row">
-                    <span class="flight-num">${f.flightNum}</span>
-                    <span class="flight-route">${f.airline.base} → ${f.dest.code}</span>
-                    <span class="flight-aircraft">${timeStr}Z</span>
-                    <span class="flight-status-tag ${isDelayed ? 'delayed' : 'scheduled'}">${isDelayed ? 'DELAYED' : 'ON TIME'}</span>
-                </div>`;
-            }
-            list.innerHTML = html;
-        }
+        <!-- Canceled -->
+        <div class="bbg-panel">
+            <div class="bbg-panel-title">CANCELED <span class="tag" id="canceled-count">32</span></div>
+            <div class="flight-list" id="canceled-list"></div>
+        </div>
+    </div>
 
-        function renderCanceledFlights() {
-            const list = document.getElementById('canceled-list');
-            const count = 28 + Math.floor(Math.random() * 10);
-            document.getElementById('canceled-count').textContent = count + ' FLIGHTS';
-            
-            let html = `<div class="flight-row header">
-                <span>FLIGHT</span>
-                <span>ROUTE</span>
-                <span>REASON</span>
-                <span>STATUS</span>
-            </div>`;
-            
-            for (let i = 0; i < Math.min(count, 10); i++) {
-                const airline = airlines[Math.floor(Math.random() * airlines.length)];
-                const f = randomFlight(airline);
-                const reason = cancelReasons[Math.floor(Math.random() * cancelReasons.length)];
-                html += `<div class="flight-row">
-                    <span class="flight-num">${f.flightNum}</span>
-                    <span class="flight-route">${f.airline.base} → ${f.dest.code}</span>
-                    <span class="flight-aircraft">${reason}</span>
-                    <span class="flight-status-tag canceled">CANCELED</span>
-                </div>`;
-            }
-            list.innerHTML = html;
-        }
+    <!-- Airport Statistics -->
+    <div class="bbg-panel">
+        <div class="bbg-panel-title">AIRPORT STATISTICS — 24H</div>
+        <table class="bbg-airport-stats">
+            <tr>
+                <th>APT</th>
+                <th>COUNTRY</th>
+                <th>STATUS</th>
+                <th>DEPS</th>
+                <th>CXLD</th>
+                <th>CXL RATIO</th>
+                <th>AVG DLY</th>
+                <th>DEP/HR</th>
+            </tr>
+            <tr>
+                <td class="code">DXB</td>
+                <td>UAE</td>
+                <td><span class="tag-status limited">LTD</span></td>
+                <td>47</td>
+                <td class="c-red">156</td>
+                <td class="c-red bold">76.8%</td>
+                <td class="c-yellow">142m</td>
+                <td>1.96</td>
+            </tr>
+            <tr>
+                <td class="code">AUH</td>
+                <td>UAE</td>
+                <td><span class="tag-status limited">LTD</span></td>
+                <td>23</td>
+                <td class="c-red">87</td>
+                <td class="c-red bold">79.1%</td>
+                <td class="c-red">186m</td>
+                <td>0.96</td>
+            </tr>
+            <tr>
+                <td class="code">DOH</td>
+                <td>QAT</td>
+                <td><span class="tag-status limited">RTG</span></td>
+                <td>134</td>
+                <td class="c-yellow">45</td>
+                <td class="c-yellow">25.1%</td>
+                <td class="c-yellow">89m</td>
+                <td>5.58</td>
+            </tr>
+            <tr>
+                <td class="code">RUH</td>
+                <td>KSA</td>
+                <td><span class="tag-status restricted">RST</span></td>
+                <td>89</td>
+                <td class="c-red">112</td>
+                <td class="c-red">55.7%</td>
+                <td class="c-yellow">98m</td>
+                <td>3.71</td>
+            </tr>
+            <tr>
+                <td class="code">JED</td>
+                <td>KSA</td>
+                <td><span class="tag-status open">OPR</span></td>
+                <td>156</td>
+                <td class="c-yellow">34</td>
+                <td class="c-yellow">17.9%</td>
+                <td class="c-yellow">54m</td>
+                <td>6.50</td>
+            </tr>
+            <tr>
+                <td class="code">DMM</td>
+                <td>KSA</td>
+                <td><span class="tag-status restricted">RST</span></td>
+                <td>12</td>
+                <td class="c-red">67</td>
+                <td class="c-red bold">84.8%</td>
+                <td class="c-red">210m</td>
+                <td>0.50</td>
+            </tr>
+            <tr>
+                <td class="code">BAH</td>
+                <td>BHR</td>
+                <td><span class="tag-status limited">MIL</span></td>
+                <td>34</td>
+                <td class="c-red">56</td>
+                <td class="c-red">62.2%</td>
+                <td class="c-yellow">124m</td>
+                <td>1.42</td>
+            </tr>
+            <tr>
+                <td class="code">MCT</td>
+                <td>OMN</td>
+                <td><span class="tag-status open">OPR</span></td>
+                <td>187</td>
+                <td>8</td>
+                <td class="c-green bold">4.1%</td>
+                <td class="c-green">23m</td>
+                <td class="c-green bold">7.79</td>
+            </tr>
+        </table>
+    </div>
 
-        function renderDelayedFlights() {
-            const list = document.getElementById('delayed-list');
-            const count = 12 + Math.floor(Math.random() * 8);
-            document.getElementById('delayed-count').textContent = count + ' FLIGHTS';
-            
-            let html = `<div class="flight-row header">
-                <span>FLIGHT</span>
-                <span>ROUTE</span>
-                <span>DELAY</span>
-                <span>STATUS</span>
-            </div>`;
-            
-            for (let i = 0; i < Math.min(count, 10); i++) {
-                const airline = airlines[Math.floor(Math.random() * airlines.length)];
-                const f = randomFlight(airline);
-                const delay = 30 + Math.floor(Math.random() * 180);
-                html += `<div class="flight-row">
-                    <span class="flight-num">${f.flightNum}</span>
-                    <span class="flight-route">${f.airline.base} → ${f.dest.code}</span>
-                    <span class="flight-aircraft">+${delay} MIN</span>
-                    <span class="flight-status-tag delayed">DELAYED</span>
-                </div>`;
-            }
-            list.innerHTML = html;
-        }
+    <!-- Suspended Routes -->
+    <div class="bbg-panel">
+        <div class="bbg-panel-title">SUSPENDED ROUTES</div>
+        <div class="bbg-grid cols-6">
+            <div class="bbg-row"><span class="c-red">ALL→IKA</span> <span class="c-dim">INDEF</span></div>
+            <div class="bbg-row"><span class="c-red">ALL→BGW</span> <span class="c-dim">INDEF</span></div>
+            <div class="bbg-row"><span class="c-red">ALL→TLV</span> <span class="c-dim">INDEF</span></div>
+            <div class="bbg-row"><span class="c-red">ALL→BEY</span> <span class="c-dim">SUSP</span></div>
+            <div class="bbg-row"><span class="c-red">ALL→DAM</span> <span class="c-dim">INDEF</span></div>
+            <div class="bbg-row"><span class="c-orange">EK/EY→AMM</span> <span class="c-dim">RDCD</span></div>
+        </div>
+    </div>
 
-        function updateAllFlights() {
-            renderAirborneFlights();
-            renderScheduledFlights();
-            renderCanceledFlights();
-            renderDelayedFlights();
-        }
+    <!-- Passenger Info -->
+    <div class="bbg-grid cols-4">
+        <div class="bbg-panel">
+            <div class="bbg-panel-title">REBOOKING</div>
+            <div class="bbg-sidebar-item">Free rebooking thru Mar 15</div>
+            <div class="bbg-sidebar-item">EK EY QR SV GF WY</div>
+        </div>
+        <div class="bbg-panel">
+            <div class="bbg-panel-title">STRANDED PAX</div>
+            <div class="bbg-sidebar-item"><span class="c-orange">DXB</span> T3 emergency accom</div>
+            <div class="bbg-sidebar-item"><span class="c-orange">DOH</span> Oryx Hotel assist</div>
+        </div>
+        <div class="bbg-panel">
+            <div class="bbg-panel-title">ALT ROUTES</div>
+            <div class="bbg-sidebar-item">Via MCT +capacity</div>
+            <div class="bbg-sidebar-item">Via BOM available</div>
+        </div>
+        <div class="bbg-panel">
+            <div class="bbg-panel-title">DELAYS</div>
+            <div class="bbg-sidebar-item">Westbound: <span class="c-yellow">2-4h</span></div>
+            <div class="bbg-sidebar-item">Eastbound: <span class="c-red">4-8h</span></div>
+        </div>
+    </div>
 
-        // Initial render
-        updateAllFlights();
+    <!-- Footer -->
+    <div class="bbg-footer">
+        <div class="keys">
+            <span><span class="key">F1</span>HELP</span>
+            <span><span class="key">F2</span>OVERVIEW</span>
+            <span><span class="key">F3</span>INCIDENTS</span>
+        </div>
+        <span>SIMULATED DATA | REFRESH 30S</span>
+    </div>
+</div>
 
-        // Update every 30 seconds
-        setInterval(updateAllFlights, 30000);
+<script>
+function updateClock() {
+    document.getElementById('clock').textContent = new Date().toLocaleString('en-US', {
+        timeZone: 'UTC',
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    }) + ' UTC';
+}
+updateClock();
+setInterval(updateClock, 1000);
 
-        // Page refresh every 5 minutes
-        setTimeout(() => location.reload(), 300000);
-    </script>
+const airlines = [
+    { code: 'EK', base: 'DXB' },
+    { code: 'EY', base: 'AUH' },
+    { code: 'QR', base: 'DOH' },
+    { code: 'SV', base: 'RUH' },
+    { code: 'GF', base: 'BAH' },
+    { code: 'WY', base: 'MCT' }
+];
+
+const dests = ['LHR','CDG','JFK','SIN','BKK','DEL','BOM','IST','FRA','CAI','KWI','CMB'];
+const aircraft = ['B77W','A388','A359','B789','A321','B738'];
+const reasons = ['AIRSPACE','SECURITY','REROUTE','CREW','MIL OPS'];
+
+function rnd(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function rndNum(min, max) { return min + Math.floor(Math.random() * (max - min)); }
+
+function renderFlights(listId, countId, count, statusClass, statusText, infoFn) {
+    const list = document.getElementById(listId);
+    document.getElementById(countId).textContent = count;
+    
+    let html = `<div class="bbg-flight-row header">
+        <span>FLT</span><span>ROUTE</span><span>INFO</span><span>STS</span>
+    </div>`;
+    
+    for (let i = 0; i < Math.min(count, 8); i++) {
+        const al = rnd(airlines);
+        const fn = al.code + rndNum(100, 999);
+        const dest = rnd(dests);
+        const info = infoFn();
+        html += `<div class="bbg-flight-row">
+            <span class="fnum">${fn}</span>
+            <span class="route">${al.base}→${dest}</span>
+            <span class="info">${info}</span>
+            <span class="status ${statusClass}">${statusText}</span>
+        </div>`;
+    }
+    list.innerHTML = html;
+}
+
+function update() {
+    renderFlights('airborne-list', 'airborne-count', rndNum(18, 30), 'airborne', 'AIR', 
+        () => 'FL' + rndNum(280, 420));
+    
+    const now = new Date();
+    renderFlights('scheduled-list', 'scheduled-count', rndNum(14, 22), 'scheduled', 'SCHED',
+        () => {
+            const t = new Date(now.getTime() + rndNum(15, 180) * 60000);
+            return t.toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'UTC'}) + 'Z';
+        });
+    
+    renderFlights('delayed-list', 'delayed-count', rndNum(12, 20), 'delayed', 'DLY',
+        () => '+' + rndNum(30, 180) + 'M');
+    
+    renderFlights('canceled-list', 'canceled-count', rndNum(28, 40), 'canceled', 'CXL',
+        () => rnd(reasons));
+}
+
+update();
+setInterval(update, 30000);
+setTimeout(() => location.reload(), 300000);
+</script>
 </body>
 </html>
