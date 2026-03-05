@@ -3,137 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UAE Situation Dashboard</title>
+    <title>Middle East Crisis Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🇦🇪 UAE Situation Dashboard</h1>
+            <h1>🌍 Middle East Crisis Dashboard</h1>
+            <p class="subtitle">UAE · Qatar · Saudi Arabia · Bahrain · Oman</p>
             <p class="last-updated">Last updated: <span id="update-time"></span></p>
         </header>
 
-        <main class="dashboard">
-            <section class="strikes-panel">
-                <h2>⚠️ Strike Incidents</h2>
-                
-                <div class="alert-banner critical">
-                    <span class="pulse"></span>
-                    ACTIVE SITUATION - Limited Flights Operating
-                </div>
+        <nav class="main-nav">
+            <a href="index.html" class="nav-link active">📊 Overview</a>
+            <a href="flights.html" class="nav-link">✈️ Live Flights</a>
+            <a href="strikes.html" class="nav-link">⚠️ Incidents</a>
+        </nav>
 
-                <div class="incidents-list">
-                    <div class="incident critical">
-                        <div class="incident-header">
-                            <span class="date">Mar 1, 2026 - 14:32 UTC</span>
-                            <span class="severity critical">CRITICAL</span>
-                        </div>
-                        <h3>Iranian Drone Strike - Al Salam Naval Base</h3>
-                        <p class="location">📍 Abu Dhabi, UAE</p>
-                        <p class="details">Two Iranian drones struck the Al Salam Naval Base. Video footage captured the moment of impact. Military response ongoing.</p>
-                        <div class="tags">
-                            <span class="tag">Military Target</span>
-                            <span class="tag">Drone Strike</span>
-                            <span class="tag">Confirmed</span>
-                        </div>
-                    </div>
+        <div class="alert-banner critical">
+            <span class="pulse"></span>
+            REGIONAL ALERT - Limited Airspace Operations Across Gulf States
+        </div>
 
-                    <div class="incident high">
-                        <div class="incident-header">
-                            <span class="date">Mar 2, 2026 - 08:15 UTC</span>
-                            <span class="severity high">HIGH</span>
+        <main class="dashboard-grid">
+            <!-- Regional Overview -->
+            <section class="overview-section">
+                <h2>Regional Status</h2>
+                <div class="country-cards">
+                    <div class="country-card uae">
+                        <div class="country-flag">🇦🇪</div>
+                        <h3>United Arab Emirates</h3>
+                        <div class="status-row">
+                            <span class="label">Airspace:</span>
+                            <span class="status limited">LIMITED</span>
                         </div>
-                        <h3>Missile Interception Over Dubai</h3>
-                        <p class="location">📍 Dubai Airspace</p>
-                        <p class="details">UAE air defense systems intercepted incoming projectiles over Dubai. Debris reported in multiple areas. No civilian casualties confirmed.</p>
-                        <div class="tags">
-                            <span class="tag">Intercepted</span>
-                            <span class="tag">Missile</span>
-                            <span class="tag">Urban Area</span>
+                        <div class="status-row">
+                            <span class="label">Airports:</span>
+                            <span class="value">DXB, AUH operational (restricted)</span>
                         </div>
+                        <div class="status-row">
+                            <span class="label">Incidents:</span>
+                            <span class="value critical">2 strike events</span>
+                        </div>
+                        <a href="strikes.html#uae" class="card-link">View Details →</a>
                     </div>
 
-                    <div class="incident medium">
-                        <div class="incident-header">
-                            <span class="date">Mar 2, 2026 - 22:40 UTC</span>
-                            <span class="severity medium">MEDIUM</span>
+                    <div class="country-card qatar">
+                        <div class="country-flag">🇶🇦</div>
+                        <h3>Qatar</h3>
+                        <div class="status-row">
+                            <span class="label">Airspace:</span>
+                            <span class="status limited">LIMITED</span>
                         </div>
-                        <h3>Airspace Closure Extended</h3>
-                        <p class="location">📍 UAE National Airspace</p>
-                        <p class="details">UAE Civil Aviation Authority extended airspace restrictions. Limited commercial flights resumed March 3rd with strict routing protocols.</p>
-                        <div class="tags">
-                            <span class="tag">Airspace</span>
-                            <span class="tag">Restrictions</span>
-                            <span class="tag">Ongoing</span>
+                        <div class="status-row">
+                            <span class="label">Airports:</span>
+                            <span class="value">DOH operational (rerouting active)</span>
                         </div>
+                        <div class="status-row">
+                            <span class="label">Incidents:</span>
+                            <span class="value warning">No direct strikes</span>
+                        </div>
+                        <a href="strikes.html#qatar" class="card-link">View Details →</a>
                     </div>
 
-                    <div class="incident low">
-                        <div class="incident-header">
-                            <span class="date">Mar 3, 2026 - 10:00 UTC</span>
-                            <span class="severity low">UPDATE</span>
+                    <div class="country-card saudi">
+                        <div class="country-flag">🇸🇦</div>
+                        <h3>Saudi Arabia</h3>
+                        <div class="status-row">
+                            <span class="label">Airspace:</span>
+                            <span class="status restricted">RESTRICTED</span>
                         </div>
-                        <h3>Stock Exchanges Remain Closed</h3>
-                        <p class="location">📍 Abu Dhabi & Dubai</p>
-                        <p class="details">ADX and DFM remain closed due to ongoing regional instability. Reopening timeline not yet announced.</p>
-                        <div class="tags">
-                            <span class="tag">Financial</span>
-                            <span class="tag">Markets Closed</span>
+                        <div class="status-row">
+                            <span class="label">Airports:</span>
+                            <span class="value">RUH, JED operational (eastern routes closed)</span>
                         </div>
+                        <div class="status-row">
+                            <span class="label">Incidents:</span>
+                            <span class="value critical">1 interception event</span>
+                        </div>
+                        <a href="strikes.html#saudi" class="card-link">View Details →</a>
                     </div>
-                </div>
 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value">4</div>
-                        <div class="stat-label">Total Incidents</div>
+                    <div class="country-card bahrain">
+                        <div class="country-flag">🇧🇭</div>
+                        <h3>Bahrain</h3>
+                        <div class="status-row">
+                            <span class="label">Airspace:</span>
+                            <span class="status limited">LIMITED</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="label">Airports:</span>
+                            <span class="value">BAH operational (US base activity high)</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="label">Incidents:</span>
+                            <span class="value warning">Military activity only</span>
+                        </div>
+                        <a href="strikes.html#bahrain" class="card-link">View Details →</a>
                     </div>
-                    <div class="stat-card critical">
-                        <div class="stat-value">9</div>
-                        <div class="stat-label">Casualties (Gulf States)</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">LIMITED</div>
-                        <div class="stat-label">Airspace Status</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">CLOSED</div>
-                        <div class="stat-label">Stock Exchanges</div>
+
+                    <div class="country-card oman">
+                        <div class="country-flag">🇴🇲</div>
+                        <h3>Oman</h3>
+                        <div class="status-row">
+                            <span class="label">Airspace:</span>
+                            <span class="status open">OPEN</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="label">Airports:</span>
+                            <span class="value">MCT fully operational (increased traffic)</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="label">Incidents:</span>
+                            <span class="value safe">None reported</span>
+                        </div>
+                        <a href="strikes.html#oman" class="card-link">View Details →</a>
                     </div>
                 </div>
             </section>
 
+            <!-- Quick Stats -->
+            <section class="stats-section">
+                <h2>Regional Impact (48h)</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value red">847</div>
+                        <div class="stat-label">Flights Canceled</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value yellow">312</div>
+                        <div class="stat-label">Flights Rerouted</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">~230K</div>
+                        <div class="stat-label">Passengers Affected</div>
+                    </div>
+                    <div class="stat-card critical">
+                        <div class="stat-value">9</div>
+                        <div class="stat-label">Gulf Casualties</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">Routes Suspended</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Stock Markets Closed</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Live Flight Tracker Preview -->
+            <section class="flights-preview">
+                <h2>✈️ Live Flight Activity</h2>
+                <div class="map-embed">
+                    <iframe 
+                        src="https://www.flightradar24.com/simple_index.php?lat=24.5&lon=54&z=5&airports=1" 
+                        width="100%" 
+                        height="400" 
+                        frameborder="0"
+                        loading="lazy">
+                    </iframe>
+                </div>
+                <a href="flights.html" class="btn primary full-width">View Full Flight Dashboard →</a>
+            </section>
+
+            <!-- Latest Incidents -->
+            <section class="incidents-preview">
+                <h2>⚠️ Latest Incidents</h2>
+                <div class="incident-list">
+                    <div class="incident critical">
+                        <span class="incident-time">Mar 2, 22:40 UTC</span>
+                        <span class="incident-location">🇦🇪 Dubai</span>
+                        <p>Missile interception over Dubai airspace. Debris reported in multiple areas.</p>
+                    </div>
+                    <div class="incident critical">
+                        <span class="incident-time">Mar 1, 14:32 UTC</span>
+                        <span class="incident-location">🇦🇪 Abu Dhabi</span>
+                        <p>Iranian drones struck Al Salam Naval Base. Two confirmed hits.</p>
+                    </div>
+                    <div class="incident high">
+                        <span class="incident-time">Mar 2, 19:15 UTC</span>
+                        <span class="incident-location">🇸🇦 Eastern Province</span>
+                        <p>Saudi air defense intercepted projectile near Dhahran.</p>
+                    </div>
+                </div>
+                <a href="strikes.html" class="btn secondary full-width">View All Incidents →</a>
+            </section>
+
+            <!-- Sidebar -->
             <aside class="sidebar">
-                <div class="sidebar-card flights">
-                    <h3>✈️ Flight Status</h3>
-                    <p>Track departures, arrivals, and cancellations at UAE airports</p>
-                    <a href="flights.html" class="btn primary">View Flight Dashboard →</a>
+                <div class="sidebar-card alert">
+                    <h3>🚨 Travel Advisory</h3>
+                    <p><strong>Level 4:</strong> Do not travel to Iran, Iraq, Yemen, Syria</p>
+                    <p><strong>Level 3:</strong> Reconsider travel to UAE, Saudi Arabia, Bahrain</p>
+                    <p><strong>Level 2:</strong> Exercise caution in Qatar, Oman, Kuwait</p>
                 </div>
 
                 <div class="sidebar-card">
                     <h3>📡 Live Sources</h3>
                     <ul class="source-list">
-                        <li><a href="https://www.aljazeera.com/where/united-arab-emirates/" target="_blank">Al Jazeera - UAE</a></li>
-                        <li><a href="https://www.flightradar24.com/data/airports/dxb" target="_blank">FlightRadar24 - DXB</a></li>
-                        <li><a href="https://www.dubaiairports.ae/" target="_blank">Dubai Airports Official</a></li>
+                        <li><a href="https://www.flightradar24.com" target="_blank">FlightRadar24</a></li>
+                        <li><a href="https://www.aljazeera.com" target="_blank">Al Jazeera</a></li>
+                        <li><a href="https://liveuamap.com" target="_blank">LiveUA Map</a></li>
+                        <li><a href="https://twitter.com/search?q=middle%20east%20airspace" target="_blank">X/Twitter Updates</a></li>
                     </ul>
                 </div>
 
-                <div class="sidebar-card alert">
-                    <h3>🚨 Current Advisory</h3>
-                    <p><strong>Travel Warning:</strong> Non-essential travel to/from UAE is discouraged. Contact your airline for flight status.</p>
+                <div class="sidebar-card">
+                    <h3>🌐 Regional Context</h3>
+                    <p>US-Israeli military operations against Iran began Feb 28, 2026. Iranian retaliation has affected multiple Gulf states.</p>
+                    <p class="small">Global death toll: ~1,045 Iran, 11 Israel, 6 US soldiers, 9 Gulf states</p>
                 </div>
 
-                <div class="sidebar-card">
-                    <h3>📊 Regional Context</h3>
-                    <p>US-Israeli operations against Iran ongoing since Feb 28. Iranian retaliation has affected multiple Gulf states.</p>
-                    <p class="small">Death toll tracker: ~1,045 Iran, 11 Israel, 6 US soldiers, 9 Gulf states</p>
+                <div class="sidebar-card info">
+                    <h3>📞 Emergency Contacts</h3>
+                    <p><strong>UAE:</strong> +971 4 224 5555 (DXB)<br>
+                    <strong>Qatar:</strong> +974 4010 6666 (DOH)<br>
+                    <strong>Saudi:</strong> +966 11 220 7000 (RUH)</p>
                 </div>
             </aside>
         </main>
 
         <footer>
-            <p>Data compiled from news sources. Not official government information.</p>
+            <p>Data compiled from news and aviation sources. Not official government information. Refresh for updates.</p>
         </footer>
     </div>
 
@@ -143,6 +236,9 @@
             dateStyle: 'medium',
             timeStyle: 'short'
         }) + ' UTC';
+
+        // Auto-refresh every 5 minutes
+        setTimeout(() => location.reload(), 300000);
     </script>
 </body>
 </html>

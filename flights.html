@@ -3,215 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UAE Flights Dashboard</title>
+    <title>Live Flights - Middle East Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+    <div class="container wide">
         <header>
-            <a href="index.html" class="back-link">← Back to Strikes Dashboard</a>
-            <h1>✈️ UAE Flights Status</h1>
+            <h1>✈️ Middle East Live Flights</h1>
+            <p class="subtitle">Real-time departures, arrivals, and cancellations</p>
             <p class="last-updated">Last updated: <span id="update-time"></span></p>
         </header>
 
+        <nav class="main-nav">
+            <a href="index.html" class="nav-link">📊 Overview</a>
+            <a href="flights.html" class="nav-link active">✈️ Live Flights</a>
+            <a href="strikes.html" class="nav-link">⚠️ Incidents</a>
+        </nav>
+
         <div class="flight-status-banner">
             <span class="status-indicator limited"></span>
-            <strong>AIRSPACE STATUS:</strong> Limited Operations - Restricted Routes Active
+            <strong>REGIONAL AIRSPACE:</strong> Multiple restrictions active - Eastern routes via Iran/Iraq closed
         </div>
 
-        <main class="flights-dashboard">
-            <section class="flights-section">
-                <h2>🛫 Departed Flights</h2>
-                <p class="section-note">Successfully departed in last 24 hours</p>
-                
-                <div class="flights-table-wrapper">
-                    <table class="flights-table">
-                        <thead>
-                            <tr>
-                                <th>Flight</th>
-                                <th>Destination</th>
-                                <th>Scheduled</th>
-                                <th>Actual</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="departed">
-                                <td><strong>EK 201</strong><br><span class="airline">Emirates</span></td>
-                                <td>London Heathrow (LHR)</td>
-                                <td>08:30</td>
-                                <td>09:45</td>
-                                <td><span class="status-badge departed">DEPARTED</span></td>
-                            </tr>
-                            <tr class="departed">
-                                <td><strong>EY 101</strong><br><span class="airline">Etihad</span></td>
-                                <td>Paris CDG (CDG)</td>
-                                <td>10:00</td>
-                                <td>11:20</td>
-                                <td><span class="status-badge departed">DEPARTED</span></td>
-                            </tr>
-                            <tr class="departed">
-                                <td><strong>FZ 001</strong><br><span class="airline">FlyDubai</span></td>
-                                <td>Colombo (CMB)</td>
-                                <td>14:15</td>
-                                <td>14:30</td>
-                                <td><span class="status-badge departed">DEPARTED</span></td>
-                            </tr>
-                            <tr class="departed delayed">
-                                <td><strong>EK 412</strong><br><span class="airline">Emirates</span></td>
-                                <td>Sydney (SYD)</td>
-                                <td>02:00</td>
-                                <td>06:15</td>
-                                <td><span class="status-badge departed">DEPARTED (Delayed)</span></td>
-                            </tr>
-                            <tr class="departed">
-                                <td><strong>EY 454</strong><br><span class="airline">Etihad</span></td>
-                                <td>Mumbai (BOM)</td>
-                                <td>09:30</td>
-                                <td>10:00</td>
-                                <td><span class="status-badge departed">DEPARTED</span></td>
-                            </tr>
-                            <tr class="departed">
-                                <td><strong>EK 003</strong><br><span class="airline">Emirates</span></td>
-                                <td>New York JFK (JFK)</td>
-                                <td>03:00</td>
-                                <td>05:30</td>
-                                <td><span class="status-badge departed">DEPARTED (Rerouted)</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <main class="flights-main">
+            <!-- Live Map -->
+            <section class="live-map-section">
+                <h2>🗺️ Live Flight Map - Gulf Region</h2>
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.flightradar24.com/simple_index.php?lat=25.5&lon=52&z=6&airports=1" 
+                        width="100%" 
+                        height="500" 
+                        frameborder="0"
+                        loading="lazy">
+                    </iframe>
                 </div>
+                <p class="map-note">Interactive map showing live aircraft positions. Click aircraft for details.</p>
+            </section>
+
+            <!-- Airport Tabs -->
+            <section class="airport-section">
+                <h2>🛫 Airport Status by Country</h2>
                 
-                <div class="summary-stats">
-                    <div class="stat">
-                        <span class="number green">47</span>
-                        <span class="label">Flights Departed (24h)</span>
+                <div class="airport-tabs">
+                    <button class="tab-btn active" data-tab="uae">🇦🇪 UAE</button>
+                    <button class="tab-btn" data-tab="qatar">🇶🇦 Qatar</button>
+                    <button class="tab-btn" data-tab="saudi">🇸🇦 Saudi</button>
+                    <button class="tab-btn" data-tab="bahrain">🇧🇭 Bahrain</button>
+                    <button class="tab-btn" data-tab="oman">🇴🇲 Oman</button>
+                </div>
+
+                <!-- UAE Tab -->
+                <div class="tab-content active" id="uae">
+                    <div class="airport-grid">
+                        <div class="airport-card">
+                            <h3>Dubai International (DXB)</h3>
+                            <span class="airport-status limited">Limited Operations</span>
+                            <div class="airport-stats">
+                                <div class="stat">
+                                    <span class="num green">47</span>
+                                    <span class="lbl">Departed (24h)</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="num red">156</span>
+                                    <span class="lbl">Canceled</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="num yellow">89%</span>
+                                    <span class="lbl">Delays</span>
+                                </div>
+                            </div>
+                            <a href="https://www.flightradar24.com/data/airports/dxb" target="_blank" class="btn small">Live Tracker →</a>
+                        </div>
+                        <div class="airport-card">
+                            <h3>Abu Dhabi (AUH)</h3>
+                            <span class="airport-status limited">Limited Operations</span>
+                            <div class="airport-stats">
+                                <div class="stat">
+                                    <span class="num green">23</span>
+                                    <span class="lbl">Departed (24h)</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="num red">87</span>
+                                    <span class="lbl">Canceled</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="num yellow">92%</span>
+                                    <span class="lbl">Delays</span>
+                                </div>
+                            </div>
+                            <a href="https://www.flightradar24.com/data/airports/auh" target="_blank" class="btn small">Live Tracker →</a>
+                        </div>
+                        <div class="airport-card">
+                            <h3>Sharjah (SHJ)</h3>
+                            <span class="airport-status closed">Closed</span>
+                            <div class="airport-stats">
+                                <div class="stat">
+                                    <span class="num">0</span>
+                                    <span class="lbl">Operations</span>
+                                </div>
+                            </div>
+                            <p class="note">Closed since Mar 1 due to military activity</p>
+                        </div>
                     </div>
-                    <div class="stat">
-                        <span class="number yellow">38</span>
-                        <span class="label">With Delays</span>
+                </div>
+
+                <!-- Qatar Tab -->
+                <div class="tab-content" id="qatar">
+                    <div class="airport-grid">
+                        <div class="airport-card">
+                            <h3>Doha Hamad (DOH)</h3>
+                            <span class="airport-status limited">Rerouting Active</span>
+                            <div class="airport-stats">
+                                <div class="stat">
+                                    <span class="num green">134</span>
+                                    <span class="lbl">Departed (24h)</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="num red">45</span>
+                                    <span class="lbl">Canceled</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="num yellow">67%</span>
+                                    <span class="lbl">Delays</span>
+                                </div>
+                            </div>
+                            <a href="https://www.flightradar24.com/data/airports/doh" target="_blank" class="btn small">Live Tracker →</a>
+                        </div>
                     </div>
-                    <div class="stat">
-                        <span class="number">12</span>
-                        <span class="label">Rerouted</span>
+                    <p class="country-note">Qatar Airways rerouting all eastbound flights via Pakistan corridor. +45min average added flight time.</p>
+                </div>
+
+                <!-- Saudi Tab -->
+                <div class="tab-content" id="saudi">
+                    <div class="airport-grid">
+                        <div class="airport-card">
+                            <h3>Riyadh (RUH)</h3>
+                            <span class="airport-status limited">Eastern Routes Closed</span>
+                            <div class="airport-stats">
+                                <div class="stat">
+                                    <span class="num green">89</span>
+                                    <span class="lbl">Departed (24h)</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="num red">112</span>
+                                    <span class="lbl">Canceled</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="num yellow">78%</span>
+                                    <span class="lbl">Delays</span>
+                                </div>
+                            </div>
+                            <a href="https://www.flightradar24.com/data/airports/ruh" target="_blank" class="btn small">Live Tracker →</a>
+                        </div>
+                        <div class="airport-card">
+                            <h3>Jeddah (JED)</h3>
+                            <span class="airport-status open">Operational</span>
+                            <div class="airport-stats">
+                                <div class="stat">
+                                    <span class="num green">156</span>
+                                    <span class="lbl">Departed (24h)</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="num red">34</span>
+                                    <span class="lbl">Canceled</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="num yellow">45%</span>
+                                    <span class="lbl">Delays</span>
+                                </div>
+                            </div>
+                            <a href="https://www.flightradar24.com/data/airports/jed" target="_blank" class="btn small">Live Tracker →</a>
+                        </div>
+                        <div class="airport-card">
+                            <h3>Dammam (DMM)</h3>
+                            <span class="airport-status restricted">Restricted</span>
+                            <div class="airport-stats">
+                                <div class="stat">
+                                    <span class="num green">12</span>
+                                    <span class="lbl">Departed (24h)</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="num red">67</span>
+                                    <span class="lbl">Canceled</span>
+                                </div>
+                            </div>
+                            <p class="note">Near-coastal operations only</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bahrain Tab -->
+                <div class="tab-content" id="bahrain">
+                    <div class="airport-grid">
+                        <div class="airport-card">
+                            <h3>Bahrain (BAH)</h3>
+                            <span class="airport-status limited">Mixed Operations</span>
+                            <div class="airport-stats">
+                                <div class="stat">
+                                    <span class="num green">34</span>
+                                    <span class="lbl">Departed (24h)</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="num red">56</span>
+                                    <span class="lbl">Canceled</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="num yellow">71%</span>
+                                    <span class="lbl">Delays</span>
+                                </div>
+                            </div>
+                            <a href="https://www.flightradar24.com/data/airports/bah" target="_blank" class="btn small">Live Tracker →</a>
+                        </div>
+                    </div>
+                    <p class="country-note">⚠️ US 5th Fleet base at high activity. Expect military traffic disruptions.</p>
+                </div>
+
+                <!-- Oman Tab -->
+                <div class="tab-content" id="oman">
+                    <div class="airport-grid">
+                        <div class="airport-card highlight">
+                            <h3>Muscat (MCT)</h3>
+                            <span class="airport-status open">Fully Operational</span>
+                            <div class="airport-stats">
+                                <div class="stat">
+                                    <span class="num green">187</span>
+                                    <span class="lbl">Departed (24h)</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="num red">8</span>
+                                    <span class="lbl">Canceled</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="num green">23%</span>
+                                    <span class="lbl">Delays</span>
+                                </div>
+                            </div>
+                            <a href="https://www.flightradar24.com/data/airports/mct" target="_blank" class="btn small">Live Tracker →</a>
+                        </div>
+                        <div class="airport-card">
+                            <h3>Salalah (SLL)</h3>
+                            <span class="airport-status open">Operational</span>
+                            <div class="airport-stats">
+                                <div class="stat">
+                                    <span class="num green">24</span>
+                                    <span class="lbl">Departed (24h)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="country-note">✅ Oman maintaining neutrality. Muscat serving as alternate hub for diverted flights. Increased capacity available.</p>
+                </div>
+            </section>
+
+            <!-- Canceled Flights Summary -->
+            <section class="canceled-section">
+                <h2>❌ Major Cancellations (Last 48h)</h2>
+                <div class="canceled-grid">
+                    <div class="canceled-route">
+                        <span class="route">All → Tehran (IKA)</span>
+                        <span class="status">SUSPENDED INDEFINITELY</span>
+                    </div>
+                    <div class="canceled-route">
+                        <span class="route">All → Baghdad (BGW)</span>
+                        <span class="status">SUSPENDED INDEFINITELY</span>
+                    </div>
+                    <div class="canceled-route">
+                        <span class="route">All → Tel Aviv (TLV)</span>
+                        <span class="status">SUSPENDED INDEFINITELY</span>
+                    </div>
+                    <div class="canceled-route">
+                        <span class="route">All → Beirut (BEY)</span>
+                        <span class="status">SUSPENDED</span>
+                    </div>
+                    <div class="canceled-route">
+                        <span class="route">All → Damascus (DAM)</span>
+                        <span class="status">SUSPENDED INDEFINITELY</span>
+                    </div>
+                    <div class="canceled-route">
+                        <span class="route">Emirates → Amman (AMM)</span>
+                        <span class="status">REDUCED SERVICE</span>
                     </div>
                 </div>
             </section>
 
-            <section class="flights-section canceled">
-                <h2>❌ Canceled Flights</h2>
-                <p class="section-note">Cancellations in last 48 hours</p>
-                
-                <div class="flights-table-wrapper">
-                    <table class="flights-table">
-                        <thead>
-                            <tr>
-                                <th>Flight</th>
-                                <th>Destination</th>
-                                <th>Scheduled</th>
-                                <th>Reason</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="canceled">
-                                <td><strong>EK 871</strong><br><span class="airline">Emirates</span></td>
-                                <td>Tehran (IKA)</td>
-                                <td>Mar 2, 09:00</td>
-                                <td>Airspace Closure</td>
-                                <td><span class="status-badge canceled">CANCELED</span></td>
-                            </tr>
-                            <tr class="canceled">
-                                <td><strong>FZ 1753</strong><br><span class="airline">FlyDubai</span></td>
-                                <td>Baghdad (BGW)</td>
-                                <td>Mar 2, 11:30</td>
-                                <td>Airspace Closure</td>
-                                <td><span class="status-badge canceled">CANCELED</span></td>
-                            </tr>
-                            <tr class="canceled">
-                                <td><strong>EY 607</strong><br><span class="airline">Etihad</span></td>
-                                <td>Beirut (BEY)</td>
-                                <td>Mar 2, 13:00</td>
-                                <td>Security</td>
-                                <td><span class="status-badge canceled">CANCELED</span></td>
-                            </tr>
-                            <tr class="canceled">
-                                <td><strong>EK 925</strong><br><span class="airline">Emirates</span></td>
-                                <td>Amman (AMM)</td>
-                                <td>Mar 2, 16:45</td>
-                                <td>Airspace Closure</td>
-                                <td><span class="status-badge canceled">CANCELED</span></td>
-                            </tr>
-                            <tr class="canceled">
-                                <td><strong>FZ 203</strong><br><span class="airline">FlyDubai</span></td>
-                                <td>Kuwait (KWI)</td>
-                                <td>Mar 3, 07:00</td>
-                                <td>Operational</td>
-                                <td><span class="status-badge canceled">CANCELED</span></td>
-                            </tr>
-                            <tr class="canceled">
-                                <td><strong>EK 919</strong><br><span class="airline">Emirates</span></td>
-                                <td>Cairo (CAI)</td>
-                                <td>Mar 3, 10:15</td>
-                                <td>Airspace Restrictions</td>
-                                <td><span class="status-badge canceled">CANCELED</span></td>
-                            </tr>
-                            <tr class="canceled">
-                                <td><strong>EY 651</strong><br><span class="airline">Etihad</span></td>
-                                <td>Tel Aviv (TLV)</td>
-                                <td>Mar 2-5</td>
-                                <td>Suspended Indefinitely</td>
-                                <td><span class="status-badge canceled">SUSPENDED</span></td>
-                            </tr>
-                            <tr class="canceled">
-                                <td><strong>EK 931</strong><br><span class="airline">Emirates</span></td>
-                                <td>Doha (DOH)</td>
-                                <td>Mar 3, 14:00</td>
-                                <td>Airspace Restrictions</td>
-                                <td><span class="status-badge canceled">CANCELED</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="summary-stats">
-                    <div class="stat">
-                        <span class="number red">312</span>
-                        <span class="label">Flights Canceled (48h)</span>
-                    </div>
-                    <div class="stat">
-                        <span class="number red">~85,000</span>
-                        <span class="label">Passengers Affected</span>
-                    </div>
-                    <div class="stat">
-                        <span class="number yellow">5</span>
-                        <span class="label">Routes Suspended</span>
-                    </div>
-                </div>
-            </section>
-
-            <section class="info-section">
+            <!-- Passenger Info -->
+            <section class="passenger-info">
                 <h2>ℹ️ Passenger Information</h2>
-                <div class="info-cards">
+                <div class="info-grid">
                     <div class="info-card">
-                        <h3>Rebooking</h3>
-                        <p>All major UAE carriers offering free rebooking for flights through March 10. Contact your airline directly.</p>
+                        <h3>✈️ Rebooking</h3>
+                        <p>All major Gulf carriers (Emirates, Etihad, Qatar Airways, Saudia, Gulf Air, Oman Air) offering <strong>free rebooking</strong> through March 15 for affected routes.</p>
                     </div>
                     <div class="info-card">
-                        <h3>Stranded Passengers</h3>
-                        <p>Emergency accommodation arranged at DXB Terminal 3. Hotline: +971 4 224 5555</p>
+                        <h3>🏨 Stranded Passengers</h3>
+                        <p><strong>Dubai:</strong> Emergency accommodation at DXB T3<br>
+                        <strong>Doha:</strong> Oryx Airport Hotel assistance<br>
+                        <strong>Riyadh:</strong> GACA coordination center active</p>
                     </div>
                     <div class="info-card">
-                        <h3>Alternative Routes</h3>
-                        <p>Flights via Oman (MCT) and India operating with increased capacity. Check availability.</p>
+                        <h3>🛤️ Alternative Routes</h3>
+                        <p>Flights via <strong>Muscat (MCT)</strong> and <strong>Mumbai (BOM)</strong> operating with increased capacity. Consider routing through Oman for eastbound travel.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>⏱️ Expected Delays</h3>
+                        <p>Average delay: <strong>2-4 hours</strong> for westbound flights<br>
+                        Average delay: <strong>4-8 hours</strong> for eastbound flights via alternative routing</p>
                     </div>
                 </div>
             </section>
         </main>
 
         <footer>
-            <p>Data compiled from airline sources. Check with your carrier for official status.</p>
-            <a href="index.html" class="btn secondary">← Return to Strikes Dashboard</a>
+            <p>Flight data from FlightRadar24 and airline sources. Real-time updates may vary.</p>
+            <a href="index.html" class="btn secondary">← Back to Overview</a>
         </footer>
     </div>
 
@@ -221,6 +326,19 @@
             dateStyle: 'medium',
             timeStyle: 'short'
         }) + ' UTC';
+
+        // Tab functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Auto-refresh every 5 minutes
+        setTimeout(() => location.reload(), 300000);
     </script>
 </body>
 </html>

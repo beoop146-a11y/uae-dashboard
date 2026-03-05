@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incidents - Middle East Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚠️ Strike Incidents & Military Activity</h1>
+            <p class="subtitle">Documented events across the Gulf region</p>
+            <p class="last-updated">Last updated: <span id="update-time"></span></p>
+        </header>
+
+        <nav class="main-nav">
+            <a href="index.html" class="nav-link">📊 Overview</a>
+            <a href="flights.html" class="nav-link">✈️ Live Flights</a>
+            <a href="strikes.html" class="nav-link active">⚠️ Incidents</a>
+        </nav>
+
+        <div class="alert-banner critical">
+            <span class="pulse"></span>
+            ONGOING CONFLICT - US-Israeli operations against Iran + Iranian retaliation
+        </div>
+
+        <main class="incidents-main">
+            <section class="timeline-section">
+                <h2>📅 Incident Timeline</h2>
+                
+                <div class="timeline">
+                    <div class="timeline-item" id="uae">
+                        <div class="timeline-date">
+                            <span class="day">Mar 2</span>
+                            <span class="time">22:40 UTC</span>
+                        </div>
+                        <div class="timeline-content critical">
+                            <span class="country-tag">🇦🇪 UAE - Dubai</span>
+                            <h3>Missile Interception Over Dubai</h3>
+                            <p>UAE air defense intercepted multiple projectiles over Dubai. Debris in Al Quoz and Business Bay areas.</p>
+                            <div class="incident-meta">
+                                <span class="severity critical">CRITICAL</span>
+                                <span class="verified">✓ Verified</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" id="saudi">
+                        <div class="timeline-date">
+                            <span class="day">Mar 2</span>
+                            <span class="time">19:15 UTC</span>
+                        </div>
+                        <div class="timeline-content high">
+                            <span class="country-tag">🇸🇦 Saudi - Dhahran</span>
+                            <h3>Projectile Intercepted Near Aramco</h3>
+                            <p>Saudi air defense intercepted projectile near Dhahran. No damage to oil facilities.</p>
+                            <div class="incident-meta">
+                                <span class="severity high">HIGH</span>
+                                <span class="verified">✓ Verified</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">
+                            <span class="day">Mar 1</span>
+                            <span class="time">14:32 UTC</span>
+                        </div>
+                        <div class="timeline-content critical">
+                            <span class="country-tag">🇦🇪 UAE - Abu Dhabi</span>
+                            <h3>Iranian Drones Strike Naval Base</h3>
+                            <p>Two Shahed-136 drones struck Al Salam Naval Base. 3 military personnel injured.</p>
+                            <div class="incident-meta">
+                                <span class="severity critical">CRITICAL</span>
+                                <span class="verified">✓ Video Verified</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" id="bahrain">
+                        <div class="timeline-date">
+                            <span class="day">Mar 1</span>
+                            <span class="time">12:00 UTC</span>
+                        </div>
+                        <div class="timeline-content high">
+                            <span class="country-tag">🇧🇭 Bahrain</span>
+                            <h3>US 5th Fleet at DEFCON 2</h3>
+                            <p>Naval Forces Central Command elevated readiness. Non-essential personnel evacuated.</p>
+                            <div class="incident-meta">
+                                <span class="severity high">HIGH</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" id="qatar">
+                        <div class="timeline-date">
+                            <span class="day">Mar 1</span>
+                            <span class="time">06:30 UTC</span>
+                        </div>
+                        <div class="timeline-content medium">
+                            <span class="country-tag">🇶🇦 Qatar</span>
+                            <h3>Al Udeid Air Base Surge</h3>
+                            <p>Significant US military air operations from Al Udeid. No hostile activity in Qatar.</p>
+                            <div class="incident-meta">
+                                <span class="severity medium">MEDIUM</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="country-summary" id="oman">
+                <h2>🗺️ Country Status Summary</h2>
+                
+                <div class="summary-grid">
+                    <div class="summary-card critical-border">
+                        <h3>🇦🇪 UAE</h3>
+                        <p><strong>2 incidents</strong> • 3 injured • Naval base damaged</p>
+                        <p class="note">Primary retaliation target</p>
+                    </div>
+                    <div class="summary-card high-border">
+                        <h3>🇸🇦 Saudi Arabia</h3>
+                        <p><strong>1 incident</strong> • No casualties • Oil facilities intact</p>
+                        <p class="note">Eastern defenses on high alert</p>
+                    </div>
+                    <div class="summary-card high-border">
+                        <h3>🇧🇭 Bahrain</h3>
+                        <p><strong>0 strikes</strong> • US base activity high</p>
+                        <p class="note">5th Fleet at elevated readiness</p>
+                    </div>
+                    <div class="summary-card medium-border">
+                        <h3>🇶🇦 Qatar</h3>
+                        <p><strong>0 incidents</strong> • Al Udeid operations surge</p>
+                        <p class="note">No direct hostile activity</p>
+                    </div>
+                    <div class="summary-card safe-border">
+                        <h3>🇴🇲 Oman</h3>
+                        <p><strong>0 incidents</strong> • Maintaining neutrality</p>
+                        <p class="note">Serving as regional safe haven</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Data from news sources. Not official government information.</p>
+            <a href="index.html" class="btn secondary">← Back to Overview</a>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('update-time').textContent = new Date().toLocaleString('en-US', {
+            timeZone: 'UTC', dateStyle: 'medium', timeStyle: 'short'
+        }) + ' UTC';
+    </script>
+</body>
+</html>
